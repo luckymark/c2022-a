@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/luckymark/temp/c2022-a/level1/p01_runningLetter/running_letter/main.c
+stdio.h
+-
+stdlib.h
+-
+libc.h
+-
+

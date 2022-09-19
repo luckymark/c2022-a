@@ -1,0 +1,3 @@
+/Users/luckymark/temp/c2022-a/level1/p01_runningLetter/running_letter/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/luckymark/temp/c2022-a/level1/p01_runningLetter/running_letter/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/luckymark/temp/c2022-a/level1/p01_runningLetter/running_letter/cmake-build-debug/CMakeFiles/running_letter.dir
