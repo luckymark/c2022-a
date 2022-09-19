@@ -12,8 +12,8 @@ int main(){
 	stack<string> ReStrings;
 	cin>>TheString;
 	Strings.push(TheString);
-	int len=TheString.length();
-	for(int i=0;i<118-len;i++){
+	const int LEN=TheString.length();
+	for(int i=0;i<118-LEN;i++){
 		TheString=' '+TheString;
 		Strings.push(TheString);
 		cout<<TheString;

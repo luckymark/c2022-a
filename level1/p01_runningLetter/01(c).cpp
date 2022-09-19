@@ -6,21 +6,22 @@ int main(){
 	char string[100];
 	scanf("%s",string);
 	int i=0;
+	const int LENGTH=(int)strlen(string);
 	while(1){
-	for(;i<118-(int)strlen(string);i++){
-		for(int j=0;j<i;j++){
-			putchar(' ');
+		for(;i<118-LENGTH;i++){
+			for(int j=0;j<i;j++){
+				putchar(' ');
+			}
+			printf("%s",string);
+			system("cls");
 		}
-		printf("%s",string);
-		system("cls");
-	}
-	for(;i>0;i--){
-		for(int j=0;j<i;j++){
-			putchar(' ');
+		for(;i>0;i--){
+			for(int j=0;j<i;j++){
+				putchar(' ');
+			}
+			printf("%s",string);
+			system("cls");
 		}
-		printf("%s",string);
-		system("cls");
-	}
 	}
 	return 0;
 }
