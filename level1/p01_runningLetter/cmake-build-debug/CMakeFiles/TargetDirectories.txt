@@ -1,0 +1,3 @@
+C:/Users/tikky/c2022-a/level1/p01_runningLetter/cmake-build-debug/CMakeFiles/p01_runningLetter.dir
+C:/Users/tikky/c2022-a/level1/p01_runningLetter/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/tikky/c2022-a/level1/p01_runningLetter/cmake-build-debug/CMakeFiles/rebuild_cache.dir
