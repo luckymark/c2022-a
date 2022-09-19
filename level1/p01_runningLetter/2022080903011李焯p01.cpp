@@ -7,9 +7,9 @@ int main()
 {
 	char s[26] = { 0 };
 	printf("runner: ");
-	scanf_s("%s", &s,sizeof(s));
+	scanf_s("%s", s,sizeof(s));
 	int len, a, b=0 ,c ;
-	printf("sleep£º ");
+	printf("sleepÂ£Âº ");
 	scanf_s("%d",& c);
 	len = strlen(s);
 	{
