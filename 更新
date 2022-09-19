@@ -1,9 +1,0 @@
-git clone https://github.com/ **YourGithubAccount** /c2022-a
-cd c2022-a
-ls
-
-git config user.name "???"
-git config user.email "???"
-
-git remote -v
-git remote add upstream https://github.com/luckymark/c2022-a
