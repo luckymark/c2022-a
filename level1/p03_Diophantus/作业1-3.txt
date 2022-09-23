@@ -1,0 +1,10 @@
+#include<stdio.h>
+int main()
+{
+    int age;
+	int i=5,j=4;
+	float x=(1.00-1.00/6-1.00/12-1.00/7-1.00/2);
+	age=(i+j)/x;
+	printf("%d\n",age);
+	return 0;
+}
