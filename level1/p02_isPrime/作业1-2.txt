@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main()
+{
+	int i,j;
+	scanf("%d",&i);
+	if(i<=0)
+	printf("error\n");
+	else
+	for(j=2;j<i;j++){
+		if(i%j==0);
+		printf("%d不是素数",i);
+		break;
+	}	
+	if(i%j!=0)
+	printf("%d是素数",i);
+	return 0;
+}
