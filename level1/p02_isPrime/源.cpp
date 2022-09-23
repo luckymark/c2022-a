@@ -2,11 +2,10 @@
 #include <math.h>
 int main() {
 	int n, flag = 1;
-	scanf_s("%d", &n);
+	scanf_s("%d",&n);
 	if (n == 1) {
 		flag = 0;
-	}
-	else {
+	}else {
 		if (n == 2) flag = 1;
 		else {
 			for (int i = 2; i <= sqrt((double)n); i++) {
@@ -15,7 +14,7 @@ int main() {
 			}
 		}
 	}
-	if (flag == 1) printf("%d是质数", n);
-	else printf("%d不是质数", n);
+	if (flag==1) printf("%d是质数", n);
+	else printf("%d不是质数",n);
 	return 0;
 }
