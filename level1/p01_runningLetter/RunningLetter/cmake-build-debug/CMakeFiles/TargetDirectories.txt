@@ -1,0 +1,3 @@
+C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug/CMakeFiles/RunningLetter.dir
+C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug/CMakeFiles/rebuild_cache.dir
