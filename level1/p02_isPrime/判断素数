@@ -1,0 +1,28 @@
+#include<stdio.h>
+int main()
+{
+	int n, i;
+	printf("请输入一个正整数：");
+	scanf_s("%d", &n);
+	if (n <= 0)
+		printf("error!");
+	else if (n == 1)
+		printf("%d不是素数", n);
+	else if (n == 2)
+		printf("%d是素数", n);
+	else
+	{
+		for (i = 2; i < n; i++)
+		{
+			if (n % i == 0)
+			{
+				printf("%d不是素数", n);
+				break;
+			}
+
+		}
+		if (i == n)
+			printf("%d是素数", n);
+	}
+	return 0;
+}
