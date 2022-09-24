@@ -1,0 +1,23 @@
+#include<stdio.h>
+int Sum(int iMember[10]);
+int main()
+{
+	int iMember[10], i;
+	printf("请输入10个整数：");
+	for (i = 0; i < 10; i++)
+	{
+		scanf_s("%d", &iMember[i]);    
+	}
+	Sum(iMember);                                  //（）中只有数组名即可，不应有[]
+	return 0;
+}
+int Sum(int iMember[10])
+{
+	int sum = 0,i;
+	for (i = 0; i < 10; i++)
+	{
+		sum = sum + iMember[i];
+	}
+	printf("%d", sum);
+	return 0;
+}
