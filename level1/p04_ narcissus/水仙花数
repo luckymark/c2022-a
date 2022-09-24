@@ -1,0 +1,17 @@
+#include<stdio.h>
+#include<math.h>
+int main()
+{
+	int i,n1,n2,n3;
+	for (i = 100; i < 1000; i++)
+	{
+		n1 = i % 10;
+		n2 = ((i - n1) % 100)/10;
+		n3 = (i - n1-10*n2)/100;
+		if (pow(n1,3)+pow(n2,3)+pow(n3,3)==i)
+		{
+			printf("%d\n", i);
+		}
+	}
+	return 0;
+}
