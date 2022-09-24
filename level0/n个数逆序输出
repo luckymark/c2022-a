@@ -1,0 +1,26 @@
+#include<stdio.h>
+int main()
+{
+	int a[100], i,t,n,*p=a;
+	printf("请输入数字个数(不超过100)；\n");
+	scanf_s("%d", &n);
+	printf("请输入这%d个数\n", n);
+	for (i = 0; i < n; i++)
+	{
+		scanf_s("%d", p++);
+	}
+	for (i = 0; i < n / 2; i++)
+	{
+		t = a[i];
+		a[i] = a[n - i - 1];
+		a[n - i - 1] = t;
+	}
+	p = a;
+	printf("逆序输出为\n");
+	for (i = 0; i < n; i++)
+	{
+		printf("%d  ", *p++);
+	}
+	return 0;
+
+}
