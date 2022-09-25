@@ -19,25 +19,30 @@ int main()
 	int j=0;  
 	printf("input an even:");
 	scanf("%d",&n);
-    while(!isEven(n)){
+    do{
     	printf("error\n");
     	printf("input an even:");
     	scanf("%d",&n);
-	}  
-	for(i=2;i<n/2;i++){   
+	}while(n<=0||n>100);
+    while(!isEven(n)){
+          printf("error\n");
+    	printf("input an even:");
+       	scanf("%d",&n);
+    }  
+    for(i=2;i<n/2;i++){   
     	if(isPrime(i))
+	{
+		if (isPrime(n-i))
 		{
-			if (isPrime(n-i))
-			{
-				printf("哥德巴赫求和：%d=%d+%d\n",n,i,n-i);
-				j=1;
-			}
+			printf("哥德巴赫求和：%d=%d+%d\n",n,i,n-i);
+			j=1;
 		}
 	}
-	if (j)
-		return 0;
-	else{
-		printf("哥德巴赫猜想不成立");
-		return -1;	
-	}
+    }
+    if (j)
+    return 0;
+    else{
+	printf("哥德巴赫猜想不成立");
+	return -1;	
+    } 
 }
