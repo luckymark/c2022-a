@@ -41,7 +41,7 @@ void decrypt(int num)
 	int len = strlen(sentence2);
 	for (int i = 0; i < len; i++) {
 		if ((int)sentence2[i] - num >= up) sentence2[i] -= num;
-		else sentence2[i] = 126-sentence2[i]-num+up;
+		else sentence2[i] = 127-(up-(sentence2[i]-num));
 	}
 	printf("%s\n", sentence2);
 }
