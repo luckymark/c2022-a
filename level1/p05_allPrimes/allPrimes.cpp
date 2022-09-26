@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include<time.h>
 #include<math.h>
+void prime(int n);
+
 int main()
 {
 	clock_t start,end;
@@ -10,18 +12,7 @@ int main()
 	start = clock();
 	for(n = 2;n < 1000;n++)
 	{
-		a = sqrt((double)n);
-		for(i = 2;i <= a;i++)
-		{
-			if(n%i == 0)
-			{
-				break;
-			}
-		}
-		if(i == a+1)
-		{
-			printf("%d ",n);
-		}
+		prime(n);
 	}
 	end = clock();
 	printf("\n");
@@ -29,3 +20,20 @@ int main()
 	printf("%f",time);
 	return 0;
  } 
+ 
+void prime(int n)
+{
+	int a,i;
+	a = sqrt((double)n);
+	for(i = 2;i <= a;i++)
+		{
+			if(n%i == 0)
+			{
+				break;
+			}
+		}
+	if(i == a+1)
+	{
+		printf("%d ",n);
+	}
+}
