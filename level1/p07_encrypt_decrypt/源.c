@@ -6,7 +6,7 @@
 void extend(char s[], int len) {
 	int l = strLen;
 	while (l < len) {
-	s = (char*)realloc(s, sizeof(char*) * (++l));
+		s = (char*)realloc(s, sizeof(char*) * (++l));
 	}
 }
 void encrypt(char s[], char a[], int length) {
