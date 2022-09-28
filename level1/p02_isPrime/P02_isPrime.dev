@@ -1,6 +1,6 @@
 [Project]
-FileName=P01.dev
-Name=P01
+FileName=P02_isPrime.dev
+Name=Project1
 Type=1
 Ver=2
 ObjFiles=
@@ -12,7 +12,7 @@ MakeIncludes=
 Compiler=
 CppCompiler=
 Linker=
-IsCpp=0
+IsCpp=1
 Icon=
 ExeOutput=
 ObjectOutput=
@@ -51,8 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=P.c
-CompileCpp=0
+FileName=P02_isPrime.dev
 Folder=
 Compile=1
 Link=1
