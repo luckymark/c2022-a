@@ -5,13 +5,13 @@
 #include<stdbool.h>
 //#include<graphics.h>
 #define N 16
-bool isWin=false;//ÓÎÏ·½áÊøÅĞ¶Ï
-struct location{//×ø±ê¶Ô
+bool isWin=false;//æ¸¸æˆç»“æŸåˆ¤æ–­
+struct location{//åæ ‡å¯¹
 	int x;
 	int y;
 };
 char** right(char** map,struct location* player){
-	if(player->x==N||map[player->y-1][player->x]=='X'){//¿¿¶ÌÂ·±ÜÃâÒç³ö
+	if(player->x==N||map[player->y-1][player->x]=='X'){//é çŸ­è·¯é¿å…æº¢å‡º
 		return map;
 	}
 	if(map[player->y-1][player->x]=='!'){
@@ -78,12 +78,12 @@ char** up(char** map,struct location* player){
 	player->y-=1;
 	return map;
 }
-//ÒÆ¶¯·½·¨£¬ÕâÀïÊÇ¿¿¸ßÆµÂÊË¢ĞÂÊµÏÖÒÆ¶¯²Ù×÷£¬ËùÒÔµ±Ë¢ĞÂÂÊ²»¸ßµÄÊ±ºò¾Í»á³öÏÖ´¥·¢²»ÁËµÄÇé¿ö£¨´ó¸Å£¿£©
-//win32apiµÄGetAsyncKeyStateº¯Êı£¬Ê¶±ğµ÷ÓÃÊ±¼üÅÌµÄ´¥·¢Çé¿ö
+//ç§»åŠ¨æ–¹æ³•ï¼Œè¿™é‡Œæ˜¯é é«˜é¢‘ç‡åˆ·æ–°å®ç°ç§»åŠ¨æ“ä½œï¼Œæ‰€ä»¥å½“åˆ·æ–°ç‡ä¸é«˜çš„æ—¶å€™å°±ä¼šå‡ºç°è§¦å‘ä¸äº†çš„æƒ…å†µï¼ˆå¤§æ¦‚ï¼Ÿï¼‰
+//win32apiçš„GetAsyncKeyStateå‡½æ•°ï¼Œè¯†åˆ«è°ƒç”¨æ—¶é”®ç›˜çš„è§¦å‘æƒ…å†µ
 void move(char** map,struct location* player){
 	int direction;
 		direction=GetAsyncKeyState(VK_UP);
-		if(direction==-32768){//·µ»ØINT16_MIN±íÃ÷¸Ã°´¼ü´¦ÓÚ°´ÏÂ×´Ì¬
+		if(direction==-32768){//è¿”å›INT16_MINè¡¨æ˜è¯¥æŒ‰é”®å¤„äºæŒ‰ä¸‹çŠ¶æ€
 			up(map,player);
 		}
 		direction=GetAsyncKeyState(VK_DOWN);
@@ -117,8 +117,8 @@ int main(){
 	player.x=2;
 	player.y=2;
 	FILE* fmap;
-	fmap=fopen("test.txt","r");//Ö»¶ÁÄ£Ê½
-	if(fmap){//ÅĞ¶ÏÊÇ·ñÕı³£´ò¿ªÎÄ¼ş
+	fmap=fopen("test.txt","r");//åªè¯»æ¨¡å¼
+	if(fmap){//åˆ¤æ–­æ˜¯å¦æ­£å¸¸æ‰“å¼€æ–‡ä»¶
 		for(int j=0;j<N;j++){
 			for(int i=0;i<N;i++){
 				map[j][i]=getc(fmap);
@@ -129,7 +129,7 @@ int main(){
 		printf("fail");
 		return -1;
 	}
-	while(1){//ÀàËÆunityµÄupdate()µÄ´¦Àí
+	while(1){//ç±»ä¼¼unityçš„update()çš„å¤„ç†
 		Sleep(10);
 		move(map,&player);
 		printMap(map);
@@ -139,7 +139,7 @@ int main(){
 		}
 		system("cls");
 	}
-	for(int i=0;i<N;i++){//ÊÍ·ÅÄÚ´æ
+	for(int i=0;i<N;i++){//é‡Šæ”¾å†…å­˜
 		free(map[i]);
 	}
 	free(map);

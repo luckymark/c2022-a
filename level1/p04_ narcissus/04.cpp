@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<math.h>
-//ÔÚÓĞÃ»ÓĞËãÕâ¸öµÄ¸ßĞ§Ëã·¨...
+//åœ¨æœ‰æ²¡æœ‰ç®—è¿™ä¸ªçš„é«˜æ•ˆç®—æ³•...
 int main(){
 	int a;
 	int b;
@@ -11,7 +11,7 @@ int main(){
 			for(c=0;c<=9;c++){
 				if(a*100+b*10+c==pow(a,3)+pow(b,3)+pow(c,3)){
 					cnt++;
-					printf("µÚ%d¸öË®ÏÉ»¨ÊıÎª£º%d%d%d\n",cnt,a,b,c);
+					printf("ç¬¬%dä¸ªæ°´ä»™èŠ±æ•°ä¸ºï¼š%d%d%d\n",cnt,a,b,c);
 				}
 			}
 		}

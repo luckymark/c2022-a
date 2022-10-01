@@ -1,11 +1,12 @@
-//±¾À´ÒÔÎªc++»á¼ò½àµã£¬½á¹û»¹¶à´òÁË¼¸ĞĞ¡£¡£
-//Õâ¸öÊÇÓÃÁËstringºÍÁ½¸öÕ»»¥µ¹µÄ·½·¨£¬ÔÚÇ°Ãæ×¼±¸ºÃ¹»ÓÃÒ»ĞĞµÄÕ»ÄÚ×Ö·û´®×éÖ®ºó¾ÍÀ´»Ø
-//ÔÚÁ½¸öÕ»Àïµ¹ÌÚ¾ÍĞĞ
+//æœ¬æ¥ä»¥ä¸ºc++ä¼šç®€æ´ç‚¹ï¼Œç»“æœè¿˜å¤šæ‰“äº†å‡ è¡Œã€‚ã€‚
+//è¿™ä¸ªæ˜¯ç”¨äº†stringå’Œä¸¤ä¸ªæ ˆäº’å€’çš„æ–¹æ³•ï¼Œåœ¨å‰é¢å‡†å¤‡å¥½å¤Ÿç”¨ä¸€è¡Œçš„æ ˆå†…å­—ç¬¦ä¸²ç»„ä¹‹åå°±æ¥å›
+//åœ¨ä¸¤ä¸ªæ ˆé‡Œå€’è…¾å°±è¡Œ
 #include<stdlib.h>
 #include<string>
 #include<stack>
 #include<iostream>
 using namespace std;
+const int SCREENWIDTH=118;
 int main(){
 	string TheString;
 	stack<string> Strings;
@@ -13,7 +14,7 @@ int main(){
 	cin>>TheString;
 	Strings.push(TheString);
 	const int LEN=TheString.length();
-	for(int i=0;i<118-LEN;i++){
+	for(int i=0;i<SCREENWIDTH-LEN;i++){
 		TheString=' '+TheString;
 		Strings.push(TheString);
 		cout<<TheString;

@@ -1,20 +1,24 @@
 #include<stdio.h>
 #include<stdbool.h>
+void answer(bool isPrime, int N);
 int main(){
 	int N;
 	bool isPrime=true;
-	printf("ÊäÈëÒ»¸öÊı£º");
+	printf("è¾“å…¥ä¸€ä¸ªæ•°ï¼š");
 	scanf("%d",&N);
-	for(int i=2;i<=N/2;i++){//Ò»¸öÊıN²»¿ÉÄÜÓĞ´óÓÚN/2µÄÖÊÒò×Ó£¨ÒòÎª2ÊÇ×îĞ¡µÄÖÊÒò×Ó£©
-		if(!(N%i)){//Ñ­»·ÅĞ±ğiÊÇ·ñÎªNµÄÖÊÒò×Ó
+	answer(isPrime,N);
+	return 0;
+}
+void answer(bool isPrime,int N){
+	for(int i=2;i<=N/2;i++){//ä¸€ä¸ªæ•°Nä¸å¯èƒ½æœ‰å¤§äºN/2çš„è´¨å› å­ï¼ˆå› ä¸º2æ˜¯æœ€å°çš„è´¨å› å­ï¼‰
+		if(!(N%i)){//å¾ªç¯åˆ¤åˆ«iæ˜¯å¦ä¸ºNçš„è´¨å› å­
 			isPrime=false;
 			break;
 		}
 	}
 	if(!isPrime||N==1){
-		printf("It is not prime");
+		printf("It is not prime\n");
 	}else{
-		printf("It is prime");
+		printf("It is prime\n");
 	}
-	return 0;
 }

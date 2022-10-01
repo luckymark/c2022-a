@@ -1,57 +1,40 @@
-//ÔÚ°Ñ1ÅÅ³ıµ½ËØÊıÖ®Íâºó£¬¡°¸çµÂ°ÍºÕ²ÂÏëµÄÏÖ´ú±íÊöÎª£ºÈÎÒ»´óÓÚ5µÄÕûÊı¶¼¿ÉĞ´³ÉÈı¸öËØÊıÖ®ºÍ¡£¡±
-//Ğ´µÃÌ«³óÁË...
+//åœ¨æŠŠ1æ’é™¤åˆ°ç´ æ•°ä¹‹å¤–åï¼Œå“¥å¾·å·´èµ«çŒœæƒ³çš„ç°ä»£è¡¨è¿°ä¸ºï¼šä»»ä¸€å¤§äº5çš„æ•´æ•°éƒ½å¯å†™æˆä¸‰ä¸ªç´ æ•°ä¹‹å’Œã€‚â€
+//å†™å¾—å¤ªä¸‘äº†...
 #include<stdio.h>
 #include<malloc.h>
 #include<stdbool.h>
 void primeIn100(bool** con);
+typedef int* pairOfPrime;
+pairOfPrime sumOfTwoPrime(int cnt,int* primes,int now);//å°†nowåˆ†è§£ä¸ºä¸¤ç´ æ•°å’Œå¹¶è¾“å‡º
 int main(){
 	int now;
-	bool checked[100]={};
 	bool* notPrime;
 	primeIn100(&notPrime);
 	int primes[50];
 	int cnt=0;
-	for(int i=1;i<100;i++){//ÌáÈ¡ËØÊı
+	for(int i=1;i<100;i++){//æå–ç´ æ•°
 		if(!notPrime[i]){
 			primes[cnt]=i+1;
 			cnt++;
 		}
 	}
-//¸çµÂ°ÍºÕ²ÂÏëµÄµÈ¼Û±íÊöÎª£ºÈÎÒâ³ä·Ö´óµÄÅ¼Êı¿ÉÒÔ±íÊ¾ÎªÁ½ËØÊıÖ®ºÍ
+//å“¥å¾·å·´èµ«çŒœæƒ³çš„ç­‰ä»·è¡¨è¿°ä¸ºï¼šä»»æ„å……åˆ†å¤§çš„å¶æ•°å¯ä»¥è¡¨ç¤ºä¸ºä¸¤ç´ æ•°ä¹‹å’Œ
 	for(int i=6;i<=100;i++){
-		if(i%2){//ÆæÊı=3+Å¼Êı
+		if(i%2){//å¥‡æ•°=3+å¶æ•°
 			 now=i-3;
-			 for(int j=0;j<cnt;j++){//±éÀúËØÊı
-			 	for(int k=0;k<cnt;k++){
-				 	if(primes[j]+primes[k]==now){
-					 	printf("%d=3+%d+%d\n",i,primes[j],primes[k]);
-						checked[i-1]=true;
-						break;
-					 }
-				 }
-				if(checked[i-1]){//ÌøÀë£¬¸Ğ¾õĞ´µÃ×î³óµÄ¾ÍÊÇÕâ¸ö
-					break;
-				}
-			 }
-		}else{//Å¼Êı=2+Å¼Êı
+			pairOfPrime answer=sumOfTwoPrime(cnt,primes,now);
+			printf("%d=3+%d+%d\n",i,answer[0],answer[1]);
+			free(answer);
+		}else{//å¶æ•°=2+å¶æ•°
 			now=i-2;
-			for(int j=0;j<cnt;j++){
-				for(int k=0;k<=cnt;k++){
-					if(primes[j]+primes[k]==now){
-						printf("%d=2+%d+%d\n",i,primes[j],primes[k]);
-						checked[i-1]=true;
-						break;
-					}
-				}
-				if(checked[i-1]){
-					break;
-				}
+			pairOfPrime answer=sumOfTwoPrime(cnt,primes,now);
+			printf("%d=2+%d+%d\n",i,answer[0],answer[1]);
+			free(answer);
 			}
 		}
-	}
 	return 0;
 }
-void primeIn100(bool** con){//½èÓÃÏÂ05
+void primeIn100(bool** con){//å€Ÿç”¨ä¸‹05
 	*con=(bool*)malloc(100*sizeof(bool));
 	for(int i=0;i<100;i++){
 		(*con)[i]=false;
@@ -65,4 +48,17 @@ void primeIn100(bool** con){//½èÓÃÏÂ05
 			}
 		}
 	}
+}
+pairOfPrime sumOfTwoPrime(int cnt,int* primes,int now){
+			 for(int j=0;j<cnt;j++){//éå†ç´ æ•°
+			 	for(int k=0;k<cnt;k++){
+				 	if(primes[j]+primes[k]==now){
+				 		pairOfPrime answer=(int*)malloc(2*sizeof(int));
+				 		answer[0]=primes[j];
+				 		answer[1]=primes[k];
+				 		return answer;
+					 }
+				 }
+			 }
+			 return NULL;
 }

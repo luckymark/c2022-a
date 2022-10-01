@@ -1,14 +1,15 @@
-//循环打空格，本来还想用个链表啥，写着写着就结束了。想多了
+//寰幆鎵撶┖鏍硷紝鏈潵杩樻兂鐢ㄤ釜閾捐〃鍟ワ紝鍐欑潃鍐欑潃灏辩粨鏉熶簡銆傛兂澶氫簡
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+const int SCREENWIDTH=118;
 int main(){
 	char string[100];
 	scanf("%s",string);
 	int i=0;
 	const int LENGTH=(int)strlen(string);
 	while(1){
-		for(;i<118-LENGTH;i++){
+		for(;i<SCREENWIDTH-LENGTH;i++){
 			for(int j=0;j<i;j++){
 				putchar(' ');
 			}

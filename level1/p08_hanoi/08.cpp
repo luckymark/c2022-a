@@ -1,81 +1,21 @@
-//ֻ�ǵú�ŵ�������ǵݹ�...
-//�˴�Ĭ�ϳ�ʼ����ΪA��
+//只记得汉诺塔好像是递归...
+//此处默认初始立柱为A柱
 #include<stdio.h>
-void hanoi_A2C(int n,int* cnt);
-void hanoi_C2A(int n,int* cnt);
-void hanoi_A2B(int n,int* cnt);
-void hanoi_B2A(int n,int* cnt);
-void hanoi_B2C(int n,int* cnt);
-void hanoi_C2B(int n,int* cnt);
+void hanoi_move(int n,int* cnt,char x,char y);
 int main(){
 	int cnt=0;
-	hanoi_A2C(3,&cnt);//��64�ܿ�ס�ˣ��Ӹ�cnt�ŷ��ִ�����2^n-1
+	hanoi_move(3,&cnt,'A','C');//用64跑卡住了，加个cnt才发现次数是2^n-1
 	printf("count:%d",cnt);
 	return 0;
 }
-void hanoi_A2C(int n,int* pcnt){
+void hanoi_move(int n,int* pcnt,char x,char y){
 	if(n==1){
-		printf("A -> C\n");
+		printf("%c -> %c\n",x,y);
 		(*pcnt)++;
 	}else if(n>1){
-		hanoi_A2B(n-1,pcnt);
-		printf("A -> C\n");
+		hanoi_move(n-1,pcnt,x,'A'+'B'+'C'-x-y);//这表达式怪怪的，但是想不到更好的统合的方法了
+		printf("%c -> %c\n",x,y);
 		(*pcnt)++;
-		hanoi_B2C(n-1,pcnt);
-	}
-}
-void hanoi_C2A(int n,int* pcnt){
-	if(n==1){
-		printf("C -> A\n");
-		(*pcnt)++;
-	}else if(n>1){
-		hanoi_C2B(n-1,pcnt);
-		printf("C -> A\n");
-		(*pcnt)++;
-		hanoi_B2A(n-1,pcnt);
-	}
-}
-void hanoi_A2B(int n,int* pcnt){
-	if(n==1){
-		printf("A -> B\n");
-		(*pcnt)++;
-	}else if(n>1){
-		hanoi_A2C(n-1,pcnt);
-		printf("A -> B\n");
-		(*pcnt)++;
-		hanoi_C2B(n-1,pcnt);
-	}
-}
-void hanoi_B2A(int n,int* pcnt){
-	if(n==1){
-		printf("B -> A\n");
-		(*pcnt)++;
-	}else if(n>1){
-		hanoi_B2C(n-1,pcnt);
-		printf("B -> A\n");
-		(*pcnt)++;
-		hanoi_C2A(n-1,pcnt);
-	}
-}
-void hanoi_B2C(int n,int* pcnt){
-	if(n==1){
-		printf("B -> C\n");
-		(*pcnt)++;
-	}else if(n>1){
-		hanoi_B2A(n-1,pcnt);
-		printf("B -> C\n");
-		(*pcnt)++;
-		hanoi_A2C(n-1,pcnt);
-	}
-}
-void hanoi_C2B(int n,int* pcnt){
-	if(n==1){
-		printf("C -> B\n");
-		(*pcnt)++;
-	}else if(n>1){
-		hanoi_C2A(n-1,pcnt);
-		printf("C -> B\n");
-		(*pcnt)++;
-		hanoi_A2B(n-1,pcnt);
+		hanoi_move(n-1,pcnt,y,'A'+'B'+'C'-x-y);
 	}
 }
