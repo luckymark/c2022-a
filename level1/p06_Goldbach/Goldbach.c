@@ -31,11 +31,11 @@ int main(){
 					c = 1;
 					break;
 				}
-			}	
+			}
 		}
 		if (c == 0) { 
-				res = i; break; 
-			}
+			res = i; break; 
+		}
 	}
 	printf("%d", res);
 	return 0;
