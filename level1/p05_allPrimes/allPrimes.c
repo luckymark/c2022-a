@@ -3,10 +3,10 @@
 int main()
 {
 	int prime[1001];
-	int maxNum = 1000, primeLen = 0;
+	int MAXNUM = 1000, primeLen = 0;
 	clock_t t1, t2;
 	t1 = clock();
-	for (int i = 2; i <= maxNum; i++)
+	for (int i = 2; i <= MAXNUM; i++)
 	{
 		int isPrime = 1;
 		for (int j = 0; j < primeLen; j++) {
