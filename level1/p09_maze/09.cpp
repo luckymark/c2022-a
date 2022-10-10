@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<limits.h>
 #include<windows.h>
 #include<w32api.h>
 #include<stdbool.h>
@@ -80,22 +81,22 @@ char** up(char** map,struct location* player){
 }
 //移动方法，这里是靠高频率刷新实现移动操作，所以当刷新率不高的时候就会出现触发不了的情况（大概？）
 //win32api的GetAsyncKeyState函数，识别调用时键盘的触发情况
+//GetAsyncKeyState函数的原理是返回一个16位bit，最高位表示当前键是否被按下，
+//最低位表示上次调用GetAsyncKeyState时当前键是否被按下，
+//这个也是通过和0x8000与运算进行判断的原因
 void move(char** map,struct location* player){
-	int direction;
-		direction=GetAsyncKeyState(VK_UP);
-		if(direction==-32768){//返回INT16_MIN表明该按键处于按下状态
+	//这里原本是用一个direction变量做判断，导致判断和监测键盘输入被分开了，
+	//下面的写法就将监测和判断结合了，对运行情况有明显优化
+		if(GetAsyncKeyState(VK_UP)&0x8000){//返回INT16_MIN(其实是SHRT_MIN)表明该按键处于按下状态
 			up(map,player);
 		}
-		direction=GetAsyncKeyState(VK_DOWN);
-		if(direction==-32768){
+		if(GetAsyncKeyState(VK_DOWN)&0x8000){
 			down(map,player);
 		}
-		direction=GetAsyncKeyState(VK_LEFT);
-		if(direction==-32768){
+		if(GetAsyncKeyState(VK_LEFT)&0x8000){
 			left(map,player);
 		}
-		direction=GetAsyncKeyState(VK_RIGHT);
-		if(direction==-32768){
+		if(GetAsyncKeyState(VK_RIGHT)&0x8000){
 			right(map,player);
 		}
 }
