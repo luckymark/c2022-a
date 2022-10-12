@@ -19,7 +19,7 @@ int main() {
     }
     finish_t=clock();
     duration_t=(double)(finish_t-start_t)/ CLOCKS_PER_SEC;;
-    printf("��ʱΪ%f��",duration_t);
+    printf("总的计算时间为",duration_t);
 
     return 0;
 }
