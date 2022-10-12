@@ -1,3 +1,0 @@
-C:/Users/William/c2022-a/level1/p04_ narcissus/cmake-build-debug/CMakeFiles/p04__narcissus.dir
-C:/Users/William/c2022-a/level1/p04_ narcissus/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/William/c2022-a/level1/p04_ narcissus/cmake-build-debug/CMakeFiles/rebuild_cache.dir
