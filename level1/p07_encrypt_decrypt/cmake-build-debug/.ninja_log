@@ -1,7 +1,0 @@
-# ninja log v5
-0	87	6867455471727200	CMakeFiles/p07_encrypt_decrypt.dir/main.c.obj	fadee7832fa8189
-87	175	6867455472579477	p07_encrypt_decrypt.exe	b740ffd291d60cd7
-1	61	6868510550330986	CMakeFiles/p07_encrypt_decrypt.dir/main.c.obj	fadee7832fa8189
-61	129	6868510550988832	p07_encrypt_decrypt.exe	b740ffd291d60cd7
-1	44	6868510659761270	CMakeFiles/p07_encrypt_decrypt.dir/main.c.obj	fadee7832fa8189
-45	103	6868510660330034	p07_encrypt_decrypt.exe	b740ffd291d60cd7
