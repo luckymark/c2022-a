@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: RunningLetter
+# Project: running_letter
 # Configurations: Debug
 # =============================================================================
 
@@ -39,49 +39,49 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = C$:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug/
+cmake_ninja_workdir = C$:/Users/Lenovo/c2022-a/level1/p01_runningLetter/running$ letter/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target RunningLetter
+# Object build statements for EXECUTABLE target running_letter
 
 
 #############################################
-# Order-only phony target for RunningLetter
+# Order-only phony target for running_letter
 
-build cmake_object_order_depends_target_RunningLetter: phony || CMakeFiles/RunningLetter.dir
+build cmake_object_order_depends_target_running_letter: phony || CMakeFiles/running_letter.dir
 
-build CMakeFiles/RunningLetter.dir/main.c.obj: C_COMPILER__RunningLetter_Debug C$:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/main.c || cmake_object_order_depends_target_RunningLetter
-  DEP_FILE = CMakeFiles\RunningLetter.dir\main.c.obj.d
+build CMakeFiles/running_letter.dir/main.c.obj: C_COMPILER__running_letter_Debug C$:/Users/Lenovo/c2022-a/level1/p01_runningLetter/running$ letter/main.c || cmake_object_order_depends_target_running_letter
+  DEP_FILE = CMakeFiles\running_letter.dir\main.c.obj.d
   FLAGS = -g -std=gnu99
-  OBJECT_DIR = CMakeFiles\RunningLetter.dir
-  OBJECT_FILE_DIR = CMakeFiles\RunningLetter.dir
-  TARGET_COMPILE_PDB = CMakeFiles\RunningLetter.dir\
-  TARGET_PDB = RunningLetter.pdb
+  OBJECT_DIR = CMakeFiles\running_letter.dir
+  OBJECT_FILE_DIR = CMakeFiles\running_letter.dir
+  TARGET_COMPILE_PDB = CMakeFiles\running_letter.dir\
+  TARGET_PDB = running_letter.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target RunningLetter
+# Link build statements for EXECUTABLE target running_letter
 
 
 #############################################
-# Link the executable RunningLetter.exe
+# Link the executable running_letter.exe
 
-build RunningLetter.exe: C_EXECUTABLE_LINKER__RunningLetter_Debug CMakeFiles/RunningLetter.dir/main.c.obj
+build running_letter.exe: C_EXECUTABLE_LINKER__running_letter_Debug CMakeFiles/running_letter.dir/main.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  OBJECT_DIR = CMakeFiles\RunningLetter.dir
+  OBJECT_DIR = CMakeFiles\running_letter.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\RunningLetter.dir\
-  TARGET_FILE = RunningLetter.exe
-  TARGET_IMPLIB = libRunningLetter.dll.a
-  TARGET_PDB = RunningLetter.pdb
+  TARGET_COMPILE_PDB = CMakeFiles\running_letter.dir\
+  TARGET_FILE = running_letter.exe
+  TARGET_IMPLIB = librunning_letter.dll.a
+  TARGET_PDB = running_letter.pdb
 
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter\cmake-build-debug && "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter\cmake-build-debug" && "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -92,7 +92,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter\cmake-build-debug && "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SC:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter -BC:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter\cmake-build-debug"
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter\cmake-build-debug" && "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S"C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter" -B"C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter\cmake-build-debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -102,7 +102,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build RunningLetter: phony RunningLetter.exe
+build running_letter: phony running_letter.exe
 
 # =============================================================================
 # Folder targets.
@@ -110,9 +110,9 @@ build RunningLetter: phony RunningLetter.exe
 # =============================================================================
 
 #############################################
-# Folder: C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug
+# Folder: C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/running letter/cmake-build-debug
 
-build all: phony RunningLetter.exe
+build all: phony running_letter.exe
 
 # =============================================================================
 # Built-in targets

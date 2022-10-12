@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: RunningLetter
+# Project: running_letter
 # Configurations: Debug
 # =============================================================================
 # =============================================================================
@@ -14,7 +14,7 @@
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__RunningLetter_Debug
+rule C_COMPILER__running_letter_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = "F:\CLion 2022.2.3\bin\mingw\bin\gcc.exe" $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -24,7 +24,7 @@ rule C_COMPILER__RunningLetter_Debug
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__RunningLetter_Debug
+rule C_EXECUTABLE_LINKER__running_letter_Debug
   command = cmd.exe /C "$PRE_LINK && "F:\CLion 2022.2.3\bin\mingw\bin\gcc.exe" $FLAGS $LINK_FLAGS $in -o $TARGET_FILE -Wl,--out-implib,$TARGET_IMPLIB -Wl,--major-image-version,0,--minor-image-version,0 $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking C executable $TARGET_FILE
   restat = $RESTAT
@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -SC:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter -BC:\Users\Lenovo\c2022-a\level1\p01_runningLetter\RunningLetter\cmake-build-debug
+  command = "F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S"C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter" -B"C:\Users\Lenovo\c2022-a\level1\p01_runningLetter\running letter\cmake-build-debug"
   description = Re-running CMake...
   generator = 1
 

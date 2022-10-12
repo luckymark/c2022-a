@@ -1,1 +1,1 @@
-CMakeLists.txt not found in C:\Users\Lenovo\c2022-a\level1\p01_runningLetter Select CMakeLists.txt
+在 C:\Users\Lenovo\c2022-a\level1\p01_runningLetter 中找不到 CMakeLists.txt 选择 CMakeLists.txt

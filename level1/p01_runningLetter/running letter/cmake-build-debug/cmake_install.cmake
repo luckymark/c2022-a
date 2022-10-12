@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter
+# Install script for directory: C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/running letter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/RunningLetter")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/running_letter")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/RunningLetter/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Lenovo/c2022-a/level1/p01_runningLetter/running letter/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
