@@ -7,26 +7,29 @@ int main()
 {
 	int n,p = 2,q,a;
 	scanf("%d",&n);
-	for(;p <= n;p++)
+	if(n >= 4 && n <=2000 && n%2 == 0)
 	{
-		if(prime(p) == 0)
+		for(;p <= n;p++)
 		{
-			a = 0;
-		}else a = 1;
-		if(a)
-		{
-			q = n - p;
-			if(prime(q) == 0)
+			if(prime(p) == 0)
 			{
 				a = 0;
+			}else a = 1;
+			if(a)
+			{
+				q = n - p;
+				if(prime(q) == 0)
+				{
+					a = 0;
+				}
+			}
+			if(a)
+			{
+				printf("%d %d",p,q);
+				break;
 			}
 		}
-		if(a)
-		{
-			printf("%d = %d + %d",n,p,q);
-			break;
-		}
-	}
+	}else printf("error");
 	return 0;
 }
 
