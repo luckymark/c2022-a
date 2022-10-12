@@ -1,3 +1,0 @@
-C:/Users/William/c2022-a/level1/p06_Goldbach/cmake-build-debug/CMakeFiles/p06_Goldbach.dir
-C:/Users/William/c2022-a/level1/p06_Goldbach/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/William/c2022-a/level1/p06_Goldbach/cmake-build-debug/CMakeFiles/rebuild_cache.dir
