@@ -11,7 +11,7 @@ int main()
 		step += add;
 		if (step == L || step == R)
 		{
-			step = -step;
+			add = -add;
 		}
 		system("cls");
 
@@ -19,7 +19,7 @@ int main()
 		{
 			putchar(' ');
 		}
-		printf("run");
+		putchar('n');
 	}
 
 	return 0;
