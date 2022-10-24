@@ -1,0 +1,31 @@
+#include<stdio.h>
+int F(int n);
+int main()
+{
+	int n;
+	printf("请输入一个正整数：");
+	scanf_s("%d",&n);
+	F(n);
+	return 0;
+}
+int F(int n)
+{
+	int i,n1=0,n2=1,sum; 
+	{
+		if (n == 1 || n==2)
+		{
+			printf("斐波那契数是1");
+		}
+		else
+		{
+			for (i = 1; i < n; i++)
+			{
+				sum = n1 + n2;
+				n1 = n2;
+				n2 = sum;                               
+			}
+			printf("斐波那契数是%d", sum);
+		}
+	}
+	return 0;
+}

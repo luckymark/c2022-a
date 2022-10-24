@@ -1,0 +1,31 @@
+#include<stdio.h>
+int main()
+{
+	int i, j, x;
+	int a[10];
+	printf("请输入十个正整数：\n");
+	for (i = 0; i < 10; i++)
+	{
+		printf("a[%d]=", i);
+		scanf_s("%d", &a[i]);
+	}
+	for (i = 1; i < 10; i++)
+	{
+		for (j = 9; j >= i; j--)
+		{
+			if (a[j] < a[j - 1])
+			{
+				x = a[j - 1];
+				a[j - 1] = a[j];
+				a[j] = x;
+			}
+		}
+	}                                                  //剩余数字中的最小数字移动到剩余数字的最前方
+	printf("排序结果如下：");
+	for (i = 0; i < 10; i++)
+	{
+		printf("%d  ", a[i]);
+	}
+	printf("\n");
+	return 0;
+}

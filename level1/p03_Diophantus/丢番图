@@ -1,0 +1,14 @@
+#include<stdio.h>
+int main()
+{
+	float i;
+	for (i = 0;; i++)
+	{
+		if (i/6+i/12+i/7+5+4==i/2)
+		{
+			printf("儿子去世时丢番图%.0f岁",i-4);
+			break;
+		}
+	}
+	return 0;
+}

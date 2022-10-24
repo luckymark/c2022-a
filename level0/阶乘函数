@@ -1,0 +1,21 @@
+#include<stdio.h>
+int mul(int n);
+int main()
+{
+	int n;
+	printf("请输入一个正整数\n");
+	scanf_s("%d", &n);
+	mul(n);
+	return 0;
+}
+int mul(int n)
+{
+	int i,num=2,m=1;
+	for (i = 0; i < (n-1); i++)
+	{
+		m = m * num;
+		num++;
+	}
+	printf("阶乘的结果是%d", m);
+	return 0;
+}

@@ -1,0 +1,20 @@
+#include<stdio.h>
+int main()
+{
+	int number[10] = { 0 },i,j,t;              //定义一个数组，初始化所有的元素为零
+	printf("请输入5个0-9的整数：");
+	for (i = 0; i < 5; i++)
+	{
+		scanf_s("%d", &t);
+		number[t]++;                           //读入数字对应的桶元素加一
+	}
+	for (i = 0; i < 10; i++)
+	{
+		for (j = 0; j < number[i]; j++)
+		{
+			printf("%d  ", i);                //桶中的数字为几读出几次数据
+		}
+	}
+	getchar();
+	return 0;
+}
