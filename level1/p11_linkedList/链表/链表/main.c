@@ -7,7 +7,7 @@
 int main()
 {
 	Node* p = createnode();
-	addnode(2, p, 100);
+	addnode(8, p, 100);
 	printnode(p);
 	return 0;
 }

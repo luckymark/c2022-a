@@ -113,7 +113,7 @@ int findDataNode(Node* p, int data2)
 	}
 	if (success == 0)
 	{
-		printf("There is no 5!\n\a");
+		printf("There is no %d!\n\a",data2);
 		return -1;
 	}
 }
