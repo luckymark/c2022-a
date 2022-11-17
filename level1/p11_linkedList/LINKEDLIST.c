@@ -46,16 +46,21 @@ int FindOneValue(LinkedList * head,int value){
     return -1;
 }
 
-void TransNum(LinkedList * head,int length){
-    LinkedList * finder = head;
-    int a[length];
-    for(int i = 0;finder != NULL;finder = finder->next,++i){
-        a[i] = finder->number;
+LinkedList * TransNum(LinkedList * head){
+    LinkedList * p1,*p2,*p3;
+    p1 = head;
+    p2 = head->next;
+    p3 = p2->next;
+    for(;p3 != NULL;){
+        p2->next = p1;
+        p1 = p2;
+        p2 = p3;
+        p3 = p3->next;
     }
-    finder = head;
-    for(int i = length - 1;i >= 0;finder = finder->next,--i){
-        finder->number = a[i];
-    }
+    p2->next = p1;
+    head->next = NULL;
+    head = p2;
+    return head;
 }
 
 void FindAllValue(LinkedList * head,int value,int * a){
@@ -66,7 +71,6 @@ void FindAllValue(LinkedList * head,int value,int * a){
             a[i] = finder->number;
         }else a[i] = -1;
     }
-    return;
 }
 
 void FreeLinked(LinkedList * head){
