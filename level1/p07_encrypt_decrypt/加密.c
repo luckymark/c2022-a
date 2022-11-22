@@ -5,7 +5,7 @@
 void code()
 {
 	int n;
-	printf("ÊäÈë×Ö·û¸öÊı:");
+	printf("è¾“å…¥å­—ç¬¦ä¸ªæ•°:");
 	scanf("%d", &n);
 	getchar();
 	char* c = (char*)malloc(sizeof(char) * n);
@@ -15,8 +15,8 @@ void code()
 	{
 		c[i] += 4;
 	}
-	printf("ÃÜÂëÎª£º%s", c);
-	free(c);
+	printf("å¯†ç ä¸ºï¼š%s", c);
+	free(c);//ä»£ç å­˜åœ¨è·‘åˆ°å‡½æ•°ä½“å†…çš„freeå‡½æ•°å°±æŠ¥é”™çš„é—®é¢˜
 }
 
 
@@ -24,7 +24,7 @@ void code()
 void recode()
 {
 	int n;
-	printf("ÊäÈë×Ö·û¸öÊı:");
+	printf("è¾“å…¥å­—ç¬¦ä¸ªæ•°:");
 	scanf("%d", &n);
 	getchar();
 	char* c = (char*)malloc(sizeof(char) * n);
@@ -33,8 +33,8 @@ void recode()
 	{
 		c[i] -= 4;
 	}
-	printf("Ô­ÂëÎª£º%s", c);
-	free(c);
+	printf("åŸç ä¸ºï¼š%s", c);
+	free(c);//ä»£ç å­˜åœ¨è·‘åˆ°å‡½æ•°ä½“å†…çš„freeå‡½æ•°å°±æŠ¥é”™çš„é—®é¢˜
 }
 
 
@@ -42,7 +42,7 @@ void recode()
 int main()
 {
 	int a;
-	printf("ÊäÈë1Îª¼ÓÃÜ£¬ÊäÈë2Îª½âÂë:");
+	printf("è¾“å…¥1ä¸ºåŠ å¯†ï¼Œè¾“å…¥2ä¸ºè§£ç :");
 	scanf("%d", &a);
 	getchar();
 	system("cls");
