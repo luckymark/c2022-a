@@ -1,0 +1,7 @@
+1.book 10
+2.meat 30
+3.egg 40
+4.ice 100
+5.ball 40
+6.cow 20
+7.pig 20
