@@ -1,0 +1,3 @@
+D:/clion work/Goldbach/cmake-build-debug/CMakeFiles/Goldbach.dir
+D:/clion work/Goldbach/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/clion work/Goldbach/cmake-build-debug/CMakeFiles/rebuild_cache.dir
