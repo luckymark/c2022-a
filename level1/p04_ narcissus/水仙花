@@ -1,0 +1,25 @@
+#define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+int main() {
+	int num = 1, cnt = 0, sum = 0;
+	while (1) {
+		int same1 = num;
+		int same2 = num;
+		for (; same1 != 0;) {
+			same1 /= 10;
+			cnt++;
+		}
+		for (; same2 != 0; ) {
+			int d = same2 % 10;
+			sum += pow(d, cnt);
+			same2 /= 10;
+		}
+		if (sum == num) {
+			printf("%d\n", num);
+		}
+		num++;
+		sum = 0;
+		cnt = 0;
+	}
+}

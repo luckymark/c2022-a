@@ -1,0 +1,46 @@
+#define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+void encrypt(char a[]);
+void decrypt(char a[]);
+int main()
+{
+	int k;
+	printf("输入1代表加密，输入0代表解密\n");
+	scanf("%d\n", &k);
+	char a[80];
+	gets_s(a, 80);
+	if (k)
+		encrypt(a);
+	else
+		decrypt(a);
+	puts(a);
+}
+void encrypt(char a[])
+{
+	int len = strlen(a);
+	for (int i = 0; i < len; i++)
+	{
+		if (('a' <= a[i] && a[i] <= 'z') || ('A' <= a[i] && a[i] <= 'Z'))
+		{
+			if (a[i] == 'z' || a[i] == 'Z')
+				a[i] -= 25;
+			else
+				a[i] += 1;
+		}
+	}
+}
+void decrypt(char a[])
+{
+	int len = strlen(a);
+	for (int i = 0; i < len; i++)
+	{
+		if (('a' <= a[i] && a[i] <= 'z') || ('A' <= a[i] && a[i] <= 'Z'))
+		{
+			if (a[i] == 'a' || a[i] == 'A')
+				a[i] += 25;
+			else
+				a[i] -= 1;
+		}
+	}
+}

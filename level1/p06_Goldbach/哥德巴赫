@@ -1,0 +1,29 @@
+#define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int judge(int n) {
+	int cnt=1;
+	for (int i = 2; i < n; i++) {
+		if (n % i == 0) {
+			cnt = 0; 
+			break;
+		}
+	}
+	return cnt;
+}
+int main() {
+	int cnt = 0;
+	for (int num = 4; num <= 100; num += 2) {
+		for (int i = 2; i < num; i++) {
+			for (int j = 2; j < num; j++) {
+				if (judge(i) && judge(j) && i + j == num) {
+					cnt++;
+					goto out;
+				}
+			}
+		}
+	out:
+		if (cnt == 49) {
+			printf("right");
+		}
+	}
+}
