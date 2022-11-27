@@ -10,8 +10,8 @@ typedef struct GOOD
 {
 	char* name;
 	int num;
-	void (*add)(int* num,int goodNum);
-	void (*sub)(int* num,int goodNum);              //C语言用结构仿类需要用函数指针；暂时还不知道为什么；
+	/*void (*add)(int* num,int goodNum);
+	void (*sub)(int* num,int goodNum);  */            //C语言用结构仿类需要用函数指针；暂时还不知道为什么；
 }GOOD;
 
 typedef struct GOODS
@@ -38,7 +38,7 @@ int main()
 	printf("3.出库\n");
 	printf("4.退出程序\n");
 	printf("####################\n");
-	FILE* fp = fopen("WAREHOUSE.txt", "r");
+	FILE* fp = fopen("house.txt", "r");
 	if (fp == NULL)
 		printf("open error\n");
 	while (fscanf(fp, "%s%d", goodName, &goodNum) != EOF)
