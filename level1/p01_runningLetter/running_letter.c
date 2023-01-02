@@ -2,41 +2,40 @@
 #include"stdlib.h"
 #include"windows.h"
 #include"stdbool.h"
+
+char LETTER = 'H';
+int controler = 40;
+
 void helper(int a) {
     system("cls");
 
-    for (int b = 0; b <= a; b++)
+    for (int b = 0; b < a; b++)
     {
         printf(" ");
     }
 
-    printf("H");
+    printf("%s",&LETTER);
     Sleep(100);
 }
-int main() {
-    bool goOrBack = TRUE;
-    int a = 0;
-    while (1)
-    {
-        system("mode con cols=40 lines=10 ");
-        if (goOrBack)
-        {
-            for (a; a < 39; a++)
-            {
-                helper(a);
-            }
-            goOrBack = FALSE;
-        }
-        else
-        {
-            for (a = 37; a >= 0; a--)
-            {
-                helper(a);
-            }
-            goOrBack = TRUE;
-        }
-        
-    }
 
+void go_back() {
+    int a = 0;
+    bool goOrBack = TRUE;
+    while (TRUE) {
+        system("mode con cols=40 lines=10 ");
+        helper(a);
+        if (goOrBack) {
+            if (a+1 == controler) goOrBack = FALSE;
+            else a++;
+        }
+        else {
+            if (a == 0) goOrBack = TRUE;
+            else a--;
+        }
+    }
+}
+
+int main() {
+    go_back();
     return 0;
 }
