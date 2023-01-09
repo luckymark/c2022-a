@@ -1,0 +1,653 @@
+#include"HEAD.h"
+#include"HEAD_G.h"
+int gamemode = 0;
+int AI_Estimation_BLACK;
+int AI_Estimation_WHITE;
+int AI_ThinkWidth[4] = { 15,-1,15,-1 };
+chess chessmap[15][15];
+chess_pos chess_pos_cursor = { 0,0 };
+int chess_draw_list[15 * 15][3] = { 0 };//用于渲染的数据，0存储棋子颜色，1存储x值，2存储y值(1-15)
+int count = 0;//落子手数
+bool isWin = false;//获胜判断
+void winchack(int nowchess[3]);
+void AI_Estimate();
+
+int main() {
+	printf("五子棋游戏\n");
+	printf("请选择游玩模式：1双人模式 2人机模式 0退出\n");
+	std::cin >> gamemode;
+	switch (gamemode)
+	{
+	case 0:
+		return 0;
+		break;
+	case 1:
+		running(1);
+		break;
+	case 2:
+		running(2);
+		break;
+	default:
+		printf("输入错误\n");
+		return -1;
+		break;
+	}
+	return 0;
+}
+void winchack(int nowchess[3]) {
+	int cnt = 1;
+	if (count) {
+		for (int i = -1; nowchess[1] - 1 + i >= 0 && chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == nowchess[0]; i--)//左
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		for (int i = 1; nowchess[1] - 1 + i < 15 && chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == nowchess[0]; i++)//右
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		cnt = 1;
+		for (int i = -1; nowchess[2] - 1 + i >= 0 && chessmap[nowchess[1] - 1][nowchess[2] - 1 + i].chesskind == nowchess[0]; i--)//上
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		for (int i = 1; nowchess[2] - 1 + i < 15 && chessmap[nowchess[1] - 1][nowchess[2] - 1 + i].chesskind == nowchess[0]; i++)//下
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		cnt = 1;
+		for (int i = -1; (nowchess[1] - 1 + i >= 0 && nowchess[2] - 1 + i >= 0) && chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 + i].chesskind == nowchess[0]; i--)//左上
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		for (int i = 1; (nowchess[1] - 1 + i < 15 && nowchess[2] - 1 + i < 15) && chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 + i].chesskind == nowchess[0]; i++)//右下
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		cnt = 1;
+		for (int i = -1; (nowchess[1] - 1 - i < 15 && nowchess[2] - 1 + i >= 0) && chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 + i].chesskind == nowchess[0]; i--)//右上
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+		for (int i = 1; (nowchess[1] - 1 - i >= 0 && nowchess[2] - 1 + i < 15) && chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 + i].chesskind == nowchess[0]; i++)//左下
+		{
+			cnt++;
+			if (cnt == 5) {
+				isWin = true;
+				return;
+			}
+		}
+	}
+	return;
+}
+int AI_Analysis(int cnt, int btw, int dis_1, int dis_2) {
+	int able = btw + cnt + dis_1 + dis_2;
+	if (cnt == 5)
+	{
+		return 50000;
+	}
+	if (cnt == 4)
+	{
+		if (able < 5)
+		{
+			return 0;
+		}
+		if (btw == 0 && (dis_1 > 0 && dis_2 > 0))
+		{
+			return 10000;
+		}
+		else {
+			return 7000;
+		}
+
+	}
+	if (cnt == 3)
+	{
+		if (able < 5)
+		{
+			return 0;
+		}
+		if (btw < 2 && (dis_1 > 1 && dis_2 > 1))
+		{
+			return 2500;
+		}
+		else {
+			return 1250;
+		}
+	}
+	if (cnt == 2)
+	{
+		if (able < 5)
+		{
+			return 0;
+		}
+		if (btw < 3 && (dis_1 > 1 && dis_2 > 1))
+		{
+			return 625;
+		}
+		else {
+			return 375;
+		}
+	}
+	if (cnt == 1)
+	{
+		if (able < 5)
+		{
+			return 0;
+		}
+		else {
+			return 100;
+		}
+	}
+}
+void AI_Estimate() {
+	int Estimate_BLACK = 0;
+	int Estimate_WHITE = 0;
+	for (int i = 0; i < count; i++)//左右
+	{
+		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
+		if (nowchess[0]) {
+			int pcnt = 0;//分数统计
+			int cnt = 1;//同色子数
+			int btw = 0;//间空数
+			int dis_1 = 0;//异色子距离
+			int dis_2 = 0;
+			int temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//左
+			{
+				if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1].chesskind == abs(nowchess[0] / 2 - 2) || nowchess[1] - i < 1) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_1 += temp_dis;
+			temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//右
+			{
+				if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == abs(nowchess[0] / 2 - 2) || nowchess[1] + i > 14) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_2 += temp_dis;
+			temp_dis = 0;
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+
+			if (nowchess[0] == BLACK) {
+				Estimate_BLACK += pcnt;
+			}
+			else {
+				Estimate_WHITE += pcnt;
+			}
+		}
+	}
+	for (int i = 0; i < count; i++)//上下
+	{
+		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
+		if (nowchess[0]) {
+			int pcnt = 0;//分数统计
+			int cnt = 1;//同色子数
+			int btw = 0;//间空数
+			int dis_1 = 0;//异色子距离
+			int dis_2 = 0;
+			int temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//上
+			{
+				if (chessmap[nowchess[1] - 1][nowchess[2] - 1 - i].chesskind == abs(nowchess[0] / 2 - 2) || nowchess[2] - i < 1) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1][nowchess[2] - 1 - i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1][nowchess[2] - 1 - i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_1 += temp_dis;
+			temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//下
+			{
+				if (chessmap[nowchess[1] - 1][nowchess[2] - 1 + i].chesskind == abs(nowchess[0] / 2 - 2) || nowchess[2] + i > 14) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1][nowchess[2] - 1 + i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1][nowchess[2] - 1 + i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_2 += temp_dis;
+			temp_dis = 0;
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+
+			if (nowchess[0] == BLACK) {
+				Estimate_BLACK += pcnt;
+			}
+			else {
+				Estimate_WHITE += pcnt;
+			}
+		}
+	}
+	for (int i = 0; i < count; i++)//方向"\"
+	{
+		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
+		if (nowchess[0]) {
+			int pcnt = 0;//分数统计
+			int cnt = 1;//同色子数
+			int btw = 0;//间空数
+			int dis_1 = 0;//异色子距离
+			int dis_2 = 0;
+			int temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//左上
+			{
+				if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 - i].chesskind == abs(nowchess[0] / 2 - 2) || ((nowchess[1] - i < 1) || (nowchess[2] - i < 1))) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 - i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 - i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_1 += temp_dis;
+			temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//右下
+			{
+				if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 + i].chesskind == abs(nowchess[0] / 2 - 2) || ((nowchess[1] + i > 14) || (nowchess[2] + i > 14))) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 + i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 + i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_2 += temp_dis;
+			temp_dis = 0;
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+
+			if (nowchess[0] == BLACK) {
+				Estimate_BLACK += pcnt;
+			}
+			else {
+				Estimate_WHITE += pcnt;
+			}
+		}
+	}
+	for (int i = 0; i < count; i++)//方向"/"
+	{
+		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
+		if (nowchess[0]) {
+			int pcnt = 0;//分数统计
+			int cnt = 1;//同色子数
+			int btw = 0;//间空数
+			int dis_1 = 0;//异色子距离
+			int dis_2 = 0;
+			int temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//左下
+			{
+				if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 + i].chesskind == abs(nowchess[0] / 2 - 2) || ((nowchess[1] - i < 1) || (nowchess[2] + i > 14))) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 + i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 - i][nowchess[2] - 1 + i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_1 += temp_dis;
+			temp_dis = 0;
+			for (int i = 1; i <= 4 || cnt + btw < 5; i++)//右上
+			{
+				if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 - i].chesskind == abs(nowchess[0] / 2 - 2) || ((nowchess[1] + i > 14) || (nowchess[2] - i < 1))) {
+					break;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 - i].chesskind == nowchess[0]) {
+					if (cnt + temp_dis + btw >= 5)
+					{
+						break;
+					}
+					btw += temp_dis;
+					temp_dis = 0;
+					cnt++;
+				}
+				else if (chessmap[nowchess[1] - 1 + i][nowchess[2] - 1 - i].chesskind == EMPTY) {
+					temp_dis++;
+				}
+			}
+			dis_2 += temp_dis;
+			temp_dis = 0;
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+
+			if (nowchess[0] == BLACK) {
+				Estimate_BLACK += pcnt;
+			}
+			else {
+				Estimate_WHITE += pcnt;
+			}
+		}
+	}
+	AI_Estimation_BLACK = Estimate_BLACK;
+	AI_Estimation_WHITE = Estimate_WHITE;
+}
+struct judgetree* AI_Judgetree_MakeTree() {
+	struct judgetree* newroot = new struct judgetree;
+	newroot->donepos.xpos = -1;
+	newroot->donepos.ypos = -1;
+	newroot->gd_expectation = INT_MAX;
+	newroot->expectation = INT_MIN;
+	newroot->bor_node = NULL;
+	newroot->kid_node = NULL;
+	newroot->listend = newroot;
+	return newroot;
+}
+void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height) {
+
+	if (root->listend == root)
+	{
+		if (height % 2)
+		{
+			root->listend->expectation = INT_MAX;
+		}
+		else {
+			root->listend->expectation = INT_MIN;
+		}
+		root->listend->donepos = newchess;
+		root->listend->bor_node = AI_Judgetree_MakeTree();
+		root->listend = root->listend->bor_node;
+		return;
+	}
+	else {
+		root->listend->donepos = newchess;
+		if (height % 2)
+		{
+			root->listend->expectation = INT_MAX;
+			root->listend->gd_expectation = INT_MIN;
+		}
+		else {
+			root->listend->expectation = INT_MIN;
+			root->listend->gd_expectation = INT_MAX;
+		}
+		root->listend->bor_node = AI_Judgetree_MakeTree();
+		root->listend = root->listend->bor_node;
+	}
+
+}
+void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
+	if (height < 2)
+	{
+		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
+		{
+			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
+			{
+				if (chessmap[j][i].chesskind == EMPTY)
+				{
+					chess_pos adding;
+					adding.xpos = j;
+					adding.ypos = i;
+					AI_Judgetree_AddNode(root, adding, height);
+				}
+			}
+		}
+		for (struct judgetree* i = root; i->bor_node != NULL; i = i->bor_node)
+		{
+			if (count % 2)
+			{
+				chess_draw_list[count][0] = WHITE;
+				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = WHITE;
+			}
+			else {
+				chess_draw_list[count][0] = BLACK;
+				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = BLACK;
+			}
+			chess_draw_list[count][1] = i->donepos.xpos + 1;
+			chess_draw_list[count][2] = i->donepos.ypos + 1;
+			count++;
+			i->kid_node = AI_Judgetree_MakeTree();
+			i->kid_node->gd_expectation = root->expectation;
+			AI_Judgetree_BuildTree(i->kid_node, height + 1);
+			i->expectation = i->kid_node->expectation;
+			AI_JudgeTree_Delete(i->kid_node);
+			i->kid_node = NULL;
+			if (height % 2) {
+				if (i->expectation < root->gd_expectation)
+				{
+					root->expectation = INT_MIN;
+					count--;
+					chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
+					return;
+				}
+			}
+			else {
+				if (i->expectation > root->gd_expectation)
+				{
+					root->expectation = INT_MAX;
+					count--;
+					chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
+					return;
+				}
+			}
+			if (height % 2)
+			{
+				if (root->expectation > i->expectation) {
+					root->expectation = i->expectation;
+				}
+			}
+			else {
+				if (root->expectation < i->expectation)
+				{
+					root->expectation = i->expectation;
+				}
+			}
+			count--;
+			chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
+		}
+	}
+	else {
+		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
+		{
+			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
+			{
+				if (chessmap[j][i].chesskind == EMPTY)
+				{
+					chess_pos adding;
+					adding.xpos = j;
+					adding.ypos = i;
+					AI_Judgetree_AddNode(root, adding, height);
+				}
+			}
+		}
+		if (count % 2)
+		{
+			chess_draw_list[count][0] = WHITE;
+		}
+		else {
+			chess_draw_list[count][0] = BLACK;
+		}
+		for (struct judgetree* i = root; i->bor_node != NULL; i = i->bor_node)
+		{
+			chess_draw_list[count][1] = i->donepos.xpos + 1;
+			chess_draw_list[count][2] = i->donepos.ypos + 1;
+			count++;
+			AI_Estimate();
+			if (count % 2)
+			{
+				i->expectation = AI_Estimation_BLACK - AI_Estimation_WHITE;
+			}
+			else {
+				i->expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
+			}
+			count--;
+			if (root->expectation < i->expectation)
+			{
+				root->expectation = i->expectation;
+			}
+		}
+	}
+
+}
+void AI_JudgeTree_Choose(struct judgetree* root) {
+	int expectation = INT_MIN;
+	chess_pos nextchess;
+	nextchess.xpos = -1;
+	nextchess.ypos = -1;
+	for (struct judgetree* i = root; i != root->listend; i = i->bor_node)
+	{
+		if (i->expectation == root->expectation)
+		{
+			expectation = i->expectation;
+			nextchess = i->donepos;
+		}
+	}
+	if (nextchess.xpos != -1 && nextchess.ypos != -1) {
+		if (chessmap[nextchess.xpos][nextchess.ypos].chesskind == EMPTY) {
+			if (count % 2) {
+				chessmap[nextchess.xpos][nextchess.ypos].chesskind = WHITE;
+				chess_draw_list[count][0] = WHITE;
+				chess_draw_list[count][1] = nextchess.xpos + 1;
+				chess_draw_list[count][2] = nextchess.ypos + 1;
+			}
+			else {
+				chessmap[nextchess.xpos][nextchess.ypos].chesskind = BLACK;
+				chess_draw_list[count][0] = BLACK;
+				chess_draw_list[count][1] = nextchess.xpos + 1;
+				chess_draw_list[count][2] = nextchess.ypos + 1;
+			}
+			if (nextchess.xpos - 1 < AI_ThinkWidth[2]) {
+				AI_ThinkWidth[2] = nextchess.xpos - 3;
+				if (AI_ThinkWidth[2] < 0)
+				{
+					AI_ThinkWidth[2] = 0;
+				}
+			}
+			if (nextchess.xpos - 1 > AI_ThinkWidth[3]) {
+				AI_ThinkWidth[3] = nextchess.xpos + 1;
+				if (AI_ThinkWidth[3] > 14)
+				{
+					AI_ThinkWidth[3] = 14;
+				}
+			}
+			if (nextchess.ypos - 1 < AI_ThinkWidth[0]) {
+				AI_ThinkWidth[0] = nextchess.ypos - 3;
+				if (AI_ThinkWidth[0] < 0)
+				{
+					AI_ThinkWidth[0] = 0;
+				}
+			}
+			if (nextchess.ypos - 1 > AI_ThinkWidth[1]) {
+				AI_ThinkWidth[1] = nextchess.ypos + 1;
+				if (AI_ThinkWidth[1] > 14)
+				{
+					AI_ThinkWidth[1] = 14;
+				}
+			}
+			count++;
+		}
+	}
+}
+void AI_JudgeTree_Delete(struct judgetree* root) {
+	for (struct judgetree* i = root; i != NULL;)
+	{
+		struct judgetree* temp = i;
+		i = i->bor_node;
+		if (!(temp->kid_node))
+		{
+			delete temp;
+		}
+		else {
+			AI_JudgeTree_Delete(temp->kid_node);
+			delete temp;
+		}
+	}
+	return;
+}
+void AI_Running() {
+	struct judgetree* judgetree = AI_Judgetree_MakeTree();
+	AI_Judgetree_BuildTree(judgetree, 0);
+	AI_JudgeTree_Choose(judgetree);
+	AI_JudgeTree_Delete(judgetree);
+	return;
+}
