@@ -17,6 +17,7 @@ constexpr auto S = 900/15;
 #include<graphics.h>
 #include<Windows.h>
 #include<time.h>
+#include <conio.h>
 
 
 
@@ -29,6 +30,9 @@ void player();
 void chess(int *row ,int *line);
 
 int game();
+int menu();
+void beginanimation();
+int showchoice();
 
 int judge1();
 int judge12();

@@ -8,7 +8,6 @@ int	n = 0;
 
 void board()
 {
-	initgraph(900, 900);
 	for (int i = 0; i < 16; i++)
 	{
 		line(900/15*i, 0, 900/15*i, 900);
@@ -25,6 +24,7 @@ void board()
 
 void player()
 {
+	FlushMouseMsgBuffer();
 	setfillcolor(BLACK);
 	MOUSEMSG m;
 	int line, row;
@@ -230,7 +230,7 @@ int judge21()
 	{
 		for (int y = 0; y < LINE - 5; y++)
 		{
-			if (i - 4 < 0&&y+4<15)
+			if (i - 4 > 0&&y+4<15)
 			{
 				if (Chess[i][y] == Chess[i - 1][y + 1] && Chess[i][y] == Chess[i - 2][y + 2] && Chess[i][y] == Chess[i - 3][y + 3] && Chess[i][y] == Chess[i - 4][y + 4] && Chess[i][y] != 0)
 				{
@@ -276,13 +276,27 @@ int judge2()
 int game()
 {
 
-
 	//目录
+	initgraph(900, 900);
+	menu();
 
+//黑一白二
 
-	board();
-
-
+	switch (showchoice())
+	{
+		Sleep(100);
+	case 1:
+		board();
+		Sleep(100);
+		break;
+	case 2:
+		board();
+		Sleep(100);
+		player();
+		break;
+	default:
+		printf("error");
+	}
 
 	//开始
 	while (1)
@@ -291,13 +305,21 @@ int game()
 		computer();
 		if (judge1()==1||judge12()==1||judge21()==1)
 		{
+			settextcolor(RED);
+			settextstyle(60, 0, _T("Consolas"));
+			outtextxy(350, 300, _T("computer win"));
 			printf("computer win");
+			Sleep(100);
 			break;
 		}
 		player();
 		if (judge2() == 1||judge12()==1||judge21()==1)
 		{
+			settextcolor(RED);
+			settextstyle(60, 0, _T("Consolas"));
+			outtextxy(350, 300, _T("you win"));
 			printf("player win");
+			Sleep(100);
 			break;
 		}
 
@@ -308,5 +330,68 @@ int game()
 
 
 
+	return 0;
+}
+
+
+
+int menu()
+{
+	settextcolor(RED);
+	settextstyle(60, 0, _T("Consolas"));
+	outtextxy(350, 300, _T("五子棋"));
+	settextstyle(20, 0, _T("Consolas"));
+	while (!_kbhit())
+	{
+		beginanimation();
+	}
+	settextcolor(BLACK);
+	settextstyle(60, 0, _T("Consolas"));
+	outtextxy(350, 300, _T("五子棋"));
+	return 0;
+}
+
+void beginanimation()
+{
+	settextcolor(WHITE);
+	outtextxy(350, 500, _T(">  clik to play  <"));
+	Sleep(100);
+	settextcolor(BLACK);
+	outtextxy(350, 500, _T(">  clik to play  <"));
+	Sleep(100);
+}
+
+
+int showchoice()
+{
+	settextcolor(WHITE);
+	settextstyle(30, 0, _T("Consolas"));
+	outtextxy(400, 300, _T("后手"));
+	outtextxy(400, 500, _T("先手"));
+	MOUSEMSG m;
+	while (1)
+	{
+		m = GetMouseMsg();
+		switch (m.uMsg)
+		{
+		case WM_LBUTTONDOWN:
+			if ((m.x >= 400 && m.x <= 450) && (m.y >= 300 && m.y <= 330))
+			{//清除文字
+				settextcolor(BLACK);
+				settextstyle(30, 0, _T("Consolas"));
+				outtextxy(400, 300, _T("后手"));
+				outtextxy(400, 500, _T("先手"));
+				return 1;
+			}
+			if ((m.x >= 400 && m.x <= 450) && (m.y >= 500 && m.y <= 530))
+			{
+				settextcolor(BLACK);
+				settextstyle(30, 0, _T("Consolas"));
+				outtextxy(400, 300, _T("后手"));
+				outtextxy(400, 500, _T("先手"));
+				return 2;
+			}
+		}
+	}
 	return 0;
 }
