@@ -1,0 +1,4 @@
+newware1 3
+good1 122
+good2 69
+product 10
