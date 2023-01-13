@@ -1,26 +1,27 @@
-#pragma once
-#ifndef AI_H
-#define AI_H
-#include <easyx.h>
-#include "GameInit.h"
+//
+// Created by XuanCheng on 2023/1/2.
+//
 
-typedef struct st {
-	short x;
-	short y;
-	short color;
-	short score;
-	struct st* thiscell;
-	struct st* nextcell;
-}tree;
+#ifndef CHESSAI_AI_H
+#define CHESSAI_AI_H
 
-extern int temp[20][20];
+#define MIN 0
+#define MAX FIVE_SCORE
+#define MOSTPOS 250
 
-void computerdo(ExMessage mouse, int color, int* win);
-tree* treerootbuild(int i,int j);
-void treebuild(short cell, int color,tree* root,tree* finder);
-void dfs(int cell, tree* root);
-short check(int j,int thorizen);
-int* genboard(int* a);
+typedef struct {
+    int x;
+    int y;
+    int score;
+}pos;
 
+void genboard(int color, pos* points);
+int maxx(int deep,int alpha, int beta,int color = R.com);
+int minn(int deep,int alpha,int beta,int color = R.hum);
+void maxmin(int deep, int color = R.com);
+void AI();
+void AIdo();
+void BubbleSort(pos *points);
+int random();
 
-#endif
+#endif //CHESSAI_AI_H

@@ -1,165 +1,214 @@
-#define _CRT_SECURE_NO_WARNINGS
+//
+// Created by XuanCheng on 2023/1/2.
+//
+
+#include "Chess.h"
 #include "AI.h"
-#include "GameInit.h"
-#include <easyx.h>
-#include "Score.h"
-#include<stdio.h>
-#include<stdlib.h>
-
-int temp[20][20];
-
-void computerdo(ExMessage mouse, int color, int* win) {
-	int i = 0;
-	int j = 0;
-	int jump = 0;
-	LOGFONT f;
-
-	gettextstyle(&f);						// »ñÈ¡µ±Ç°×ÖÌåÉèÖÃ
-	settextcolor(BLACK);					// ÉèÖÃ×ÖÌåÑÕÉ«ºÚÉ«
-	f.lfHeight = 24;						// ÉèÖÃ×ÖÌå¸ß¶ÈÎª 12
-	_tcscpy(f.lfFaceName, _T("ºÚÌå"));		// ÉèÖÃ×ÖÌåÎª¡°ºÚÌå¡±(¸ß°æ±¾ VC ÍÆ¼öÊ¹ÓÃ _tcscpy_s º¯Êı)
-	f.lfQuality = ANTIALIASED_QUALITY;		// ÉèÖÃÊä³öĞ§¹ûÎª¿¹¾â³İ  
-	settextstyle(&f);						// ÉèÖÃ×ÖÌåÑùÊ½
+#include <random>
 
 
-RENEW:
-	outtextxy(913, 0, _T("Î°´ó»úÆ÷ÈËÕıÔÚÍÆ·­ÈËÀà±©Õş"));
-	while (mouse.lbutton != true) {
-		getmessage(&mouse, EX_MOUSE);
-	}
-	mouse.lbutton = false;
-	for (i = 0; i < 15; ++i) {
-		for (j = 0; j < 15; ++j) {
-			if (mouse.x > X[i] - 16 && mouse.x < X[i] + 16) {
-				if (mouse.y > Y[j] - 16 && mouse.y < Y[j] + 16 && Board[i][j] == 0) {
-					if (color == 1) {
-						setfillcolor(BLACK);
-					}
-					else {
-						setfillcolor(WHITE);
-					}
-					solidcircle(X[i], Y[j], 28);
-					Board[i][j] = color;
-					flushmessage();
-					jump = 1;
-					break;
-				}
-			}
-		}
-		if (jump == 1) {
-			jump = 0;
-			clearrectangle(913, 0, 1500, 30);
-			WinWinWin(win);
-			break;
-		}
-		if (i == 14 && j == 15) {
-			clearrectangle(913, 0, 1500, 30);
-			goto RENEW;
-		}
-	}
+pos position[MOSTPOS];
+pos bestpos;
+int c = 1;
+
+void genboard(int color, pos *points) {
+    //Init pos
+    for (int i = 0; i < MOSTPOS; ++i) {
+        points[i].x = -1;
+        points[i].y = -1;
+        points[i].score = -1;
+    }
+
+    //Get empty position
+    int flag = 0;
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
+            if (board[i][j] != 0) {
+                for (int m = i - 1; m < i + 1; ++m) {
+                    for (int n = j - 1; n < j + 1; ++n) {
+                        if (m > 0 && m < 15 && n > 0 && n < 15 && board[m][n] == 0) {
+                            points[flag].x = m;
+                            points[flag].y = n;
+                            board[m][n] = color;
+                            points[flag].score = score(color);
+                            board[m][n] = 0;
+                            flag++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Bubble Sort
+    BubbleSort(points);
 }
 
-tree* treerootbuild(int i, int j) {
-	tree* root;
-	root = (tree*)malloc(sizeof(tree));
-	if(root != NULL)
-	{
-		root->x = i;
-		root->y = j;
-		root->color = check(i, j);
-		root->score = 0;
-		root->thiscell = NULL;
-		root->nextcell = NULL;
-		return root;
-	}
-	return NULL;
+int maxx(int deep, int alpha, int beta, int color) {
+    int v = score(color);
+    //è¿­ä»£ç»ˆæ­¢
+    if (deep <= 0 || v >= FIVE_SCORE) {
+        return v;
+    }
+
+    int best = MIN;
+    pos points[MOSTPOS];
+    genboard(color,points);
+    for (int i = 0; i < MOSTPOS && points[i].x != -1; ++i) {
+        board[points[i].x][points[i].y] = color;
+        v = minn(deep - 1, alpha, best > beta ? best : beta);
+        board[points[i].x][points[i].y] = 0;
+        if (v > best) {
+            best = v;
+        }
+        if (v > alpha) {
+            break;
+        }
+    }
+    return best;
 }
 
-void treebuild(short cell, int color,tree* root,tree* finder) {//ÇëÓÃµİ¹éÖØĞ´
-	int a[450];
-	for (int i = 0; i < 450; ++i) {
-		a[i] = -1;
-	}
-	if (root->nextcell == NULL) {
-		finder = root;
-	}
-	genboard(a);
-	for (int k = 0; k < 900 && a[k] != -1; k += 2) {
-		temp[a[k]][a[k+1]] = color;
-		tree* next = (tree*)malloc(sizeof(tree));
-		next->color = color;
-		next->x = a[k];
-		next->y = a[k + 1];
-		next->score = score(color);
-		next->nextcell = NULL;
-		next->thiscell = NULL;
-		if (finder->nextcell == NULL  && k == 0) {
-			finder->nextcell = next;
-			finder = finder->nextcell;
-		}
-		else {
-			finder->thiscell = next;
-			finder = finder->thiscell;
-		}
-		if (cell < 7) {//change
-			treebuild(cell += 1, color, root, finder);
-		}
+int minn(int deep, int alpha, int beta, int color) {
+    int v = score(color);
+    //è¿­ä»£ç»ˆæ­¢
+    if (deep <= 0 || v >= 999999) {
+        return v;
+    }
 
-		temp[a[k]][a[k + 1]] = 0;
-	}
-	
+    int best = MAX;
+    pos points[MOSTPOS];
+    genboard(color, points);
+    for (int i = MOSTPOS - 1; i >= 0 ; --i) {
+        if (points[i].x == -1) {
+            continue;
+        }
+        board[points[i].x][points[i].y] = R.hum;
+        v = maxx(deep - 1,best<alpha ? best : alpha, beta);
+        board[points[i].x][points[i].y] = 0;
+        if (v < best) {
+            best = v;
+        }
+        if (v < beta) {
+            break;
+        }
+    }
+    return best;
 }
 
-void dfs(int cell,tree *root)
-{
-	tree* finder = root;
-	if (cell == 4) {
-		//finder->score = score();
-		return;
-	}
-
+void maxmin(int deep, int color) {
+    int best = MIN;
+    int beta = MIN;
+    int alpha = MAX;
+    int v;
+    int end = 0;
+    pos points[MOSTPOS];
+    //Init position
+    for(int i = 0; i < MOSTPOS; ++i){
+        position[i].x = -1;
+        position[i].y = -1;
+        position[i].score = -1;
+    }
+    //body
+    genboard(color, points);
+    for (int i = 0; i < MOSTPOS && points[i].x != -1; ++i){
+        board[points[i].x][points[i].y] = color;
+        v = maxx(deep - 1, alpha, beta, color);
+        if (v == best){//å°†æ–°çš„èŠ‚ç‚¹åŠ å…¥positionä¸­
+            position[end].x = points[i].x;
+            position[end].y = points[i].y;
+            end++;
+        } else if(v > best){//æ¸…é™¤ä¹‹å‰çš„èŠ‚ç‚¹ï¼Œå°†æ–°çš„èŠ‚ç‚¹åŠ å…¥positionä¸­
+            best = v;
+            for (int j = 0; j < MOSTPOS; ++j) {
+                position[j].x = -1;
+                position[j].y = -1;
+            }
+            end = 0;
+            position[end].x = points[i].x;
+            position[end].y = points[i].y;
+            end++;
+        }
+        board[points[i].x][points[i].y] = 0;
+    }
+    //produce random node
+    int k = 1;
+    for (int i = 0; i < MOSTPOS; ++i) {
+        if (position[i].x == -1) {
+            k = i - 1;
+            break;
+        }
+    }
+    //ç”Ÿæˆéšæœºæ•°
+    int randnum;
+    while(true) {
+        randnum = random();
+        if(position[randnum].x != -1) {
+            bestpos.x = position[randnum].x;
+            bestpos.y = position[randnum].y;
+            break;
+        }
+    }
 }
 
-short check(int i,int j)
-{
-	if (temp[i][j] == 1) {
-		return 1;
-	}
-	else if(temp[i][j] == 2) {
-		return 2;
-	}
-	else {
-		return 0;
-	}
-	return 0;
+void AI() {
+    maxmin(4);
+    fontset(BLACK, 24, ANTIALIASED_QUALITY, _T("é»‘ä½“"));
+    outtextxy(913, 0, _T("ä¼Ÿå¤§æœºå™¨äººæ­£åœ¨æ¨ç¿»äººç±»æš´æ”¿ "));
+    if (R.com == 1) {
+        setfillcolor(BLACK);
+    }
+    else {
+        setfillcolor(WHITE);
+    }
+
+    if(c>1)
+    {
+        solidcircle(X[bestpos.x], Y[bestpos.y], 28);
+        board[bestpos.x][bestpos.y] = R.com;
+        clearrectangle(913, 0, 1500, 30);
+    }
+    else if(c == 1) {
+        if (board[8][8] == 0) {
+            solidcircle(X[8], Y[8], 28);
+            board[8][8] = R.com;
+            clearrectangle(913, 0, 1500, 30);
+        }
+        else {
+            solidcircle(X[9], Y[9], 28);
+            board[9][9] = R.com;
+            clearrectangle(913, 0, 1500, 30);
+        }
+    }
+    c++;
 }
 
-int* genboard(int* a)
-{
-	int k = 0;
-	int flag = 1;
-	for (int i = 0; i < 15; ++i) {
-		for (int j = 0; j < 15; ++j) {
-			if (Board[i][j] == 0) {
-				for (int m = i - 2; m <= i+2; ++m) {
-					for (int n = j - 2; n <= j + 2; ++n) {
-						if (m > 0 && n > 0 && m != n && Board[m][n] != 0) {
-							for (int q = 0; q < 450 && a[q] != -1; q = q + 2) {
-								if (a[q] == i && a[q + 1] == j) {
-									flag = 0;
-								}
-							}
-							if (flag) {
-								a[k] = i;
-								a[k + 1] = j;
-								k = k + 2;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	return a;
+void BubbleSort(pos *points) {
+    pos temp;
+    for (int i = 0; i < 19; ++i) {
+        for (int j = 0; j < 19 - i; ++j) {
+            if (points[j].x == points[j + 1].x && points[j].y == points[j + 1].y) {
+                points[j + 1].x = -1;
+                points[j + 1].y = -1;
+                points[j + 1].score = -1;
+            }
+            if (points[j].score < points[j + 1].score) {
+                temp.score = points[j].score;
+                points[j].score = points[j + 1].score;
+                points[j + 1].score = temp.score;
+            }
+        }
+    }
 }
 
+int random() {
+    std::random_device rd;
+    auto gen = std::default_random_engine(rd());
+    std::uniform_int_distribution<int> dis(0,MOSTPOS);
+    int randk = dis(gen);
+    return randk;
+}
+
+void AIdo(){
+    AI();
+    finish();
+}
