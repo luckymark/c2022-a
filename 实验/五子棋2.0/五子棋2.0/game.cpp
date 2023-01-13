@@ -8,6 +8,9 @@ int	n = 0;
 
 void board()
 {
+	settextcolor(WHITE);
+	settextstyle(25, 0, _T("Consolas"));
+	outtextxy(900, 300, _T("保存记录"));
 	for (int i = 0; i < 16; i++)
 	{
 		line(900/15*i, 0, 900/15*i, 900);
@@ -18,25 +21,51 @@ void board()
 
 
 
+//void player(int x, int y)
+//{
+//	FlushMouseMsgBuffer();
+//	setfillcolor(BLACK);
+//	MOUSEMSG m;
+//	int line, row;
+//	while (true)
+//	{
+//	flag:
+//		m = GetMouseMsg();
+//		switch (m.uMsg)
+//		{
+//		case WM_LBUTTONDOWN:
+//			row = m.x;
+//			line = m.y;
+//			chess(&row, &line);
+//			if (Chess[mm][n] == 0)
+//			{
+//				Chess[mm][n] = 1;
+//				printf("(%d,%d) %d\n", mm, n, 1);
+//				solidcircle(row, line, 10);
+//			}
+//			else
+//				goto flag;
+//			//case WM_MOUSEMOVE:
+//			//	char s[12];
+//			//	setfillcolor(BLACK);
+//			//	solidrectangle(0, 0, 75, 20);
+//			//	sprintf(s, "[%d,%d]", m.x, m.y);
+//			//	outtextxy(0, 0, s);
+//		}
+//		if (m.uMsg == WM_LBUTTONUP)
+//			break;
+//	}
+//}
 
 
 
-
-void player()
+void player(int x,int y)
 {
 	FlushMouseMsgBuffer();
 	setfillcolor(BLACK);
-	MOUSEMSG m;
 	int line, row;
-	while (true)
-	{
-		flag:
-		m = GetMouseMsg();
-		switch (m.uMsg)
-		{
-		case WM_LBUTTONDOWN:
-				row = m.x;
-				line = m.y;
+				row = x;
+				line = y;
 				chess(&row, &line);
 				if (Chess[mm][n] == 0)
 				{
@@ -45,17 +74,15 @@ void player()
 					solidcircle(row, line, 10);
 				}
 				else
-					goto flag;
+					return ;
 		//case WM_MOUSEMOVE:
 		//	char s[12];
 		//	setfillcolor(BLACK);
 		//	solidrectangle(0, 0, 75, 20);
 		//	sprintf(s, "[%d,%d]", m.x, m.y);
 		//	outtextxy(0, 0, s);
-		}
-		if (m.uMsg == WM_LBUTTONUP)
-			break;
-	}
+		
+	
 }
 
 
@@ -277,7 +304,7 @@ int game()
 {
 
 	//目录
-	initgraph(900, 900);
+	initgraph(1000, 900);
 	menu();
 
 //黑一白二
@@ -292,16 +319,20 @@ int game()
 	case 2:
 		board();
 		Sleep(100);
-		player();
+		saving();
+		break;
+	case 3:
+		board();
+		reading();
+		Sleep(100);
+		saving();
 		break;
 	default:
 		printf("error");
 	}
-
 	//开始
 	while (1)
 	{
-
 		computer();
 		if (judge1()==1||judge12()==1||judge21()==1)
 		{
@@ -312,7 +343,8 @@ int game()
 			Sleep(100);
 			break;
 		}
-		player();
+		if (saving() == 1)
+			break;
 		if (judge2() == 1||judge12()==1||judge21()==1)
 		{
 			settextcolor(RED);
@@ -368,6 +400,7 @@ int showchoice()
 	settextstyle(30, 0, _T("Consolas"));
 	outtextxy(400, 300, _T("后手"));
 	outtextxy(400, 500, _T("先手"));
+	outtextxy(380, 700, _T("恢复对局"));
 	MOUSEMSG m;
 	while (1)
 	{
@@ -381,6 +414,7 @@ int showchoice()
 				settextstyle(30, 0, _T("Consolas"));
 				outtextxy(400, 300, _T("后手"));
 				outtextxy(400, 500, _T("先手"));
+				outtextxy(380, 700, _T("恢复对局"));
 				return 1;
 			}
 			if ((m.x >= 400 && m.x <= 450) && (m.y >= 500 && m.y <= 530))
@@ -389,9 +423,96 @@ int showchoice()
 				settextstyle(30, 0, _T("Consolas"));
 				outtextxy(400, 300, _T("后手"));
 				outtextxy(400, 500, _T("先手"));
+				outtextxy(380, 700, _T("恢复对局"));
 				return 2;
+			}
+			if ((m.x >= 380 && m.x <= 500) && (m.y >= 700 && m.y <= 730))
+			{
+				settextcolor(BLACK);
+				settextstyle(30, 0, _T("Consolas"));
+				outtextxy(400, 300, _T("后手"));
+				outtextxy(400, 500, _T("先手"));
+				outtextxy(380, 700, _T("恢复对局"));
+				return 3;
 			}
 		}
 	}
 	return 0;
+}
+
+
+int saving()
+{
+	MOUSEMSG m;
+	while (1)
+	{
+		m = GetMouseMsg();
+		switch (m.uMsg)
+		{
+			case WM_LBUTTONDOWN:
+				if (m.x < 900)
+				{
+					player(m.x, m.y);
+					return 0;
+				}				
+				if (m.y > 275 || m.y < 350)
+				{
+					FILE* fp = fopen("./记录/记录.text", "w");
+					if (!fp)
+					{
+						printf("error");
+						return 0;
+					}
+					for (int i = 0; i < 15; i++)
+					{
+						for (int j = 0; j < 15; j++)
+						{
+							fprintf(fp, "%d ", Chess[i][j]);
+						}
+					}
+					fclose;
+					return 1;
+				}
+			case WM_LBUTTONUP:
+				break;
+		}
+	}
+	return 0;
+}
+
+
+
+void reading()
+{
+	FILE* fp = fopen("./记录/记录.text", "r");
+	if (!fp)
+	{
+		printf("error");
+		return;
+	}
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			fscanf(fp,"%d ", &Chess[i][j]);
+		}
+	}
+	fclose(fp);
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			if (Chess[i][j] == 1)
+			{
+				setfillcolor(BLACK);		
+				solidcircle(i*S+ OROW, j*S+ OLINE, 10);
+			}
+			if (Chess[i][j] == 2)
+			{
+				setfillcolor(WHITE);
+				solidcircle(i * S + OROW, j * S + OLINE, 10);
+			}
+		}
+	}
+	return;
 }

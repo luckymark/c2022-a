@@ -24,7 +24,7 @@ constexpr auto S = 900/15;
 void board();
 
 
-void player();
+void player(int x,int y);
 
 
 void chess(int *row ,int *line);
@@ -33,6 +33,10 @@ int game();
 int menu();
 void beginanimation();
 int showchoice();
+int saving(); 
+void reading();
+
+
 
 int judge1();
 int judge12();
