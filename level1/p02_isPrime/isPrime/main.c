@@ -8,14 +8,14 @@ void Judge(void){
             break;
     }
     if (Number == Factor)
-        printf("%d是素数\n",Number);
+        printf("%d??????\n",Number);
     else
-        printf("%d不是素数\n",Number);
+        printf("%d????????\n",Number);
 }
 int main(void ) {
     while (1) {
         Factor=2;
-        printf("请输入你想判断的数字：\n");
+        printf("???????????ж???????\n");
         scanf("%d", &Number);
         Judge();
         continue;

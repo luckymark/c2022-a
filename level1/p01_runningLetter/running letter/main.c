@@ -14,7 +14,7 @@ void Walk(void) {
             Time++;
             Step=Time;
             Cycle();
-            printf("RUNNING LETTER");
+            printf(">=º¯W±¦=<");
             system("cls");
         }
     else
@@ -23,7 +23,7 @@ void Walk(void) {
             Time++;
             Step= abs(Time);
             Cycle();
-            printf("RUNNING LETTER");
+            printf(">=º¯W±¦=<");
             system("cls");
     }
 }
