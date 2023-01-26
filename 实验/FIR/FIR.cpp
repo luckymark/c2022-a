@@ -1,7 +1,7 @@
 ﻿#include <stdio.h>
 #include <string.h>
 #include "Basic.h"
-#include "AIhead.h"
+#include "AI.h"
 #include "Human.h"
 #include "Stack.h"
 

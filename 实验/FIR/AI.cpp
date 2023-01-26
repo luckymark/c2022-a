@@ -1,4 +1,4 @@
-#include "AIhead.h"
+#include "AI.h"
 #include "Basic.h"
 #include <stdlib.h>
 #include <math.h>
@@ -94,7 +94,7 @@ void findBoundary(int boundary[], int** vBoard) {
 }
 
 int maxminSearch(int depth, int player, int** vBoard, int alpha, int beta) {
-	int score = 0, falpha = alpha, fbeta = beta;
+	int score = 0;
 	int boundary[4] = { 0, 14, 0, 14 }; //上下左右
 	int x1, x2, y1, y2;
 
@@ -188,7 +188,6 @@ int getScore(int** vBoard, int player) {
 						n_rival++;
 					}
 				}
-
 				//向反方向遍历
 				x = i - DIR[dir].x, y = j - DIR[dir].y;
 				while (x >= 0 && x <= 14 && y >= 0 && y <= 14 && vBoard[x][y] == player ){
@@ -248,7 +247,6 @@ int AI(int* x, int* y, int round) {
 		Sleep(500);
 		secondRound(x, y);
 		flag = 1;
-
 	}
 	else {
 		int** vBoard = (int**)malloc(sizeof(int*) * 15);
@@ -257,7 +255,7 @@ int AI(int* x, int* y, int round) {
 				vBoard[i] = (int*)malloc(sizeof(int) * 15);
 			}
 		}
-		//把当前棋盘的局势复制到假想棋盘中,并找出囊括落有棋子的矩形
+		//把当前棋盘复制到假想棋盘中
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				if (vBoard != NULL) {
@@ -274,7 +272,6 @@ int AI(int* x, int* y, int round) {
 		else {
 			player = BPIECE;
 		}
-		// VCF,VCT
 		maxminSearch(SDEPTH, player, vBoard, alpha, beta);
 
 		int boundary[4], x1, x2, y1, y2;
