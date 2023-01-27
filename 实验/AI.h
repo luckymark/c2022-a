@@ -14,13 +14,12 @@ typedef struct {
     int y;
 }pos;
 
-void genboard(int color, pos* points);
+std::vector<int> genboard(int color, int deep);
 int maxx(int deep,int alpha, int beta,int color = R.com);
 int minn(int deep,int alpha,int beta,int color = R.hum);
 void maxmin(int deep, int color = R.com);
 void AI();
 void AIdo();
-void BubbleSort(pos *points);
 int random();
 int HasNeighbor(int i, int j, int length, int wideth);
 

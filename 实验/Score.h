@@ -10,6 +10,7 @@
 #define THREE_LIVE_SCORE 1000
 #define FOUR_DIE_SCORE 1000
 #define THREE_DIE_SCORE 100
+#define TOW_SCORE 10
 
 
 int score(int color);

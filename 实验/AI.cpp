@@ -5,18 +5,21 @@
 #include "Chess.h"
 #include "AI.h"
 
+using namespace std;
 
-pos position[MOSTPOS];
-pos bestpos;
+vector<int>points;
 int c = 1;
 
-void genboard(int color, pos *points) {
-    //Init pos
-    for (int i = 0; i < MOSTPOS; ++i) {
-        points[i].x = -1;
-        points[i].y = -1;
-    }
+vector<int> genboard(int color,int deep) {
 
+    vector<int>temp;
+    vector<int>fives;
+    vector<int>fours;
+    vector<int>doubleThrees;
+    vector<int>threes;
+    vector<int>twos;
+    vector<int>neighbors;
+    vector<int>nextNeighbors;
 
     for (int i = 0; i < 20; ++i) {
         for (int j = 0; j < 20; ++j) {
@@ -26,16 +29,58 @@ void genboard(int color, pos *points) {
                     int scoreCom = score_point(i,j,R.com);
 
                     if(scoreCom >= FIVE_SCORE){
-                        position[0].x = i;
-                        position[0].y = j;
-                        return;
+                        temp.push_back(i);
+                        temp.push_back(j);
+                        return temp;
                     }else if(scoreHum >= FIVE_SCORE){
-
+                        fives.push_back(i);
+                        fives.push_back(j);
+                    } else if (scoreHum >= FOUR_LIVE_SCORE){
+                        fours.push_back(i);
+                        fours.push_back(j);
+                    }else if(scoreCom >= FOUR_LIVE_SCORE){
+                        fours.insert(fours.begin(),j);
+                        fours.insert(fours.begin(),i);
+                    }else if(scoreHum >= 2*THREE_LIVE_SCORE){
+                        doubleThrees.push_back(i);
+                        doubleThrees.push_back(j);
+                    }else if(scoreCom >= 2*THREE_LIVE_SCORE){
+                        doubleThrees.insert(doubleThrees.begin(),j);
+                        doubleThrees.insert(doubleThrees.begin(),i);
+                    } else if(scoreCom >= THREE_LIVE_SCORE){
+                        threes.insert(threes.begin(),j);
+                        threes.insert(threes.begin(),i);
+                    }else if(scoreHum >= THREE_LIVE_SCORE){
+                        threes.push_back(i);
+                        threes.push_back(j);
+                    }else if (scoreCom >= TOW_SCORE){
+                        twos.insert(twos.begin(),j);
+                        twos.insert(twos.begin(),i);
+                    } else if (scoreHum >= TOW_SCORE){
+                        twos.push_back(i);
+                        twos.push_back(j);
+                    } else {
+                        neighbors.push_back(i);
+                        neighbors.push_back(j);
                     }
-                }
+                }else if(deep >= 2 && HasNeighbor(i,j,2,2)){
+                    nextNeighbors.push_back(i);
+                    nextNeighbors.push_back(j);
+                };
             }
         }
     }
+
+    if(!fives.empty()) return fives;
+    if(!fours.empty()) return fours;
+    if(!doubleThrees.empty()) return doubleThrees;
+
+    //此处temp用于储存拼接结果
+    temp.insert(temp.end(),threes.begin(),threes.end());
+    temp.insert(temp.end(),twos.begin(),twos.end());
+    temp.insert(temp.end(),neighbors.begin(),neighbors.end());
+    temp.insert(temp.end(),nextNeighbors.begin(),nextNeighbors.end());
+    return temp;
 }
 
 int maxx(int deep, int alpha, int beta, int color) {
