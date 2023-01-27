@@ -5,6 +5,7 @@
 #ifndef CHESSAI_INIT_H
 #define CHESSAI_INIT_H
 
+#include "AI.h"
 #include <tchar.h>
 #include <easyx.h>
 

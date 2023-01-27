@@ -12,7 +12,6 @@
 typedef struct {
     int x;
     int y;
-    int score;
 }pos;
 
 void genboard(int color, pos* points);
@@ -23,5 +22,6 @@ void AI();
 void AIdo();
 void BubbleSort(pos *points);
 int random();
+int HasNeighbor(int i, int j, int length, int wideth);
 
 #endif //CHESSAI_AI_H

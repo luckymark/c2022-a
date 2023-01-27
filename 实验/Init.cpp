@@ -66,6 +66,11 @@ void Init(){
     first();
     loadimage(&board_img, _T("PNG"), MAKEINTRESOURCE(IDB_PNG1));
     putimage(0, 0,&board_img);
+    for (auto & i : board) {
+        for (int & j : i) {
+            j = 0;
+        }
+    }
 }
 
 int wincondition(){

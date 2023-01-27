@@ -4,7 +4,6 @@
 
 #include "Chess.h"
 #include "AI.h"
-#include <random>
 
 
 pos position[MOSTPOS];
@@ -16,32 +15,27 @@ void genboard(int color, pos *points) {
     for (int i = 0; i < MOSTPOS; ++i) {
         points[i].x = -1;
         points[i].y = -1;
-        points[i].score = -1;
     }
 
-    //Get empty position
-    int flag = 0;
-    for (int i = 0; i < 15; ++i) {
-        for (int j = 0; j < 15; ++j) {
-            if (board[i][j] != 0) {
-                for (int m = i - 1; m < i + 1; ++m) {
-                    for (int n = j - 1; n < j + 1; ++n) {
-                        if (m > 0 && m < 15 && n > 0 && n < 15 && board[m][n] == 0) {
-                            points[flag].x = m;
-                            points[flag].y = n;
-                            board[m][n] = color;
-                            points[flag].score = score(color);
-                            board[m][n] = 0;
-                            flag++;
-                        }
+
+    for (int i = 0; i < 20; ++i) {
+        for (int j = 0; j < 20; ++j) {
+            if(board[i][j] == R.emp){
+                if (HasNeighbor(i,j,1,1)){
+                    int scoreHum = score_point(i,j,R.hum);
+                    int scoreCom = score_point(i,j,R.com);
+
+                    if(scoreCom >= FIVE_SCORE){
+                        position[0].x = i;
+                        position[0].y = j;
+                        return;
+                    }else if(scoreHum >= FIVE_SCORE){
+
                     }
                 }
             }
         }
     }
-
-    //Bubble Sort
-    BubbleSort(points);
 }
 
 int maxx(int deep, int alpha, int beta, int color) {
@@ -106,7 +100,6 @@ void maxmin(int deep, int color) {
     for(int i = 0; i < MOSTPOS; ++i){
         position[i].x = -1;
         position[i].y = -1;
-        position[i].score = -1;
     }
     //body
     genboard(color, points);
@@ -180,24 +173,10 @@ void AI() {
         }
     }
     c++;
-}
-
-void BubbleSort(pos *points) {
-    pos temp;
-    for (int i = 0; i < 19; ++i) {
-        for (int j = 0; j < 19 - i; ++j) {
-            if (points[j].x == points[j + 1].x && points[j].y == points[j + 1].y) {
-                points[j + 1].x = -1;
-                points[j + 1].y = -1;
-                points[j + 1].score = -1;
-            }
-            if (points[j].score < points[j + 1].score) {
-                temp.score = points[j].score;
-                points[j].score = points[j + 1].score;
-                points[j + 1].score = temp.score;
-            }
-        }
-    }
+    //
+    int k = score(R.com);
+    printf("com:%d\n",k);
+    //
 }
 
 int random() {
@@ -211,4 +190,15 @@ int random() {
 void AIdo(){
     AI();
     finish();
+}
+
+int HasNeighbor(int i, int j, int length, int wideth) {
+    for(int m = i - length ; m < i+length; m++){
+        for(int n = i - length ; n < i+length; n++){
+            if(m != n && board[m][n] != 0){
+                return 1;
+            }
+        }
+    }
+    return 0;
 }

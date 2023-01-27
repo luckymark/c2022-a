@@ -28,6 +28,10 @@ void Hum(){
                         solidcircle(X[i], Y[j], 28);
                         board[i][j] = R.hum;
                         flushmessage();
+                        //
+                        int k = score(R.hum);
+                        printf("hum:%d\n",k);
+                        //
                         return;
                     }
                 }
