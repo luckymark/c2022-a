@@ -141,7 +141,7 @@ vector<int> maxmin(int deep, int color) {
     vector<int>points = genboard(deep);
     for (int i = 0; i < points.size(); i += 2){
         board[points[i]][points[i + 1]] = color;
-        v = maxx(deep - 1, alpha, beta, color);
+        v = maxx(deep - 1, alpha, beta);
         if (v == best){//将新的节点加入position中
             position.push_back(points[i]);
             position.push_back(points[i+1]);
@@ -214,8 +214,8 @@ void AIdo(){
 }
 
 int HasNeighbor(int i, int j, int length, int wideth)   {
-    for(int m = i - length ;m>0 && m<15 && m <= i+length; m++){
-        for(int n = j - length ;n>0 && n<15 && n <= j+length; n++){
+    for(int m = i - length ;m>=0 && m<15 && m <= i+length; m++){
+        for(int n = j - length ;n>=0 && n<15 && n <= j+length; n++){
             if(m != n && board[m][n] != 0){
                 return 1;
             }

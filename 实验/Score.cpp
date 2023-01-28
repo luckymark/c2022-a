@@ -5,6 +5,8 @@
 #include "Chess.h"
 #include "Score.h"
 
+//未处理边缘评分问题
+
 int score(int color)
 {
     int score = 0;
@@ -43,6 +45,28 @@ int score(int color)
             }
         }
     }
+    //活二
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
+            judgeL = ((board[i][j] == 0) && (board[i + 1][j] == color) && (board[i + 2][j] == color) && (board[i + 3][j] == 0) && (i + 3 < 15));
+            judgeW = ((board[i][j] == 0) && (board[i][j + 1] == color) && (board[i][j + 2] == color) && (board[i][j + 3] == 0)  && (j + 3< 15));
+            judgeD = ((board[i][j] == 0) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] == color) && (board[i + 3][j + 3] == 0) && (i + 3 < 15) && (j + 3 < 15));
+            if (judgeL || judgeW || judgeD) {
+                score += TWO_SCORE;
+            }
+        }
+    }
+    //活一
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
+            judgeL = ((board[i][j] == 0) && (board[i + 1][j] == color) && (board[i + 2][j] == 0) && (i + 2 < 15));
+            judgeW = ((board[i][j] == 0) && (board[i][j + 1] == color) && (board[i][j + 2] == 0) && (j + 2 < 15));
+            judgeD = ((board[i][j] == 0) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] == 0) && (i + 2 < 15) && (j + 2 < 15));
+            if (judgeL || judgeW || judgeD) {
+                score += ONE_SCORE;
+            }
+        }
+    }
     //死四
     for (int i = 0; i < 15; ++i) {
         for (int j = 0; j < 15; ++j) {
@@ -71,6 +95,35 @@ int score(int color)
             }
         }
     }
+    //死二
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
+            judgeL = ((board[i][j] != 0) && (board[i][j] != color) && (board[i + 1][j] == color) && (board[i + 2][j] == color) && (board[i + 3][j] == 0) && (i + 3 < 15)) ||
+                     ((board[i][j] == 0) && (board[i + 1][j] == color) && (board[i + 2][j] == color) && (board[i + 3][j] != 0) && (board[i + 3][j] != color) && (i + 3 < 15));
+            judgeW = ((board[i][j] != 0) && (board[i][j] != color) && (board[i][j + 1] == color) && (board[i][j + 2] == color) && (board[i][j + 3] == 0) && (j + 3 < 15)) ||
+                     ((board[i][j] == 0) && (board[i][j + 1] == color) && (board[i][j + 2] == color) && (board[i][j + 3] != 0) && (board[i][j + 3] != color) && (j + 3 < 15));
+            judgeD = ((board[i][j] != 0) && (board[i][j] != color) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] == color) && (board[i + 3][j + 3] == 0) && (i + 3 < 15) && (j + 3 < 15)) ||
+                     ((board[i][j] == 0) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] == color) && (board[i + 3][j + 3] != 0) && (board[i + 3][j + 3] != color) && (i + 3 < 15) && (j + 3 < 15));
+            if (judgeL || judgeW || judgeD) {
+                score += TWO_DIE_SCORE;
+            }
+        }
+    }
+    //死一
+    for (int i = 0; i < 15; ++i) {
+        for (int j = 0; j < 15; ++j) {
+            judgeL = ((board[i][j] != 0) && (board[i][j] != color) && (board[i + 1][j] == color) && (board[i + 2][j] == 0) && (i + 2 < 15)) ||
+                     ((board[i][j] == 0) && (board[i + 1][j] == color) && (board[i + 2][j] != 0) && (board[i + 2][j] != color) && (i + 2 < 15));
+            judgeW = ((board[i][j] != 0) && (board[i][j] != color) && (board[i][j + 1] == color) && (board[i][j + 2] == 0) && (j + 2 < 15)) ||
+                     ((board[i][j] == 0) && (board[i][j + 1] == color) && (board[i][j + 2] != 0) && (board[i][j + 2] != color) && (j + 2 < 15));
+            judgeD = ((board[i][j] != 0) && (board[i][j] != color) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] == 0) && (i + 2 < 15) && (j + 2 < 15)) ||
+                     ((board[i][j] == 0) && (board[i + 1][j + 1] == color) && (board[i + 2][j + 2] != 0) && (board[i + 2][j + 2] != color) && (i + 2 < 15) && (j + 2 < 15));
+            if (judgeL || judgeW || judgeD) {
+                score += ONE_DIE_SCORE;
+            }
+        }
+    }
+
 
     return score;
 }
