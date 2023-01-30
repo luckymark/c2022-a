@@ -1,22 +1,17 @@
+//graphic.cpp头文件
 #ifndef _HEAD_G
 #define _HEAD_G
 
 #include"HEAD.h"
-extern GLuint rendering_program;
-
-extern GLuint vs[2];
-extern GLuint tcs;
-extern GLuint tes;
-extern GLuint gs;
-extern GLuint fs[2];
-extern GLuint rendering_program1;//管线1，渲染棋盘
-extern GLuint rendering_program2;//管线2，渲染棋子
-extern GLuint vertex_array_object;
-void compile_shader(void);
-void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
-int running(int running_mode);
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-void startup();
-void render(double currentTime,GLFWwindow* window,int running_mode);
-void shutdown();
+void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);//光标位置回调函数，参数：窗口,光标x坐标，光标y坐标
+int running(int running_mode);//五子棋运行程序，running_mode为游戏模式，1为双人，2为人机
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);//鼠标回调函数，参数：窗口，当前操作键，操作行为，操作模式
+void board_button_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void delete_shader(void);//删除着色器
+void compile_shader(void);//编译着色器程序
+GLuint linkprogram1();//棋盘渲染管线链接函数
+GLuint linkprogram2();//棋子渲染管线链接函数
+void startup();//渲染循环前处理函数
+void render(double currentTime,GLFWwindow* window,int running_mode);//渲染循环中处理函数
+void shutdown();//渲染循环后处理函数
 #endif
