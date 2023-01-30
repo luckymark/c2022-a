@@ -1,19 +1,19 @@
+//程序main部分及逻辑部分代码
 #include"HEAD.h"
 #include"HEAD_G.h"
-int gamemode = 0;
-int AI_Estimation_BLACK;
-int AI_Estimation_WHITE;
-int AI_ThinkWidth[4] = { 15,-1,15,-1 };
-chess chessmap[15][15];
-chess_pos chess_pos_cursor = { 0,0 };
-int chess_draw_list[15 * 15][3] = { 0 };//用于渲染的数据，0存储棋子颜色，1存储x值，2存储y值(1-15)
+int gamemode = 0;//游玩模式，1为双人，2为人机
+int gamer_color = -1;//人机模式下玩家棋色
+int AI_Estimation_BLACK;//黑棋全局估值
+int AI_Estimation_WHITE;//白棋全局估值
+int AI_ThinkWidth[4] = { 15,-1,15,-1 };//AI演算区域
+chess chessmap[15][15];//棋局信息
+chess_pos chess_pos_cursor = { 0,0 };//最新落子坐标
+int chess_draw_list[15 * 15][3] = { 0 };//渲染棋子序列，用于渲染的数据，0存储棋子颜色，1存储x值，2存储y值(1-15)
 int count = 0;//落子手数
 bool isWin = false;//获胜判断
-void winchack(int nowchess[3]);
-void AI_Estimate();
-
 int main() {
 	printf("五子棋游戏\n");
+	printf("鼠标落子，按R键悔棋\n");
 	printf("请选择游玩模式：1双人模式 2人机模式 0退出\n");
 	std::cin >> gamemode;
 	switch (gamemode)
@@ -25,8 +25,24 @@ int main() {
 		running(1);
 		break;
 	case 2:
-		running(2);
-		break;
+		printf("请选择您的执子（1：黑 2：白）：");
+		std::cin >> gamer_color;
+		if (gamer_color!=1&&gamer_color!=2)
+		{
+			printf("输入错误\n");
+			return -1;
+			break;
+		}else{
+			if (gamer_color==2)
+			{
+				AI_ThinkWidth[0] = 7;
+				AI_ThinkWidth[1] = 7;
+				AI_ThinkWidth[2] = 7;
+				AI_ThinkWidth[3] = 7;
+			}
+			running(2);
+			break;
+		}
 	default:
 		printf("输入错误\n");
 		return -1;
@@ -34,7 +50,7 @@ int main() {
 	}
 	return 0;
 }
-void winchack(int nowchess[3]) {
+void winchack(int nowchess[3]) {//根据最新落子八个方向统计连子数
 	int cnt = 1;
 	if (count) {
 		for (int i = -1; nowchess[1] - 1 + i >= 0 && chessmap[nowchess[1] - 1 + i][nowchess[2] - 1].chesskind == nowchess[0]; i--)//左
@@ -107,24 +123,24 @@ void winchack(int nowchess[3]) {
 	}
 	return;
 }
-int AI_Analysis(int cnt, int btw, int dis_1, int dis_2) {
-	int able = btw + cnt + dis_1 + dis_2;
-	if (cnt == 5)
+int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//根据传到参数分析棋型，给出评分
+	int able = btw + cnt + dis_1 + dis_2;//able判断当前参数是否有活五可能
+	if (cnt == 5)//活五情况
 	{
-		return 50000;
+		return 2000;
 	}
 	if (cnt == 4)
 	{
 		if (able < 5)
-		{
+		{ 
 			return 0;
 		}
 		if (btw == 0 && (dis_1 > 0 && dis_2 > 0))
-		{
-			return 10000;
+		{//活四情况
+			return 400;
 		}
-		else {
-			return 7000;
+		else {//冲四情况
+			return 280;
 		}
 
 	}
@@ -135,11 +151,11 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2) {
 			return 0;
 		}
 		if (btw < 2 && (dis_1 > 1 && dis_2 > 1))
-		{
-			return 2500;
+		{//活三情况
+			return 100;
 		}
-		else {
-			return 1250;
+		else {//眠三情况
+			return 50;
 		}
 	}
 	if (cnt == 2)
@@ -149,11 +165,11 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2) {
 			return 0;
 		}
 		if (btw < 3 && (dis_1 > 1 && dis_2 > 1))
-		{
-			return 625;
+		{//活二情况
+			return 25;
 		}
-		else {
-			return 375;
+		else {//眠二情况
+			return 15;
 		}
 	}
 	if (cnt == 1)
@@ -163,13 +179,14 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2) {
 			return 0;
 		}
 		else {
-			return 100;
+			return 4;
 		}
 	}
 }
 void AI_Estimate() {
 	int Estimate_BLACK = 0;
 	int Estimate_WHITE = 0;
+	//对渲染序列进行四次遍历，分别对每个子横竖、主次对角四个方向评分，并最终汇总为全局黑白方评分
 	for (int i = 0; i < count; i++)//左右
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
@@ -220,7 +237,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
 
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
@@ -280,7 +297,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
 
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
@@ -340,7 +357,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
 
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
@@ -400,8 +417,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2);
-
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
 			}
@@ -410,10 +426,10 @@ void AI_Estimate() {
 			}
 		}
 	}
-	AI_Estimation_BLACK = Estimate_BLACK;
+	AI_Estimation_BLACK = Estimate_BLACK+4000;
 	AI_Estimation_WHITE = Estimate_WHITE;
 }
-struct judgetree* AI_Judgetree_MakeTree() {
+struct judgetree* AI_Judgetree_MakeTree() {//采用子节点链表示法
 	struct judgetree* newroot = new struct judgetree;
 	newroot->donepos.xpos = -1;
 	newroot->donepos.ypos = -1;
@@ -457,9 +473,9 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 
 }
 void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
-	if (height < 2)
+	if (height < 2)//如果不使用GPU，就此AI程序而言，到3层树已经是极限了
 	{
-		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
+		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)//演算区域内遍历所有可能
 		{
 			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
 			{
@@ -483,15 +499,17 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 				chess_draw_list[count][0] = BLACK;
 				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = BLACK;
 			}
+			//对所有可能依次进入
 			chess_draw_list[count][1] = i->donepos.xpos + 1;
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
 			i->kid_node = AI_Judgetree_MakeTree();
 			i->kid_node->gd_expectation = root->expectation;
-			AI_Judgetree_BuildTree(i->kid_node, height + 1);
+			AI_Judgetree_BuildTree(i->kid_node, height + 1);//此处进行递归
 			i->expectation = i->kid_node->expectation;
-			AI_JudgeTree_Delete(i->kid_node);
+			AI_JudgeTree_Delete(i->kid_node);//实时删除无用内存
 			i->kid_node = NULL;
+			//剪枝
 			if (height % 2) {
 				if (i->expectation < root->gd_expectation)
 				{
@@ -510,9 +528,10 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 					return;
 				}
 			}
-			if (height % 2)
+			if (height % 2)//更新当前层期望极值
 			{
-				if (root->expectation > i->expectation) {
+				if (root->expectation > i->expectation) 
+				{
 					root->expectation = i->expectation;
 				}
 			}
@@ -526,7 +545,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 			chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
 		}
 	}
-	else {
+	else {//最深层对每种可能局面评估
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
 		{
 			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
@@ -569,7 +588,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 	}
 
 }
-void AI_JudgeTree_Choose(struct judgetree* root) {
+void AI_JudgeTree_Choose(struct judgetree* root) {//执行此函数时，最浅层的期望最优者即为AI最优落子
 	int expectation = INT_MIN;
 	chess_pos nextchess;
 	nextchess.xpos = -1;
