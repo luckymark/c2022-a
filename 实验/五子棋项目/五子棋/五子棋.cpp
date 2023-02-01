@@ -10,6 +10,12 @@ chess chessmap[15][15];//Æå¾ÖĞÅÏ¢
 chess_pos chess_pos_cursor = { 0,0 };//×îĞÂÂä×Ó×ø±ê
 int chess_draw_list[15 * 15][3] = { 0 };//äÖÈ¾Æå×ÓĞòÁĞ£¬ÓÃÓÚäÖÈ¾µÄÊı¾İ£¬0´æ´¢Æå×ÓÑÕÉ«£¬1´æ´¢xÖµ£¬2´æ´¢yÖµ(1-15)
 int count = 0;//Âä×ÓÊÖÊı
+int l4_b = 0;
+int l4_w = 0;
+int d4_b = 0;
+int d4_w = 0;
+int l3_b = 0;
+int l3_w = 0;
 bool isWin = false;//»ñÊ¤ÅĞ¶Ï
 int main() {
 	printf("Îå×ÓÆåÓÎÏ·\n");
@@ -127,7 +133,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 	int able = btw + cnt + dis_1 + dis_2;//ableÅĞ¶Ïµ±Ç°²ÎÊıÊÇ·ñÓĞ»îÎå¿ÉÄÜ
 	if (cnt == 5)//»îÎåÇé¿ö
 	{
-		return 2000;
+		return 10000;
 	}
 	if (cnt == 4)
 	{
@@ -137,9 +143,23 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 		}
 		if (btw == 0 && (dis_1 > 0 && dis_2 > 0))
 		{//»îËÄÇé¿ö
+			if ((i + 1) % 2)
+			{
+				l4_b++;
+			}
+			else {
+				l4_w++;
+			}
 			return 400;
 		}
 		else {//³åËÄÇé¿ö
+			if ((i + 1) % 2)
+			{
+				d4_b++;
+			}
+			else {
+				d4_w++;
+			}
 			return 280;
 		}
 
@@ -152,6 +172,13 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 		}
 		if (btw < 2 && (dis_1 > 1 && dis_2 > 1))
 		{//»îÈıÇé¿ö
+			if ((i + 1) % 2)
+			{
+				l3_b++;
+			}
+			else {
+				l3_w++;
+			}
 			return 100;
 		}
 		else {//ÃßÈıÇé¿ö
@@ -186,11 +213,13 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 void AI_Estimate() {
 	int Estimate_BLACK = 0;
 	int Estimate_WHITE = 0;
+	int i = 0;
 	//¶ÔäÖÈ¾ĞòÁĞ½øĞĞËÄ´Î±éÀú£¬·Ö±ğ¶ÔÃ¿¸ö×ÓºáÊú¡¢Ö÷´Î¶Ô½ÇËÄ¸ö·½ÏòÆÀ·Ö£¬²¢×îÖÕ»ã×ÜÎªÈ«¾ÖºÚ°×·½ÆÀ·Ö
-	for (int i = 0; i < count; i++)//×óÓÒ
+	for (int done[15][15] = { 0 }; i < count; i++)//×óÓÒ
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (nowchess[0]) {
+		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
+			done[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -207,6 +236,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 - i][nowchess[2] - 1] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -227,6 +257,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 + i][nowchess[2] - 1] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -247,10 +278,12 @@ void AI_Estimate() {
 			}
 		}
 	}
-	for (int i = 0; i < count; i++)//ÉÏÏÂ
+	i = 0;
+	for (int done[15][15] = { 0 }; i < count; i++)//ÉÏÏÂ
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (nowchess[0]) {
+		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
+			done[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -267,6 +300,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -287,6 +321,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -307,10 +342,12 @@ void AI_Estimate() {
 			}
 		}
 	}
-	for (int i = 0; i < count; i++)//·½Ïò"\"
+	i = 0;
+	for (int done[15][15] = { 0 }; i < count; i++)//·½Ïò"\"
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (nowchess[0]) {
+		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
+			done[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -327,6 +364,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 - i][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -347,6 +385,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 + i][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -367,10 +406,12 @@ void AI_Estimate() {
 			}
 		}
 	}
-	for (int i = 0; i < count; i++)//·½Ïò"/"
+	i = 0;
+	for (int done[15][15] = { 0 }; i < count; i++)//·½Ïò"/"
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (nowchess[0]) {
+		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
+			done[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -387,6 +428,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 - i][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -407,6 +449,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
+					done[nowchess[1] - 1 + i][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -426,15 +469,62 @@ void AI_Estimate() {
 			}
 		}
 	}
-	AI_Estimation_BLACK = Estimate_BLACK+4000;
+	if (count % 2) {
+		if (l4_w || d4_w)
+		{
+			Estimate_WHITE += 10000;
+		}
+		else if (l3_w && !(d4_b || l4_b))
+		{
+			Estimate_WHITE += 9000;
+		}
+		else if ((d4_b == 2) || l4_b)
+		{
+			Estimate_BLACK += 8000;
+		}
+		else if (d4_b && l3_b)
+		{
+			Estimate_BLACK += 7000;
+		}
+	}
+	else {
+		if (l4_b || d4_b)
+		{
+			Estimate_BLACK += 10000;
+		}
+		else if (l3_b && !(d4_w || l4_w))
+		{
+			Estimate_BLACK += 9000;
+		}
+		else if ((d4_w == 2) || l4_w)
+		{
+			Estimate_WHITE += 8000;
+		}
+		else if (d4_w && l3_w)
+		{
+			Estimate_WHITE += 7000;
+		}
+	}
+	AI_Estimation_BLACK = Estimate_BLACK;
 	AI_Estimation_WHITE = Estimate_WHITE;
+	l4_b = 0;
+	l4_w = 0;
+	d4_b = 0;
+	d4_w = 0;
+	l3_b = 0;
+	l3_w = 0;
 }
-struct judgetree* AI_Judgetree_MakeTree() {//²ÉÓÃ×Ó½ÚµãÁ´±íÊ¾·¨
+struct judgetree* AI_Judgetree_MakeTree(int height) {//²ÉÓÃ×Ó½ÚµãÁ´±íÊ¾·¨
 	struct judgetree* newroot = new struct judgetree;
 	newroot->donepos.xpos = -1;
 	newroot->donepos.ypos = -1;
-	newroot->gd_expectation = INT_MAX;
-	newroot->expectation = INT_MIN;
+	if (height % 2)
+	{
+		newroot->expectation = INT_MAX;
+	}
+	else {
+		newroot->expectation = INT_MIN;
+	}
 	newroot->bor_node = NULL;
 	newroot->kid_node = NULL;
 	newroot->listend = newroot;
@@ -452,7 +542,7 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 			root->listend->expectation = INT_MIN;
 		}
 		root->listend->donepos = newchess;
-		root->listend->bor_node = AI_Judgetree_MakeTree();
+		root->listend->bor_node = AI_Judgetree_MakeTree(height);
 		root->listend = root->listend->bor_node;
 		return;
 	}
@@ -461,18 +551,16 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 		if (height % 2)
 		{
 			root->listend->expectation = INT_MAX;
-			root->listend->gd_expectation = INT_MIN;
 		}
 		else {
 			root->listend->expectation = INT_MIN;
-			root->listend->gd_expectation = INT_MAX;
 		}
-		root->listend->bor_node = AI_Judgetree_MakeTree();
+		root->listend->bor_node = AI_Judgetree_MakeTree(height);
 		root->listend = root->listend->bor_node;
 	}
 
 }
-void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
+void AI_Judgetree_BuildTree(struct judgetree* root, int height,int gd_expectation) {
 	if (height < 2)//Èç¹û²»Ê¹ÓÃGPU£¬¾Í´ËAI³ÌĞò¶øÑÔ£¬µ½3²ãÊ÷ÒÑ¾­ÊÇ¼«ÏŞÁË
 	{
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)//ÑİËãÇøÓòÄÚ±éÀúËùÓĞ¿ÉÄÜ
@@ -503,15 +591,14 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 			chess_draw_list[count][1] = i->donepos.xpos + 1;
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
-			i->kid_node = AI_Judgetree_MakeTree();
-			i->kid_node->gd_expectation = root->expectation;
-			AI_Judgetree_BuildTree(i->kid_node, height + 1);//´Ë´¦½øĞĞµİ¹é
+			i->kid_node = AI_Judgetree_MakeTree(height);
+			AI_Judgetree_BuildTree(i->kid_node, height + 1,root->expectation);//´Ë´¦½øĞĞµİ¹é
 			i->expectation = i->kid_node->expectation;
 			AI_JudgeTree_Delete(i->kid_node);//ÊµÊ±É¾³ıÎŞÓÃÄÚ´æ
 			i->kid_node = NULL;
 			//¼ôÖ¦
 			if (height % 2) {
-				if (i->expectation < root->gd_expectation)
+				if (i->expectation < gd_expectation)
 				{
 					root->expectation = INT_MIN;
 					count--;
@@ -520,7 +607,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 				}
 			}
 			else {
-				if (i->expectation > root->gd_expectation)
+				if (i->expectation > gd_expectation)
 				{
 					root->expectation = INT_MAX;
 					count--;
@@ -568,6 +655,13 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 		}
 		for (struct judgetree* i = root; i->bor_node != NULL; i = i->bor_node)
 		{
+			if (count % 2)
+			{
+				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = WHITE;
+			}
+			else {
+				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = BLACK;
+			}
 			chess_draw_list[count][1] = i->donepos.xpos + 1;
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
@@ -579,7 +673,15 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height) {
 			else {
 				i->expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
 			}
+			if (i->expectation > gd_expectation)
+			{
+				root->expectation = INT_MAX;
+				chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
+				count--;
+				return;
+			}
 			count--;
+			chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
 			if (root->expectation < i->expectation)
 			{
 				root->expectation = i->expectation;
@@ -664,8 +766,8 @@ void AI_JudgeTree_Delete(struct judgetree* root) {
 	return;
 }
 void AI_Running() {
-	struct judgetree* judgetree = AI_Judgetree_MakeTree();
-	AI_Judgetree_BuildTree(judgetree, 0);
+	struct judgetree* judgetree = AI_Judgetree_MakeTree(0);
+	AI_Judgetree_BuildTree(judgetree, 0,INT_MAX);
 	AI_JudgeTree_Choose(judgetree);
 	AI_JudgeTree_Delete(judgetree);
 	return;

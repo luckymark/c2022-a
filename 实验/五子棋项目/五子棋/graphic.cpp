@@ -22,7 +22,7 @@ int running(int running_mode)
 	//限制窗口缩放
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	//窗口对象，前三参数分别为窗口宽、高、窗口名
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Learning2", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "wuziqi", nullptr, nullptr);
 	if (window == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		return -1;
@@ -160,28 +160,28 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 					chess_draw_list[count][2] = chess_pos_cursor.ypos;
 				}
 				//更新AI演算区域
-				if (chess_pos_cursor.xpos - 1 < AI_ThinkWidth[2]) {
+				if (chess_pos_cursor.xpos - 1 < AI_ThinkWidth[2]+2) {
 					AI_ThinkWidth[2] = chess_pos_cursor.xpos - 3;
 					if (AI_ThinkWidth[2]<0)
 					{
 						AI_ThinkWidth[2] = 0;
 					}
 				}
-				if (chess_pos_cursor.xpos - 1 > AI_ThinkWidth[3]) {
+				if (chess_pos_cursor.xpos - 1 > AI_ThinkWidth[3]-2) {
 					AI_ThinkWidth[3] = chess_pos_cursor.xpos + 1;
 					if (AI_ThinkWidth[3]>14)
 					{
 						AI_ThinkWidth[3] = 14;
 					}
 				}
-				if (chess_pos_cursor.ypos - 1 < AI_ThinkWidth[0]) {
+				if (chess_pos_cursor.ypos - 1 < AI_ThinkWidth[0]+2) {
 					AI_ThinkWidth[0] = chess_pos_cursor.ypos - 3;
 					if (AI_ThinkWidth[0]<0)
 					{
 						AI_ThinkWidth[0] = 0;
 					}
 				}
-				if (chess_pos_cursor.ypos - 1 > AI_ThinkWidth[1]) {
+				if (chess_pos_cursor.ypos - 1 > AI_ThinkWidth[1]-2) {
 					AI_ThinkWidth[1] = chess_pos_cursor.ypos + 1;
 					if (AI_ThinkWidth[1]>14)
 					{
