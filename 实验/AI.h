@@ -8,7 +8,7 @@
 #define MIN 0
 #define MAX FIVE_SCORE
 
-std::vector<int> genboard(int deep);
+bool genboard(int deep, std::vector<int> &points);
 int maxx(int deep,int alpha, int beta,int color = R.com);
 int minn(int deep,int alpha,int beta,int color = R.hum);
 std::vector<int> maxmin(int deep, int color = R.com);

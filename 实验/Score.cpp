@@ -10,7 +10,7 @@
 int score(int color)
 {
     int score = 0;
-    short judgeL = 0, judgeW = 0, judgeD = 0;
+    short judgeL, judgeW, judgeD;
     //成5
     for (int i = 0; i < 15; ++i) {
         for (int j = 0; j < 15; ++j) {

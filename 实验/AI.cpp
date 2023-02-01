@@ -10,9 +10,7 @@ using namespace std;
 vector<int>position;
 int c = 1;
 
-vector<int> genboard(int deep) {
-
-    vector<int>temp;
+bool genboard(int deep, vector<int> &points) {
     vector<int>fives;
     vector<int>fours;
     vector<int>doubleThrees;
@@ -29,9 +27,9 @@ vector<int> genboard(int deep) {
                     int scoreCom = score_point(i,j,R.com);
 
                     if(scoreCom >= FIVE_SCORE){
-                        temp.push_back(i);
-                        temp.push_back(j);
-                        return temp;
+                        points.push_back(i);
+                        points.push_back(j);
+                        return true;
                     }else if(scoreHum >= FIVE_SCORE){
                         fives.push_back(i);
                         fives.push_back(j);
@@ -71,16 +69,25 @@ vector<int> genboard(int deep) {
         }
     }
 
-    if(!fives.empty()) return fives;
-    if(!fours.empty()) return fours;
-    if(!doubleThrees.empty()) return doubleThrees;
+    if(!fives.empty()){
+        points = fives;
+        return true;
+    }
+    if(!fours.empty()){
+        points = fours;
+        return true;
+    }
+    if(!doubleThrees.empty()){
+        points = doubleThrees;
+        return true;
+    }
 
     //此处temp用于储存拼接结果
-    temp.insert(temp.end(),threes.begin(),threes.end());
-    temp.insert(temp.end(),twos.begin(),twos.end());
-    temp.insert(temp.end(),neighbors.begin(),neighbors.end());
-    temp.insert(temp.end(),nextNeighbors.begin(),nextNeighbors.end());
-    return temp;
+    points.insert(points.end(),threes.begin(),threes.end());
+    points.insert(points.end(),twos.begin(),twos.end());
+    points.insert(points.end(),neighbors.begin(),neighbors.end());
+    //points.insert(points.end(),nextNeighbors.begin(),nextNeighbors.end());
+    return true;
 }
 
 int maxx(int deep, int alpha, int beta, int color) {
@@ -91,7 +98,8 @@ int maxx(int deep, int alpha, int beta, int color) {
     }
 
     int best = MIN;
-    vector<int>points = genboard(deep);
+    vector<int>points;
+    genboard(deep, points);
 
     for (int i = 0; i < points.size(); i += 2) {
         board[points[i]][points[i + 1]] = color;
@@ -115,7 +123,8 @@ int minn(int deep, int alpha, int beta, int color) {
     }
 
     int best = MAX;
-    vector<int>points = genboard(deep);
+    vector<int>points;
+    genboard(deep, points);
 
     for (int i = 0; i < points.size(); i += 2) {
         board[points[i]][points[i + 1]] = R.hum;
@@ -137,8 +146,8 @@ vector<int> maxmin(int deep, int color) {
     int alpha = MAX;
     vector<int>temp;
     int v;
-
-    vector<int>points = genboard(deep);
+    vector<int>points;
+    genboard(deep, points);
     for (int i = 0; i < points.size(); i += 2){
         board[points[i]][points[i + 1]] = color;
         v = maxx(deep - 1, alpha, beta);
@@ -203,7 +212,7 @@ void AI() {
 int random(const vector<int>& vec) {
     random_device rd;
     auto gen = default_random_engine(rd());
-    uniform_int_distribution<int> dis(0,(int )vec.size());
+    uniform_int_distribution<int> dis(0,(int )(vec.size() - 1));
     int randk = dis(gen);
     return randk;
 }
@@ -215,7 +224,7 @@ void AIdo(){
 
 int HasNeighbor(int i, int j, int length, int wideth)   {
     for(int m = i - length ;m>=0 && m<15 && m <= i+length; m++){
-        for(int n = j - length ;n>=0 && n<15 && n <= j+length; n++){
+        for(int n = j - wideth ;n>=0 && n<15 && n <= j+wideth; n++){
             if(m != n && board[m][n] != 0){
                 return 1;
             }
