@@ -30,7 +30,7 @@
 
    ```
    git fetch upstream
-   git merge upstream/master
+   git merge upstream/main
    ```
 
    [在 github 网页上更新的方法](https://www.zhihu.com/question/20393785/answer/30725725)
