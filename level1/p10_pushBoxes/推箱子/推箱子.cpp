@@ -31,18 +31,7 @@ void paintGrid()
 	}
 
 }
-int map[10][10] = {
-	{0,0,0,1,1,1,0,0,0,0},
-	{0,1,1,1,2,1,0,0,0,0},
-	{1,1,0,3,0,1,1,1,1,1},
-	{1,2,0,3,4,3,0,0,2,1},
-	{1,1,1,1,3,1,1,1,1,1},
-	{0,0,1,1,0,1,0,0,0,0},
-	{0,0,1,0,0,1,1,1,1,0},
-	{0,0,1,0,0,0,0,2,1,0},
-	{0,0,1,1,1,1,1,1,1,0},
-	{0,0,0,0,0,0,0,0,0,0},
-};//创建二维数组作为地图
+int map[10][10];//创建二维数组作为地图
 
 void paintMap()
 {
@@ -216,6 +205,16 @@ int ifwin()
 
 int main()
 {	
+	FILE* pFile = NULL;
+	errno_t err = 0;
+	err = fopen_s(&pFile, "MapData.txt", "r");
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			fscanf_s(pFile, "%d", &map[i][j]);
+		}
+	}
 	initgraph(500,500);
 
 	setbkcolor(RGB(164, 225, 202));
@@ -231,20 +230,16 @@ int main()
 		int win = ifwin();
 		if (win == 1)
 		{
+			FILE* pFile = NULL;
+			errno_t err = 0;
+			err = fopen_s(&pFile, "MapData2.txt", "r");
 			for (int i = 0; i < 10; i++)
 			{
 				for (int j = 0; j < 10; j++)
 				{
-					map[i][j] = 0;
-						
+					fscanf_s(pFile, "%d", &map[i][j]);
 				}
 			}
-			for (int x = 0; x < 6; x++)
-				map[2][x + 2] = 1;
-			for (int x = 0; x < 6; x++)
-				map[7][x + 2] = 1;
-			map[2][5] = 4; map[3][2] = 1; map[4][2] = 1; map[5][2] = 1; map[6][2] = 1; map[3][5] = 3;
-			map[3][7] = 1; map[4][7] = 1; map[5][7] = 1; map[6][7] = 2; map[6][4] = 1; map[5][5] = 1; map[3][7] = 0; map[4][8] = 1;
 		}
 	}	
 	
