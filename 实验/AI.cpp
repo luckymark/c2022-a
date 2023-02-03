@@ -23,8 +23,13 @@ bool genboard(int deep, vector<int> &points) {
         for (int j = 0; j < 15; ++j) {
             if(board[i][j] == R.emp){
                 if (HasNeighbor(i,j,1,1)){
+                    board[i][j] = R.hum;
                     int scoreHum = score_point(i,j,R.hum);
+                    board[i][j] = R.emp;
+
+                    board[i][j] = R.com;
                     int scoreCom = score_point(i,j,R.com);
+                    board[i][j] = R.emp;
 
                     if(scoreCom >= FIVE_SCORE){
                         points.push_back(i);
@@ -61,6 +66,7 @@ bool genboard(int deep, vector<int> &points) {
                         neighbors.push_back(i);
                         neighbors.push_back(j);
                     }
+                    //change
                 }else if(deep >= 2 && HasNeighbor(i,j,2,2)){
                     nextNeighbors.push_back(i);
                     nextNeighbors.push_back(j);
@@ -86,12 +92,12 @@ bool genboard(int deep, vector<int> &points) {
     points.insert(points.end(),threes.begin(),threes.end());
     points.insert(points.end(),twos.begin(),twos.end());
     points.insert(points.end(),neighbors.begin(),neighbors.end());
-    //points.insert(points.end(),nextNeighbors.begin(),nextNeighbors.end());
+    points.insert(points.end(),nextNeighbors.begin(),nextNeighbors.end());
     return true;
 }
 
 int maxx(int deep, int alpha, int beta, int color) {
-    int v = score(color);
+    int v = score(R.com);
     //迭代终止
     if (deep <= 0 || v >= FIVE_SCORE) {
         return v;
@@ -102,9 +108,9 @@ int maxx(int deep, int alpha, int beta, int color) {
     genboard(deep, points);
 
     for (int i = 0; i < points.size(); i += 2) {
-        board[points[i]][points[i + 1]] = color;
+        board[points[i]][points[i + 1]] = R.com;
         v = minn(deep - 1, alpha, best > beta ? best : beta);
-        board[points[i]][points[i + 1]] = 0;
+        board[points[i]][points[i + 1]] = R.emp;
         if (v > best) {
             best = v;
         }
@@ -116,7 +122,7 @@ int maxx(int deep, int alpha, int beta, int color) {
 }
 
 int minn(int deep, int alpha, int beta, int color) {
-    int v = score(color);
+    int v = score(R.hum);
     //迭代终止
     if (deep <= 0 || v >= 999999) {
         return v;
@@ -128,8 +134,8 @@ int minn(int deep, int alpha, int beta, int color) {
 
     for (int i = 0; i < points.size(); i += 2) {
         board[points[i]][points[i + 1]] = R.hum;
-        v = maxx(deep - 1,best<alpha ? best : alpha, beta);
-        board[points[i]][points[i + 1]] = 0;
+        v = maxx(deep - 1,best < alpha ? best : alpha, beta);
+        board[points[i]][points[i + 1]] = R.emp;
         if (v < best) {
             best = v;
         }
@@ -149,8 +155,8 @@ vector<int> maxmin(int deep, int color) {
     vector<int>points;
     genboard(deep, points);
     for (int i = 0; i < points.size(); i += 2){
-        board[points[i]][points[i + 1]] = color;
-        v = maxx(deep - 1, alpha, beta);
+        board[points[i]][points[i + 1]] = R.com;
+        v = minn(deep - 1, alpha, beta);
         if (v == best){//将新的节点加入position中
             position.push_back(points[i]);
             position.push_back(points[i+1]);
@@ -160,11 +166,14 @@ vector<int> maxmin(int deep, int color) {
             position.push_back(points[i]);
             position.push_back(points[i+1]);
         }
-        board[points[i]][points[i+1]] = 0;
+        board[points[i]][points[i+1]] = R.emp;
     }
     //生成随机数
     int k;
-    k = random(position);
+    if(position.empty()){
+        exit(22);
+    }
+    k = (int)(position.size() - 1) * random();
     if(k % 2 != 0){
         k = k - 1;
     }
@@ -191,14 +200,14 @@ void AI() {
         clearrectangle(913, 0, 1500, 30);
     }
     else if(c == 1) {
-        if (board[8][8] == 0) {
-            solidcircle(X[8], Y[8], 28);
-            board[8][8] = R.com;
+        if (board[7][7] == 0) {
+            solidcircle(X[7], Y[7], 28);
+            board[7][7] = R.com;
             clearrectangle(913, 0, 1500, 30);
         }
         else {
-            solidcircle(X[9], Y[9], 28);
-            board[9][9] = R.com;
+            solidcircle(X[8], Y[8], 28);
+            board[8][8] = R.com;
             clearrectangle(913, 0, 1500, 30);
         }
     }
@@ -209,10 +218,10 @@ void AI() {
     //
 }
 
-int random(const vector<int>& vec) {
+int random() {
     random_device rd;
     auto gen = default_random_engine(rd());
-    uniform_int_distribution<int> dis(0,(int )(vec.size() - 1));
+    uniform_int_distribution<int> dis(0,1);
     int randk = dis(gen);
     return randk;
 }
