@@ -10,12 +10,16 @@ chess chessmap[15][15];//Æå¾ÖĞÅÏ¢
 chess_pos chess_pos_cursor = { 0,0 };//×îĞÂÂä×Ó×ø±ê
 int chess_draw_list[15 * 15][3] = { 0 };//äÖÈ¾Æå×ÓĞòÁĞ£¬ÓÃÓÚäÖÈ¾µÄÊı¾İ£¬0´æ´¢Æå×ÓÑÕÉ«£¬1´æ´¢xÖµ£¬2´æ´¢yÖµ(1-15)
 int count = 0;//Âä×ÓÊÖÊı
+int l5_b = 0;
+int l5_w = 0;
 int l4_b = 0;
 int l4_w = 0;
 int d4_b = 0;
 int d4_w = 0;
 int l3_b = 0;
 int l3_w = 0;
+int d3_b = 0;
+int d3_w = 0;
 bool isWin = false;//»ñÊ¤ÅĞ¶Ï
 int main() {
 	printf("Îå×ÓÆåÓÎÏ·\n");
@@ -133,7 +137,14 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 	int able = btw + cnt + dis_1 + dis_2;//ableÅĞ¶Ïµ±Ç°²ÎÊıÊÇ·ñÓĞ»îÎå¿ÉÄÜ
 	if (cnt == 5)//»îÎåÇé¿ö
 	{
-		return 10000;
+		if ((i + 1) % 2)
+		{
+			l5_b++;
+		}
+		else {
+			l5_w++;
+		}
+		return 0;
 	}
 	if (cnt == 4)
 	{
@@ -150,7 +161,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 			else {
 				l4_w++;
 			}
-			return 400;
+			return 100;
 		}
 		else {//³åËÄÇé¿ö
 			if ((i + 1) % 2)
@@ -160,7 +171,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 			else {
 				d4_w++;
 			}
-			return 280;
+			return 70;
 		}
 
 	}
@@ -179,10 +190,17 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 			else {
 				l3_w++;
 			}
-			return 100;
+			return 25;
 		}
 		else {//ÃßÈıÇé¿ö
-			return 50;
+			if ((i + 1) % 2)
+			{
+				d3_b++;
+			}
+			else {
+				d3_w++;
+			}
+			return 12;
 		}
 	}
 	if (cnt == 2)
@@ -193,10 +211,10 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 		}
 		if (btw < 3 && (dis_1 > 1 && dis_2 > 1))
 		{//»î¶şÇé¿ö
-			return 25;
+			return 6;
 		}
 		else {//Ãß¶şÇé¿ö
-			return 15;
+			return 4;
 		}
 	}
 	if (cnt == 1)
@@ -206,7 +224,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 			return 0;
 		}
 		else {
-			return 4;
+			return 1;
 		}
 	}
 }
@@ -470,7 +488,43 @@ void AI_Estimate() {
 		}
 	}
 	if (count % 2) {
-		if (l4_w || d4_w)
+		if (l5_w||l5_b)
+		{
+			if (l5_w&&l5_b)
+			{
+				chessmap[chess_draw_list[count-1][1]-1][chess_draw_list[count-1][2]-1].chesskind = EMPTY;
+				count--;
+				l5_w = -1;
+				l5_b = 0;
+				l4_b = 0;
+				l4_w = 0;
+				d4_b = 0;
+				d4_w = 0;
+				l3_b = 0;
+				l3_w = 0;
+				d3_b = 0;
+				d3_w = 0;
+				AI_Estimate();
+				if (AI_Estimation_BLACK >=11000)
+				{
+					Estimate_BLACK +=11000;
+				}
+				else {
+					Estimate_WHITE +=11000;
+				}
+				count++;
+			}
+			else {
+				if (l5_w)
+				{
+					Estimate_WHITE += 11000;
+				}
+				else {
+					Estimate_BLACK += 11000;
+				}
+			}
+		}
+		else if (l4_w || d4_w)
 		{
 			Estimate_WHITE += 10000;
 		}
@@ -486,9 +540,49 @@ void AI_Estimate() {
 		{
 			Estimate_BLACK += 7000;
 		}
+		else if (l3_b==2&&((!l3_w)||(!d3_w)))
+		{
+			Estimate_BLACK += 6000;
+		}
 	}
 	else {
-		if (l4_b || d4_b)
+		if (l5_w || l5_b)
+		{
+			if (l5_w && l5_b)
+			{
+					chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+					count--;
+					l5_w = 0;
+					l5_b = -1;
+					l4_b = 0;
+					l4_w = 0;
+					d4_b = 0;
+					d4_w = 0;
+					l3_b = 0;
+					l3_w = 0;
+					d3_b = 0;
+					d3_w = 0;
+					AI_Estimate();
+					if (AI_Estimation_WHITE >= 11000)
+					{
+						Estimate_WHITE +=11000;
+					}
+					else {
+						Estimate_BLACK +=11000;
+					}
+					count++;
+			}
+			else {
+				if (l5_w)
+				{
+					Estimate_WHITE += 11000;
+				}
+				else {
+					Estimate_BLACK += 11000;
+				}
+			}
+		}
+		else if (l4_b || d4_b)
 		{
 			Estimate_BLACK += 10000;
 		}
@@ -504,15 +598,23 @@ void AI_Estimate() {
 		{
 			Estimate_WHITE += 7000;
 		}
+		else if (l3_w == 2 && ((!l3_b) || (!d3_b)))
+		{
+			Estimate_WHITE += 6000;
+		}
 	}
 	AI_Estimation_BLACK = Estimate_BLACK;
 	AI_Estimation_WHITE = Estimate_WHITE;
+	l5_b = 0;
+	l5_w = 0;
 	l4_b = 0;
 	l4_w = 0;
 	d4_b = 0;
 	d4_w = 0;
 	l3_b = 0;
 	l3_w = 0;
+	d3_b = 0;
+	d3_w = 0;
 }
 struct judgetree* AI_Judgetree_MakeTree(int height) {//²ÉÓÃ×Ó½ÚµãÁ´±íÊ¾·¨
 	struct judgetree* newroot = new struct judgetree;
