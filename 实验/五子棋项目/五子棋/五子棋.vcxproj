@@ -89,8 +89,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\程序练习\A班项目\五子棋大项目\五子棋\openGL配置文件\openGL配置文件\glut-3.7\include;D:\程序练习\A班项目\五子棋大项目\五子棋\openGL配置文件\openGL配置文件\glfw-3.3.4.bin.WIN32\include;D:\程序练习\A班项目\五子棋大项目\五子棋\openGL配置文件\openGL配置文件\glew-2.2.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Disabled</Optimization>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Full</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

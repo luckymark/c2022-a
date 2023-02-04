@@ -421,6 +421,12 @@ void render(double currentTime,GLFWwindow* window,int running_mode) {
 			glVertexAttrib4fv(0, onechess);
 			glDrawArrays(GL_POINTS, 0, 1);
 		}
+		//绘制上一落子标识
+		glPointSize(38.0);
+		GLfloat chessflag[4] = { abs(chess_draw_list[count - 1][0] / 2 - 2),chess_draw_list[count-1][1]+0.25,chess_draw_list[count-1][2] - 0.25,1.0f };
+		glVertexAttrib4fv(0, chessflag);
+		glDrawArrays(GL_POINTS, 0, 1);
+		glPointSize(80.0);
 	}
 	glfwSwapBuffers(window);
 	//在双人模式中，以及人机模式人落子阶段识别落子，在人机模式AI落子阶段完成评估并落子
