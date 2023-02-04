@@ -13,7 +13,7 @@
 #define ONE_DIE_SCORE 1
 #define TWO_DIE_SCORE 10
 #define THREE_DIE_SCORE 100
-#define FOUR_DIE_SCORE 10000
+#define FOUR_DIE_SCORE 50000
 
 
 

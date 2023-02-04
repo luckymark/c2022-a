@@ -9,9 +9,10 @@
 #define MAX (FIVE_SCORE+1)
 
 bool genboard(int deep, std::vector<int> &points);
-int maxx(int deep,int alpha, int beta,int color = R.com);
+/*int maxx(int deep,int alpha, int beta,int color = R.com);
 int minn(int deep,int alpha,int beta,int color = R.hum);
-std::vector<int> maxmin(int deep, int color = R.com);
+std::vector<int> maxmin(int deep, int color = R.com);*/
+int negamax(int deep, int alpha, int beta, int color);
 void AI();
 void AIdo();
 int random();

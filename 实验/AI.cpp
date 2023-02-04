@@ -7,17 +7,17 @@
 
 using namespace std;
 
-vector<int>position;
 int c = 1;
 
-bool genboard(int deep, vector<int> &points) {
-    vector<int>fives;
-    vector<int>fours;
-    vector<int>doubleThrees;
-    vector<int>threes;
-    vector<int>twos;
-    vector<int>neighbors;
-    vector<int>nextNeighbors;
+bool genboard(int deep, vector<pair<int,int>> &points) {
+    vector<pair<int,int>>fives;
+    vector<pair<int,int>>fours;
+    vector<pair<int,int>>doubleThrees;
+    vector<pair<int,int>>threes;
+    vector<pair<int,int>>twos;
+    vector<pair<int,int>>neighbors;
+    vector<pair<int,int>>nextNeighbors;
+    pair<int,int>temp;
 
     for (int i = 0; i < 15; ++i) {
         for (int j = 0; j < 15; ++j) {
@@ -32,44 +32,56 @@ bool genboard(int deep, vector<int> &points) {
                     board[i][j] = R.emp;
 
                     if(scoreCom >= FIVE_SCORE){
-                        points.push_back(i);
-                        points.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        points.push_back(temp);
                         return true;
                     }else if(scoreHum >= FIVE_SCORE){
-                        fives.push_back(i);
-                        fives.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        fives.push_back(temp);
                     } else if (scoreHum >= FOUR_SCORE){
-                        fours.push_back(i);
-                        fours.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        fours.push_back(temp);
                     }else if(scoreCom >= FOUR_SCORE){
-                        fours.insert(fours.begin(),j);
-                        fours.insert(fours.begin(),i);
+                        temp.first = i;
+                        temp.second = j;
+                        fours.insert(fours.begin(),temp);
                     }else if(scoreHum >= 2*THREE_SCORE){
-                        doubleThrees.push_back(i);
-                        doubleThrees.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        doubleThrees.push_back(temp);
                     }else if(scoreCom >= 2*THREE_SCORE){
-                        doubleThrees.insert(doubleThrees.begin(),j);
-                        doubleThrees.insert(doubleThrees.begin(),i);
+                        temp.first = i;
+                        temp.second = j;
+                        doubleThrees.insert(doubleThrees.begin(),temp);
                     } else if(scoreCom >= THREE_SCORE){
-                        threes.insert(threes.begin(),j);
-                        threes.insert(threes.begin(),i);
+                        temp.first = i;
+                        temp.second = j;
+                        threes.insert(threes.begin(),temp);
                     }else if(scoreHum >= THREE_SCORE){
-                        threes.push_back(i);
-                        threes.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        threes.push_back(temp);
                     }else if (scoreCom >= TWO_SCORE){
-                        twos.insert(twos.begin(),j);
-                        twos.insert(twos.begin(),i);
+                        temp.first = i;
+                        temp.second = j;
+                        twos.insert(twos.begin(),temp);
                     } else if (scoreHum >= TWO_SCORE){
-                        twos.push_back(i);
-                        twos.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        twos.push_back(temp);
                     } else {
-                        neighbors.push_back(i);
-                        neighbors.push_back(j);
+                        temp.first = i;
+                        temp.second = j;
+                        neighbors.push_back(temp);
                     }
                     //change
                 }else if(deep >= 2 && HasNeighbor(i,j,2,2)){
-                    nextNeighbors.push_back(i);
-                    nextNeighbors.push_back(j);
+                    temp.first = i;
+                    temp.second = j;
+                    nextNeighbors.push_back(temp);
                 }
             }
         }
@@ -96,7 +108,7 @@ bool genboard(int deep, vector<int> &points) {
     return true;
 }
 
-int maxx(int deep, int alpha, int beta, int color) {
+/*int maxx(int deep, int alpha, int beta, int color) {
     int v = score(R.com);
     //迭代终止
     if (deep <= 0 || v >= FIVE_SCORE) {
@@ -180,6 +192,32 @@ vector<int> maxmin(int deep, int color) {
     temp.push_back(position[k]);
     temp.push_back(position[k+1]);
     return temp;
+}*/
+
+int negamax(int deep, int alpha, int beta, int color) {
+    int v = score(color);
+    if(deep <= 0 || wincondition()){
+        return v;
+    }
+
+    int best = MIN;
+    vector<pair<int,int>>points;
+    genboard(deep, points);
+
+    for (int i = 0; i < points.size(); ++i) {
+        pair<int,int>p = points[i];
+        board[p.first][p.second] = color;
+        alpha = max(best, alpha);
+        v = -negamax(deep - 1, -beta, -alpha, R.trans(color));
+        board[p.first][p.second] = R.emp;
+        if(v > best){
+            best = v;
+        }
+        if(v >= beta){
+            return v;
+        }
+    }
+    return best;
 }
 
 void AI() {
@@ -194,7 +232,7 @@ void AI() {
 
     if(c>1)
     {
-        vector<int>bestpos = maxmin(4);
+        //vector<int>bestpos = maxmin(4);
         solidcircle(X[bestpos[0]], Y[bestpos[1]], 28);
         board[bestpos[0]][bestpos[1]] = R.com;
         clearrectangle(913, 0, 1500, 30);

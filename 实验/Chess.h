@@ -5,12 +5,25 @@
 #ifndef CHESSAI_CHESS_H
 #define CHESSAI_CHESS_H
 
-typedef struct {
+/*typedef struct {
     int hum;
     int com;
     int emp;
-}col;
+}col;*/
+class col{
+    public:
+        int hum;
+        int com;
+        int emp;
+        int trans(int color);
+};
+
+int col::trans(int color) {
+    return (color == 1 ? 2 : 1);
+}
+
 extern col R;
+
 extern int board[20][20];
 //y0 = 1;per y = 4.3;y per xiangsu = 15.621;permission = +-1
 const int Y[15] = {16,83,150,218,284,351,419,486,553,621,688,755,822,889,955};
