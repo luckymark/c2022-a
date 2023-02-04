@@ -1,0 +1,688 @@
+#include <stdio.h>
+#include <Windows.h>
+#include <conio.h>
+#define ROW 12   
+#define COL 12   
+#define NUM 6   
+#include<windows.h>
+
+struct MAP
+{
+    const int row;
+    const int col;
+    char map[ROW][COL];
+};
+
+struct MAP all_map[NUM] =
+{
+{ 8, 8, {
+{ 0, 0, 1, 1, 1, 0, 0, 0 },
+{ 0, 0, 1, 3, 1, 0, 0, 0 },
+{ 0, 0, 1, 0, 1, 1, 1, 1 },
+{ 1, 1, 1, 2, 0, 2, 3, 1 },
+{ 1, 3, 0, 2, 4, 1, 1, 1 },
+{ 1, 1, 1, 1, 2, 1, 0, 0 },
+{ 0, 0, 0, 1, 3, 1, 0, 0 },
+{ 0, 0, 0, 1, 1, 1, 0, 0 } } },
+
+{ 8, 8, {
+{ 0, 1, 1, 1, 1, 1, 0, 0 },
+{ 0, 1, 0, 4, 0, 1, 1, 1 },
+{ 1, 1, 0, 1, 2, 0, 0, 1 },
+{ 1, 0, 0, 3, 0, 3, 0, 1 },
+{ 1, 0, 0, 2, 0, 0, 1, 1 },
+{ 1, 1, 1, 0, 0, 0, 1, 0 },
+{ 0, 0, 1, 0, 0, 0, 1, 0 },
+{ 0, 0, 1, 1, 1, 1, 1, 0 } } },
+
+{ 9, 9, {
+{1,1,1,1,1,0,0,0,0},
+{1,4,0,0,1,0,0,0,0},
+{1,0,2,2,1,0,1,1,1},
+{1,0,2,0,1,0,1,3,1},
+{1,1,1,0,1,1,1,3,1},
+{0,1,1,0,0,0,0,3,1},
+{0,1,0,0,0,1,0,0,1},
+{0,1,0,0,0,1,1,1,1},
+{0,1,1,1,1,1,0,0,0} } },
+
+{ 7, 10, {
+{ 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+{ 0, 1, 0, 0, 0, 0, 0, 1, 1, 1 },
+{ 1, 1, 2, 1, 1, 1, 0, 0, 0, 1 },
+{ 1, 0, 4, 0, 2, 0, 0, 2, 0, 1 },
+{ 1, 0, 3, 3, 1, 0, 2, 0, 1, 1 },
+{ 1, 1, 3, 3, 1, 0, 0, 0, 1, 0 },
+{0,1,1,1,1,1,1,1,1,0} } },
+
+{ 8, 6, {
+{ 0, 1, 1, 1, 1, 0 },
+{ 1, 1, 0, 0, 1, 0 },
+{ 1, 4, 2, 0, 1, 0 },
+{ 1, 1, 2, 0, 1, 1 },
+{ 1, 1, 0, 2, 0, 1 },
+{ 1, 3, 2, 0, 0, 1 },
+{ 1, 3, 3, 5, 3, 1 },
+{ 1, 1, 1, 1, 1, 1 } } }
+};
+
+void color();
+void menu();  
+void congratulation();
+void game();  
+void showMaker();
+void HowToPlay();
+void end();
+
+void print_map(char(*map)[COL], const int* row, const int* col);  
+
+void find_man(char(*map)[COL], const int* row, const int* col, int* x, int* y);  
+
+void player_act(char(*map)[COL], int* x, int* y);  
+
+int is_win(char(*map)[COL], const int* row, const int* col); 
+
+int main()
+{
+    int input = 0;
+    color();
+    menu();
+    printf("\n\n\n");
+    printf("\t\t\t请选择想要进行的操作：>>>");
+    do
+    {
+        scanf("%d", &input);
+        switch (input)
+        {
+        case 2:  system("cls"), showMaker();
+            break;
+        case 0:  system("cls"), end();
+            break;
+        case 1:  system("cls"), game();
+            break;
+        case 3:  system("cls"), wanfa();
+            break;
+        default:  system("cls"), printf("\n\n\n\n\t\t**你选的啥？丹丹姐看不懂捏**\n\n");
+            printf("\t\t**按任意键继续回到主菜单,丹丹姐要求你重新选择**\n");
+            _getch(); system("cls"); main();
+            break;
+        }
+    } while (input);
+    return 0;
+}
+void end()
+{
+    system("cls");
+    printf("\n\n\n\t\t-------...........------------\n");
+    printf("\n\n\n\t\t-------欢迎下次再来！！！--------\n\n");
+    printf("\t\t\t\t\t\t\t再见\n\n\n\n\n\n\n");
+    printf("\n\n\n\n\t\t\t\t\t\t\t按-*-'00'-*-键退出   ");
+    system("exit");
+}
+
+void menu() 
+{
+    printf("\n\n\n\n\n\n");
+    printf("\t\t\t***********************\n");
+    printf("\t\t\t***    1.开始游戏   ***\n");
+    printf("\t\t\t***                 ***\n");
+    printf("\t\t\t***    0.退出游戏   ***\n");
+    printf("\t\t\t***                 ***\n");
+    printf("\t\t\t***    2.人员介绍   ***\n");
+    printf("\t\t\t***                 ***\n");
+    printf("\t\t\t***    3.玩法介绍   ***\n");
+    printf("\t\t\t***                 ***\n");
+    printf("\t\t\t***    其他键无效   ***\n");
+    printf("\t\t\t***********************\n");
+}
+
+void HowToPlay()
+{
+    char ch;
+    system("cls");
+    printf("\n\n\n");
+    printf("\t\t\t\t操作方法\n");
+    printf("\n\n");
+    printf("\t\t\t*-*-*  按'W',向上走！  *-*-*\n\n");
+    printf("\t\t\t*-*-*  按'S',向下走！  *-*-*\n\n");
+    printf("\t\t\t*-*-*  按'A',向左走！  *-*-*\n\n");
+    printf("\t\t\t*-*-*  按'D',向右走！  *-*-*\n\n");
+    printf("\n");
+    printf("\n\t\t■表示墙，□表示箱子，◎表示目的地\n");
+    printf("\n\t\t♀表示玩家，★表示箱子在目的地上，＠表示人在目的地上\n");
+    printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t按任意键返回上一步");
+    _getch();
+    system("cls");
+    main();
+}
+
+void find_man(char(*map)[COL], const int* row, const int* col, int* x, int* y)  
+{
+    int i = 0;
+    for (i = 0; i < *row; i++){
+        for (int j = 0; j < *col; j++){
+            if ((map[i][j] == 4) || (map[i][j] == 7)){
+                *x = i;
+                *y = j;
+                return;
+            }
+        }
+    }
+}
+void print_map(char(*map)[COL], const int* row, const int* col) 
+{
+    int i = 0;...llllkkkkkkkkkkkkkkkkkkkkkkkk
+    system("cls");
+    printf("-------------------------------------------------------------\n");
+    printf("-------------------------------------------------------------\n\n");
+    for (i = 0; i < *row; i++)
+    {
+        printf("\t\t\t\t\t");
+        int j = 0;
+        for (j = 0; j < *col; j++)
+        {
+            switch ((map[i][j]))
+            {
+
+            case 0:   printf("  ");
+                break;
+            case 1:printf("■");
+                break;
+            case 2:printf("□");
+                break;
+            case 3:printf("◎");
+                break;
+            case 4:printf("♀");
+                break;
+            case 5: printf("★");
+                break;
+            case 7: printf("＠");
+                break;
+            }
+        }
+        printf("\n");
+    }
+    printf("\nW A S D 控制小人的上下左右\n");
+    printf("结束\n");
+    printf("-------------------------------------------------------------\n");
+    printf("-------------------------------------------------------------\n\n\n");
+    printf("\t\t\t按1重新选关\n\n");
+}
+int is_win(char(*map)[COL], const int* row, const int* col)   
+{
+    int dest = 0;
+    int i = 0;
+    for (i = 0; i < *row; i++)
+    {
+        int j = 0;
+        for (j = 0; j < *col; j++)
+        {
+            if (map[i][j] == 2 || map[i][j] == 7)
+                return 0;
+        }
+    }
+    return 1;
+}
+void player_act(char(*map)[COL], int* x, int* y) 
+{
+    char input = 0;
+    switch (input = _getch())
+    {
+    case '1':  	system("cls"), game(); break;
+    case 'W':
+    case 'w':
+    case 38://向上走
+    {
+        if (map[(*x) - 1][*y] == 0 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 4;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 4;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 3 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 7;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 3 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 7;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 4;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 2 && map[*x][*y] == 4 && map[(*x) - 2][*y] == 0)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 4;
+            map[(*x) - 2][*y] = 2;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 2 && map[*x][*y] == 7 && map[(*x) - 2][*y] == 0)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 4;
+            map[(*x) - 2][*y] = 2;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 2 && map[*x][*y] == 7 && map[(*x) - 2][*y] == 3)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 4;
+            map[(*x) - 2][*y] = 5;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 2 && map[*x][*y] == 4 && map[(*x) - 2][*y] == 3)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 4;
+            map[(*x) - 2][*y] = 5;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 5 && map[*x][*y] == 7 && map[(*x) - 2][*y] == 3)
+        {
+            map[*x][*y] = 3;
+            map[(*x) - 1][*y] = 7;
+            map[(*x) - 2][*y] = 5;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 5 && map[*x][*y] == 4 && map[(*x) - 2][*y] == 0)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 7;
+            map[(*x) - 2][*y] = 2;
+            --* x;
+        }
+        else if (map[(*x) - 1][*y] == 5 && map[*x][*y] == 4 && map[(*x) - 2][*y] == 3)
+        {
+            map[*x][*y] = 0;
+            map[(*x) - 1][*y] = 7;
+            map[(*x) - 2][*y] = 5;
+            --* x;
+        }
+    }
+    break;
+    case 'S':
+    case 's':
+    case 40://向下走
+    {
+        if (map[(*x) + 1][*y] == 0 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 4;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 4;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 3 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 7;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 3 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 7;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 4;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 2 && map[*x][*y] == 4 && map[(*x) + 2][*y] == 0)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 4;
+            map[(*x) + 2][*y] = 2;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 2 && map[*x][*y] == 7 && map[(*x) + 2][*y] == 0)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 4;
+            map[(*x) + 2][*y] = 2;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 2 && map[*x][*y] == 7 && map[(*x) + 2][*y] == 3)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 4;
+            map[(*x) + 2][*y] = 5;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 2 && map[*x][*y] == 4 && map[(*x) + 2][*y] == 3)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 4;
+            map[(*x) + 2][*y] = 5;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 5 && map[*x][*y] == 7 && map[(*x) + 2][*y] == 3)
+        {
+            map[*x][*y] = 3;
+            map[(*x) + 1][*y] = 7;
+            map[(*x) + 2][*y] = 5;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 5 && map[*x][*y] == 4 && map[(*x) + 2][*y] == 0)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 7;
+            map[(*x) + 2][*y] = 2;
+            ++* x;
+        }
+        else if (map[(*x) + 1][*y] == 5 && map[*x][*y] == 4 && map[(*x) + 2][*y] == 3)
+        {
+            map[*x][*y] = 0;
+            map[(*x) + 1][*y] = 7;
+            map[(*x) + 2][*y] = 5;
+            ++* x;
+        }
+    }
+    break;
+    case 'A':
+    case 'a':
+    case 37://向左走
+    {
+        if (map[*x][(*y) - 1] == 0 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 4;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 4;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 3 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 7;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 3 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 7;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 4;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 2 && map[*x][*y] == 4 && map[*x][(*y) - 2] == 0)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 4;
+            map[*x][(*y) - 2] = 2;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 2 && map[*x][*y] == 7 && map[*x][(*y) - 2] == 0)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 4;
+            map[*x][(*y) - 2] = 2;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 2 && map[*x][*y] == 7 && map[*x][(*y) - 2] == 3)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 4;
+            map[*x][(*y) - 2] = 5;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 2 && map[*x][*y] == 4 && map[*x][(*y) - 2] == 3)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 4;
+            map[*x][(*y) - 2] = 5;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 5 && map[*x][*y] == 7 && map[*x][(*y) - 2] == 3)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) - 1] = 7;
+            map[*x][(*y) - 2] = 5;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 5 && map[*x][*y] == 4 && map[*x][(*y) - 2] == 0)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 7;
+            map[*x][(*y) - 2] = 2;
+            --* y;
+        }
+        else if (map[*x][(*y) - 1] == 5 && map[*x][*y] == 4 && map[*x][(*y) - 2] == 3)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) - 1] = 7;
+            map[*x][(*y) - 2] = 5;
+            --* y;
+        }
+    }
+    break;
+    case 'D':
+    case 'd':
+    case 39://向右走
+    {
+        if (map[*x][(*y) + 1] == 0 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 4;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 4;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 3 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 7;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 3 && map[*x][*y] == 4)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 7;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 0 && map[*x][*y] == 7)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 4;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 2 && map[*x][*y] == 4 && map[*x][(*y) + 2] == 0)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 4;
+            map[*x][(*y) + 2] = 2;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 2 && map[*x][*y] == 7 && map[*x][(*y) + 2] == 0)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 4;
+            map[*x][(*y) + 2] = 2;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 2 && map[*x][*y] == 7 && map[*x][(*y) + 2] == 3)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 4;
+            map[*x][(*y) + 2] = 5;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 2 && map[*x][*y] == 4 && map[*x][(*y) + 2] == 3)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 4;
+            map[*x][(*y) + 2] = 5;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 5 && map[*x][*y] == 7 && map[*x][(*y) + 2] == 3)
+        {
+            map[*x][*y] = 3;
+            map[*x][(*y) + 1] = 7;
+            map[*x][(*y) + 2] = 5;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 5 && map[*x][*y] == 4 && map[*x][(*y) + 2] == 0)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 7;
+            map[*x][(*y) + 2] = 2;
+            ++* y;
+        }
+        else if (map[*x][(*y) + 1] == 5 && map[*x][*y] == 4 && map[*x][(*y) + 2] == 3)
+        {
+            map[*x][*y] = 0;
+            map[*x][(*y) + 1] = 7;
+            map[*x][(*y) + 2] = 5;
+            ++* y;
+        }
+    }
+    break;
+    }
+}
+void game()  
+{
+    int i = 0;
+    int x = 0;
+    int y = 0;
+    system("cls");
+    struct MAP* pmap = NULL;
+    printf("\n\n\t目前总共有%d关,你要从哪一关开始玩？：>>>\n", NUM - 1);
+    printf("\n\n\n\t\t\t\t\t\t\t按0返回主菜单<<<\n");
+    scanf("%d", &i);
+    if (i == 0)
+    {
+        system("cls");
+        main();
+    }
+    else
+    {
+        pmap = all_map + i - 1;
+        find_man(pmap->map, &(pmap->row), &(pmap->col), &x, &y);
+        while (1)
+        {
+            system("cls");
+            char ch;
+            print_map(pmap->map, &(pmap->row), &(pmap->col));
+            player_act(pmap->map, &x, &y);
+            if (is_win(pmap->map, &(pmap->row), &(pmap->col)) && i < NUM)
+            {
+                system("cls");
+                print_map(pmap->map, &(pmap->row), &(pmap->col));
+                system("cls");
+                qinzhu();
+                printf("\n");
+                printf("\t\t\t\t你真棒!");
+                printf("--你已经完成了第%d关\n\n\n\n", i);
+                printf("\t\t\t\t输入1，重新选关卡\n");
+                printf("\t\t\t\t输入2,返回主菜单\n");
+                printf("\t\t\t按任意键到下一关\n");
+                printf("\n");
+                ch = _getch();
+                if (ch == '2')
+                {
+                    system("cls");
+                    main();
+                    break;
+                }
+                else if (ch == '1')
+                {
+                    system("cls");
+                    game();
+                    break;
+                }
+                pmap++;
+                x = 0;
+                y = 0;
+                i++;
+                find_man(pmap->map, &(pmap->row), &(pmap->col), &x, &y);
+            }
+            else if (i == NUM)
+            {
+                printf("\n通关了！你真厉害！\n");
+                return;
+            }
+        }
+    }
+}
+void showMaker()  //游戏实现函数
+{
+    system("cls");
+    printf("\n\n\n");
+    printf("\t\t戴围巾的TiAmo\n\n\n");
+    printf("\n");
+    printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t按任意键返回上一步");
+    _getch();
+    system("cls");
+    main();
+}
+void congratulation()
+{
+    int n, m, i, j;
+    for (i = 1; i <= 5; i++)
+    {
+        printf("\t\t\t*");
+        printf("\t");
+        printf("*");
+        if (i % 2 != 0)
+            printf("*");
+        else
+            printf(" ");
+        if (i % 2 != 0)
+            printf("*");
+        else
+            printf(" ");
+        printf("*");
+        if (i == 2)
+        {
+            printf("\t\t\t\t");
+            for (j = 0; j < 15; j++)
+                printf("*");
+        }
+        if (i == 4)
+        {
+            printf("\t\t\t\t");
+            for (j = 0; j < 15; j++)
+                printf("*");
+        }
+        printf("\n");
+    }
+
+
+}
+void color()
+{
+    int a, b;
+    system("color 04");
+}
