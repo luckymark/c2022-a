@@ -3,30 +3,32 @@
 #include<string.h>
 void en(char text[100]);
 void de(char code[100]);
+const int Num=1000;
+
 int main()
 {
 	int result;
-	char text[1000], code[1000];
+	char text[Num], code[Num];
 	printf("要加密请输入0，要解密请输入1：\n");
 	scanf_s("%d", &result);
 	if (result == 0)
 	{
 		printf("请输入需要加密的字符串:\n");
-		scanf_s("%s", text,1000);
+		scanf_s("%s", text,Num);
 		en(text);
 	}
 	else
 	{
 		printf("请输入需要解密的字符串:\n");
-		scanf_s("%s", code,1000);
+		scanf_s("%s", code,Num);
 		de(code);
 	}
 	return 0;
 }
-void en(char text[1000])
+void en(char text[Num])
 {
 	int i, length;
-	char code[1000];
+	char code[Num];
 	length = strlen(text);
 	for (i = 0; i < length; i++)
 	{
@@ -35,10 +37,10 @@ void en(char text[1000])
 	code[i] = '\0';
 	printf("加密后的密码是：%s", code);
 }
-void de(char code[1000])
+void de(char code[Num])
 {
 	int i,length;
-	char text[1000];
+	char text[Num];
 	length = strlen(code);
 	for (i = 0; i < length; i++)
 	{
