@@ -38,5 +38,6 @@ const int X[15] = {27,90,153,216,279,343,406,469,532,596,659,722,786,849,911};
 #include "Score.h"
 #include "hum.h"
 #include "AI.h"
+#include "kill.h"
 
 #endif //CHESSAI_CHESS_H

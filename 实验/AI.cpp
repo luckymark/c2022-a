@@ -108,92 +108,6 @@ bool genboard(int deep, vector<pair<int,int>> &points) {
     return true;
 }
 
-/*int maxx(int deep, int alpha, int beta, int color) {
-    int v = score(R.com);
-    //迭代终止
-    if (deep <= 0 || v >= FIVE_SCORE) {
-        return v;
-    }
-
-    int best = MIN;
-    vector<int>points;
-    genboard(deep, points);
-
-    for (int i = 0; i < points.size(); i += 2) {
-        board[points[i]][points[i + 1]] = R.com;
-        v = minn(deep - 1, alpha, best > beta ? best : beta);
-        board[points[i]][points[i + 1]] = R.emp;
-        if (v > best) {
-            best = v;
-        }
-        if (v > alpha) {
-            break;
-        }
-    }
-    return best;
-}
-
-int minn(int deep, int alpha, int beta, int color) {
-    int v = score(R.hum);
-    //迭代终止
-    if (deep <= 0 || v >= 999999) {
-        return v;
-    }
-
-    int best = MAX;
-    vector<int>points;
-    genboard(deep, points);
-
-    for (int i = 0; i < points.size(); i += 2) {
-        board[points[i]][points[i + 1]] = R.hum;
-        v = maxx(deep - 1,best < alpha ? best : alpha, beta);
-        board[points[i]][points[i + 1]] = R.emp;
-        if (v < best) {
-            best = v;
-        }
-        if (v < beta) {
-            break;
-        }
-    }
-    return best;
-}
-
-vector<int> maxmin(int deep, int color) {
-    int best = MIN;
-    int beta = MIN;
-    int alpha = MAX;
-    vector<int>temp;
-    int v;
-    vector<int>points;
-    genboard(deep, points);
-    for (int i = 0; i < points.size(); i += 2){
-        board[points[i]][points[i + 1]] = R.com;
-        v = minn(deep - 1, alpha, beta);
-        if (v == best){//将新的节点加入position中
-            position.push_back(points[i]);
-            position.push_back(points[i+1]);
-        } else if(v > best){//清除之前的节点，将新的节点加入position中
-            best = v;
-            position.clear();
-            position.push_back(points[i]);
-            position.push_back(points[i+1]);
-        }
-        board[points[i]][points[i+1]] = R.emp;
-    }
-    //生成随机数
-    int k;
-    if(position.empty()){
-        exit(22);
-    }
-    k = (int)(position.size() - 1) * random();
-    if(k % 2 != 0){
-        k = k - 1;
-    }
-    temp.push_back(position[k]);
-    temp.push_back(position[k+1]);
-    return temp;
-}*/
-
 int negamax(int deep, int alpha, int beta, int color) {
     int v = score(color);
     if(deep <= 0 || wincondition()){
@@ -256,14 +170,13 @@ void AI() {
     //
 }
 
-int random() {
+double random() {
     random_device rd;
     auto gen = default_random_engine(rd());
-    uniform_int_distribution<int> dis(0,1);
-    int randk = dis(gen);
+    uniform_real_distribution<double> dis(0,1);
+    double randk = dis(gen);
     return randk;
 }
-
 void AIdo(){
     AI();
     finish();
