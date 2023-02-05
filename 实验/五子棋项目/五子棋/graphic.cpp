@@ -9,6 +9,7 @@ GLuint fs[2] = { 0 };
 GLuint rendering_program1;//管线1，渲染棋盘
 GLuint rendering_program2;//管线2，渲染棋子
 GLuint vertex_array_object;
+bool fallback=true;
 int running(int running_mode)
 {
 	//glfw库调用
@@ -100,27 +101,30 @@ int running(int running_mode)
 }
 void board_button_callback(GLFWwindow* window,int key,int scancode,int action,int mods) {
 	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-		switch (gamemode)
+		if (fallback)
 		{
-		case 1:
-			if (count - 1 >= 0)
+			fallback = !fallback;
+			switch (gamemode)
 			{
-				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
-				count -= 1;
+			case 1:
+				if (count - 1 >= 0)
+				{
+					chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+					count -= 1;
+				}
+				break;
+			case 2:
+				if (count - 2 >= 0)
+				{
+					chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+					chessmap[chess_draw_list[count - 2][1] - 1][chess_draw_list[count - 2][2] - 1].chesskind = EMPTY;
+					count -= 2;
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		case 2:
-			if (count - 2 >= 0)
-			{
-				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
-				chessmap[chess_draw_list[count - 2][1] - 1][chess_draw_list[count - 2][2] - 1].chesskind = EMPTY;
-				count -= 2;
-			}
-			break;
-		default:
-			break;
 		}
-
 	}
 }
 void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -435,6 +439,7 @@ void render(double currentTime,GLFWwindow* window,int running_mode) {
 	}
 	else {
 		AI_Running();
+		fallback = true;
 	}
 }
 void shutdown() {

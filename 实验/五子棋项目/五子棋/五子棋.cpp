@@ -558,7 +558,7 @@ void AI_Estimate() {
 		{
 			Estimate_BLACK += 7000;
 		}
-		else if (l3_b==2&&((!l3_w)||(!d3_w)))
+		else if (l3_b==2&&!(l3_w||d3_w))
 		{
 			Estimate_BLACK += 6000;
 		}
@@ -634,23 +634,13 @@ void AI_Estimate() {
 		{
 			Estimate_WHITE += 7000;
 		}
-		else if (l3_w == 2 && ((!l3_b) || (!d3_b)))
+		else if (l3_w == 2 && !(l3_b|| d3_b))
 		{
 			Estimate_WHITE += 6000;
 		}
 	}
 	AI_Estimation_BLACK = Estimate_BLACK;
 	AI_Estimation_WHITE = Estimate_WHITE;
-	l5_b = 0;
-	l5_w = 0;
-	l4_b = 0;
-	l4_w = 0;
-	d4_b = 0;
-	d4_w = 0;
-	l3_b = 0;
-	l3_w = 0;
-	d3_b = 0;
-	d3_w = 0;
 }
 struct judgetree* AI_Judgetree_MakeTree(int height) {//采用子节点链表示法
 	struct judgetree* newroot = new struct judgetree;
@@ -686,21 +676,420 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 	}
 	else {
 		root->listend->donepos = newchess;
-		if (height % 2)
-		{
-			root->listend->expectation = INT_MAX;
-		}
-		else {
-			root->listend->expectation = INT_MIN;
-		}
 		root->listend->bor_node = AI_Judgetree_MakeTree(height);
 		root->listend = root->listend->bor_node;
 	}
-
 }
 void AI_Judgetree_BuildTree(struct judgetree* root, int height,int gd_expectation) {
-	if (height < 3)//如果不使用GPU，就此AI程序而言，到4层树已经是极限了
+	if (height < 5)//如果不使用GPU，就此AI程序而言，到4层树已经是极限了
 	{
+			if (height) {
+				AI_Estimate();//贪心
+				if (height % 2)
+				{
+					if (count % 2){
+						if (l5_b)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l4_w || d4_w){
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_w && !(d4_b || l4_b))
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if ((d4_b == 2) || l4_b)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (d4_b && l3_b)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_b == 2 && !(l3_w || d3_w))
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+					}
+					else {
+						if (l5_w)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l4_b || d4_b){
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_b && !(d4_w || l4_w))
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if ((d4_w == 2) || l4_w)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (d4_w && l3_w)
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_w == 2 && !(l3_b || d3_b))
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+					}
+				}
+				else {
+					if (count % 2)
+					{
+						if (l5_b) {
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l4_w || d4_w) {
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_w && !(d4_b || l4_b))
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if ((d4_b == 2) || l4_b)
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (d4_b && l3_b)
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_b == 2 && !(l3_w || d3_w))
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+					}
+					else {
+						if (l5_w)
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l4_b || d4_b) {
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_b && !(d4_w || l4_w))
+						{
+							root->expectation = INT_MAX;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+
+						}
+						else if ((d4_w == 2) || l4_b)
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (d4_w && l3_w)
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+						else if (l3_w == 2 && !(l3_b || d3_b))
+						{
+							root->expectation = INT_MIN;
+							chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+							l5_b = 0;
+							l5_w = 0;
+							l4_b = 0;
+							l4_w = 0;
+							d4_b = 0;
+							d4_w = 0;
+							l3_b = 0;
+							l3_w = 0;
+							d3_b = 0;
+							d3_w = 0;
+							return;
+						}
+					}
+				}
+				l5_b = 0;
+				l5_w = 0;
+				l4_b = 0;
+				l4_w = 0;
+				d4_b = 0;
+				d4_w = 0;
+				l3_b = 0;
+				l3_w = 0;
+				d3_b = 0;
+				d3_w = 0;
+			}
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)//演算区域内遍历所有可能
 		{
 			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
@@ -804,6 +1193,16 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int gd_expectatio
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
 			AI_Estimate();
+			l5_b = 0;
+			l5_w = 0;
+			l4_b = 0;
+			l4_w = 0;
+			d4_b = 0;
+			d4_w = 0;
+			l3_b = 0;
+			l3_w = 0;
+			d3_b = 0;
+			d3_w = 0;
 			if (count % 2)
 			{
 				i->expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
