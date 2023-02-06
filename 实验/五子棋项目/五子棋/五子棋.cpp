@@ -153,7 +153,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾Ý´«µ½²ÎÊý·ÖÎ
 		{ 
 			return 0;
 		}
-		if (btw == 0 && (dis_1 > 0 && dis_2 > 0))
+		if (btw == 0 && (dis_1 && dis_2))
 		{//»îËÄÇé¿ö
 			if ((i + 1) % 2)
 			{
@@ -182,16 +182,29 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾Ý´«µ½²ÎÊý·ÖÎ
 		{
 			return 0;
 		}
-		if (btw < 2 && (dis_1 > 1 && dis_2 > 1))
+		if (btw < 2 && (dis_1 && dis_2))
 		{//»îÈýÇé¿ö
-			if ((i + 1) % 2)
-			{
-				l3_b++;
+			if (btw + dis_1 + dis_2 >= 3) {
+				if ((i + 1) % 2)
+				{
+					l3_b++;
+				}
+				else {
+					l3_w++;
+				}
+				return 25;
 			}
-			else {
-				l3_w++;
+			else {//ÀýÍâÃßÈýÇé¿ö
+				if ((i + 1) % 2)
+				{
+					d3_b++;
+				}
+				else {
+					d3_w++;
+				}
+				return 12;
 			}
-			return 25;
+
 		}
 		else {//ÃßÈýÇé¿ö
 			if ((i + 1) % 2)
@@ -228,6 +241,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾Ý´«µ½²ÎÊý·ÖÎ
 			return 1;
 		}
 	}
+	return 0;
 }
 void AI_Estimate() {
 	int Estimate_BLACK = 0;
@@ -688,7 +702,7 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 		root->listend = root->listend->bor_node;
 	}
 }
-bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos, int fa_expectation) {
+bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 	AI_Estimate();//Ì°ÐÄ
 	if (height % 2)
 	{
@@ -788,15 +802,6 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos, int fa
 				d3_w = 0;
 				return true;
 			}
-			if (AI_Estimation_BLACK - AI_Estimation_WHITE - fa_expectation < -5 * height) {
-				(*stoppos)-= 2;
-			}
-			if (AI_Estimation_BLACK - AI_Estimation_WHITE - fa_expectation > 5 * height) {
-				if (*stoppos< MAX_DEPTH)
-				{
-					(*stoppos)+= 2;
-				}
-			}
 		}
 		else {
 			if (l5_w)
@@ -893,15 +898,6 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos, int fa
 				d3_b = 0;
 				d3_w = 0;
 				return true;
-			}
-			if (AI_Estimation_WHITE - AI_Estimation_BLACK - fa_expectation < -5 * height) {
-				(*stoppos)-= 2;
-			}
-			if (AI_Estimation_WHITE - AI_Estimation_BLACK - fa_expectation > 5 * height) {
-				if (*stoppos < MAX_DEPTH)
-				{
-					(*stoppos)+= 2;
-				}
 			}
 		}
 	}
@@ -1002,15 +998,6 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos, int fa
 				d3_w = 0;
 				return true;
 			}
-			if (AI_Estimation_WHITE - AI_Estimation_BLACK - fa_expectation > 5 * height) {
-				(*stoppos)-= 2;
-			}
-			if (AI_Estimation_WHITE - AI_Estimation_BLACK - fa_expectation < -5 * height) {
-				if (*stoppos < MAX_DEPTH)
-				{
-					(*stoppos)+= 2;
-				}
-			}
 		}
 		else {
 			if (l5_w)
@@ -1109,15 +1096,6 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos, int fa
 				d3_w = 0;
 				return true;
 			}
-			if (AI_Estimation_BLACK - AI_Estimation_WHITE - fa_expectation > 5 * height) {
-				(*stoppos)-=2;
-			}
-			if (AI_Estimation_BLACK - AI_Estimation_WHITE - fa_expectation < -5 * height) {
-				if (*stoppos < MAX_DEPTH)
-				{
-					(*stoppos)+=2;
-				}
-			}
 		}
 	}
 	l5_b = 0;
@@ -1136,7 +1114,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 	if (height < stoppos)//Èç¹û²»Ê¹ÓÃGPU£¬¾Í´ËAI³ÌÐò¶øÑÔ£¬µ½4²ãÊ÷ÒÑ¾­ÊÇ¼«ÏÞÁË
 	{
 			if (height) {
-				if (AI_Judgetree_Greedy(root, height,&stoppos,fa_expectation)) {
+				if (AI_Judgetree_Greedy(root, height)) {
 					return;
 				}
 			}
@@ -1207,10 +1185,16 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 			}
 			count--;
 			chessmap[i->donepos.xpos][i->donepos.ypos].chesskind = EMPTY;
+			if (!height)
+			{
+				if (root->expectation == INT_MAX) {
+					return;
+				}
+			}
 		}
 	}
 	else {//×îÉî²ã¶ÔÃ¿ÖÖ¿ÉÄÜ¾ÖÃæÆÀ¹À
-		if (AI_Judgetree_Greedy(root, height,&stoppos,fa_expectation)) {
+		if (AI_Judgetree_Greedy(root, height)) {
 			return;
 		}
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
