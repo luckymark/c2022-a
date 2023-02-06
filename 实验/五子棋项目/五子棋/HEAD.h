@@ -42,7 +42,8 @@ void winchack(int nowchess[3]);//¸ù¾İ×îĞÂÂä×Ó£¬ÅĞ¶ÏÊÇ·ñÓÎÏ·½áÊø£¬²ÎÊı£º×îĞÂÂä×ÓÊ
 struct judgetree* AI_MakeTree(int height);//ĞÂ½¨¿ÕÊ÷
 int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i);//ÆåĞÍ·ÖÎöº¯Êı
 void AI_Estimate();//ÆÀ¹Àº¯Êı
-void AI_Judgetree_BuildTree(struct judgetree* root, int height,int gd_expectation);//½¨Á¢3²ã×î´ó×îĞ¡¾ö²ßÊ÷£¬Í¬²½½øĞĞ¼ôÖ¦
+bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* stoppos,int fa_expectation);//Ì°ĞÄËÑË÷
+void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int gd_expectation,int fa_expectation);//½¨Á¢3²ã×î´ó×îĞ¡¾ö²ßÊ÷£¬Í¬²½½øĞĞ¼ôÖ¦
 void AI_JudgeTree_Choose(struct judgetree* root);//Êä³ö×îÖÕÂä×Ó
 void AI_JudgeTree_Delete(struct judgetree* root);//É¾³ıÊ÷
 void AI_Running();//AIÔËĞĞ³ÌĞò

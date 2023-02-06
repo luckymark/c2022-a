@@ -81,6 +81,11 @@ int running(int running_mode)
 				glVertexAttrib4fv(0, onechess);
 				glDrawArrays(GL_POINTS, 0, 1);
 			}
+			glPointSize(38.0);
+			GLfloat chessflag[4] = { abs(chess_draw_list[count - 1][0] / 2 - 2),chess_draw_list[count - 1][1] + 0.25,chess_draw_list[count - 1][2] - 0.25,1.0f };
+			glVertexAttrib4fv(0, chessflag);
+			glDrawArrays(GL_POINTS, 0, 1);
+			glPointSize(80.0);
 		}
 		glfwSwapBuffers(window);
 		if (count % 2)
