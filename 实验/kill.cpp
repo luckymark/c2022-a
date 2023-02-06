@@ -49,7 +49,6 @@ bool find(int color, int score, vector<poi> &points) {
 }
 
 bool maxx(int color, int deep, vector<poi> &result) {
-    result.clear();
     int w = wincondition();
     if(w == color){
         return true;
@@ -64,6 +63,7 @@ bool maxx(int color, int deep, vector<poi> &result) {
         return false;
     }
     for(int i = 0;i < points.size();++i){
+        result.clear();
         pair<int,int>p = points[i].coor;
         board[p.first][p.second] = color;
         bool m = minn(color, deep-1, result);
@@ -92,6 +92,7 @@ bool minn(int color, int deep, vector<poi> &result) {
     }
     vector<vector<poi>> candidates;
     for(int i = 0;i < points.size();++i){
+        result.clear();
         pair<int,int>p = points[i].coor;
         board[p.first][p.second] = R.trans(color);
         bool m = minn(color, deep-1, result);
@@ -106,5 +107,19 @@ bool minn(int color, int deep, vector<poi> &result) {
     int k = (int)(((int)(candidates.size()-1))*random());
     result = candidates[k];
     return true;
+}
+
+bool kill(int color, int deep, vector<poi> &result) {
+    result.clear();
+    if(deep <= 0){
+        return false;
+    }
+    for (int i = 2; i <= deep; i += 2) {
+        bool m = maxx(color, i, result);
+        if(m){
+            return true;
+        }
+    }
+    return false;
 }
 

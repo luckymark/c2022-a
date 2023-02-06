@@ -9,15 +9,15 @@ using namespace std;
 
 int c = 1;
 
-bool genboard(int deep, vector<pair<int,int>> &points) {
-    vector<pair<int,int>>fives;
-    vector<pair<int,int>>fours;
-    vector<pair<int,int>>doubleThrees;
-    vector<pair<int,int>>threes;
-    vector<pair<int,int>>twos;
-    vector<pair<int,int>>neighbors;
-    vector<pair<int,int>>nextNeighbors;
-    pair<int,int>temp;
+bool genboard(int deep, vector<poi>  &points) {
+    vector<poi> fives;
+    vector<poi> fours;
+    vector<poi> doubleThrees;
+    vector<poi> threes;
+    vector<poi> twos;
+    vector<poi> neighbors;
+    vector<poi> nextNeighbors;
+    poi temp;
 
     for (int i = 0; i < 15; ++i) {
         for (int j = 0; j < 15; ++j) {
@@ -32,55 +32,43 @@ bool genboard(int deep, vector<pair<int,int>> &points) {
                     board[i][j] = R.emp;
 
                     if(scoreCom >= FIVE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         points.push_back(temp);
                         return true;
                     }else if(scoreHum >= FIVE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         fives.push_back(temp);
                     } else if (scoreHum >= FOUR_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         fours.push_back(temp);
                     }else if(scoreCom >= FOUR_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         fours.insert(fours.begin(),temp);
                     }else if(scoreHum >= 2*THREE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         doubleThrees.push_back(temp);
                     }else if(scoreCom >= 2*THREE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         doubleThrees.insert(doubleThrees.begin(),temp);
                     } else if(scoreCom >= THREE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         threes.insert(threes.begin(),temp);
                     }else if(scoreHum >= THREE_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         threes.push_back(temp);
                     }else if (scoreCom >= TWO_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         twos.insert(twos.begin(),temp);
                     } else if (scoreHum >= TWO_SCORE){
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         twos.push_back(temp);
                     } else {
-                        temp.first = i;
-                        temp.second = j;
+                        temp.coor = {i,j};
                         neighbors.push_back(temp);
                     }
                     //change
                 }else if(deep >= 2 && HasNeighbor(i,j,2,2)){
-                    temp.first = i;
-                    temp.second = j;
+                    temp.coor = {i,j};
                     nextNeighbors.push_back(temp);
                 }
             }
@@ -108,27 +96,23 @@ bool genboard(int deep, vector<pair<int,int>> &points) {
     return true;
 }
 
-int negamax(int deep, int alpha, int beta, int color) {
+int negamax(int deep, int alpha, int beta, int color, std::vector<poi> &candidates) {
     int v = score(color);
     if(deep <= 0 || wincondition()){
         return v;
     }
 
     int best = MIN;
-    vector<pair<int,int>>points;
-    genboard(deep, points);
 
-    for (int i = 0; i < points.size(); ++i) {
-        pair<int,int>p = points[i];
+    for (int i = 0; i < candidates.size(); ++i) {
+        pair<int,int>p = candidates[i].coor;
         board[p.first][p.second] = color;
         alpha = max(best, alpha);
-        v = -negamax(deep - 1, -beta, -alpha, R.trans(color));
+        v = -r(deep - 1, -beta, -alpha, R.trans(color));
         board[p.first][p.second] = R.emp;
+        candidates[i].score = v;
         if(v > best){
             best = v;
-        }
-        if(v >= beta){
-            return v;
         }
     }
     return best;
@@ -146,9 +130,9 @@ void AI() {
 
     if(c>1)
     {
-        //vector<int>bestpos = maxmin(4);
-        solidcircle(X[bestpos[0]], Y[bestpos[1]], 28);
-        board[bestpos[0]][bestpos[1]] = R.com;
+        poi bestpos = GiveBestPoint();
+        solidcircle(X[bestpos.coor.first], Y[bestpos.coor.second], 28);
+        board[bestpos.coor.first][bestpos.coor.second] = R.com;
         clearrectangle(913, 0, 1500, 30);
     }
     else if(c == 1) {
@@ -191,4 +175,70 @@ int HasNeighbor(int i, int j, int length, int wideth)   {
         }
     }
     return 0;
+}
+
+bool deeppp(int deep, int color, vector<poi> &result, vector<poi> &candidates) {
+    int bestscore;
+    for(int i = 2;i <=deep;i += 2){
+        bestscore = negamax(i,MIN,MAX,color,candidates);
+        if(bestscore == FIVE_SCORE){
+            break;
+        }
+    }
+    sort(candidates.begin(), candidates.end(), cmp);
+    result.push_back((candidates[0]));
+    for (int i = 0; i < candidates.size(); ++i) {
+        if(candidates[i].score == candidates[i+1].score){
+            result.push_back(candidates[i + 1]);
+        }else{
+            break;
+        }
+    }
+    return false;
+}
+
+poi GiveBestPoint(int color, int deep) {
+    vector<poi> candidates;
+    genboard(deep, candidates);
+
+    vector<poi> result;
+    deeppp(deep, color, result, candidates);
+
+    int k = (int)(((int)(result.size()-1))*random());
+    return result[k];
+}
+
+int r(int deep, int alpha, int beta, int color) {
+    //去除candidates干扰，集成算杀
+    int v = score(color);
+    if(deep <= 0 || wincondition()){
+        return v;
+    }
+
+    int best = MIN;
+
+    vector<poi>candidates;
+    genboard(deep,candidates);
+
+    for (int i = 0; i < candidates.size(); ++i) {
+        pair<int,int>p = candidates[i].coor;
+        board[p.first][p.second] = color;
+        alpha = max(best, alpha);
+        v = -r(deep - 1, -beta, -alpha, R.trans(color));
+        board[p.first][p.second] = R.emp;
+        if(v > best){
+            best = v;
+        }
+        if(v >= beta){
+            return v;
+        }
+        if(deep <= 2 && color == R.com && best < FOUR_SCORE && best > (FOUR_SCORE*(-1))){
+            vector<poi>mate;
+            bool m = kill(color, 8, mate);
+            if(m){
+                return FIVE_SCORE * pow(0.8,(double)mate.size());
+            }
+        }
+    }
+    return best;
 }

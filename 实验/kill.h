@@ -7,14 +7,9 @@
 
 #include "Chess.h"
 
-class poi{
-public:
-    std::pair<int,int>coor = {};
-    int score = 0;
-};
-
-bool cmp(const poi x, const poi y);
+bool cmp(poi x, poi y);
 bool find(int color, int score, std::vector<poi> &points);
 bool maxx(int color, int deep, std::vector<poi> &result);
 bool minn(int color, int deep, std::vector<poi> &result);
+bool kill(int color, int deep, std::vector<poi> &result);
 #endif //CHESSAI_KILL_H
