@@ -1,0 +1,405 @@
+{
+    "root": {
+        "data": {
+            "id": "cq80h7ns9k00",
+            "created": 1675334394068,
+            "text": "AI五子棋算法",
+            "expandState": "expand"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cq806h5lobk0",
+                    "created": 1675333552731,
+                    "text": "棋盘搭建",
+                    "layout_mind_offset": {
+                        "x": -18,
+                        "y": -356
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cq80eadr0v40",
+                            "created": 1675334164899,
+                            "text": "PS精美的棋盘图片(*^_^*)",
+                            "layout_right_offset": {
+                                "x": 6,
+                                "y": -83
+                            }
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cq80lol7xmw0",
+                            "created": 1675334744375,
+                            "text": "用easyx加载图片",
+                            "layout_right_offset": {
+                                "x": 5,
+                                "y": -83
+                            }
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cq80mqd44ow0",
+                            "created": 1675334826603,
+                            "text": "简陋的UI功能区",
+                            "layout_right_offset": {
+                                "x": 2,
+                                "y": -82
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq80r9w13xc0",
+                                    "created": 1675335182562,
+                                    "text": "草率了悔棋"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq80reyvb140",
+                                    "created": 1675335193618,
+                                    "text": "不服！重来"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq80rjw1ego0",
+                                    "created": 1675335204330,
+                                    "text": "就这？后手"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq80ru1gu1s0",
+                                    "created": 1675335226426,
+                                    "text": "认输……结束"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cq80nein74w0",
+                            "created": 1675334879180,
+                            "text": "信息",
+                            "layout_right_offset": {
+                                "x": 8,
+                                "y": -41
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq80vq0muog0",
+                                    "created": 1675335531126,
+                                    "text": "姓名",
+                                    "layout_right_offset": {
+                                        "x": 42.999999999999886,
+                                        "y": -44
+                                    }
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq80w2ulnm00",
+                                    "created": 1675335559059,
+                                    "text": "学号",
+                                    "layout_right_offset": {
+                                        "x": 41,
+                                        "y": -33
+                                    }
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq80w78b3ug0",
+                                    "created": 1675335568595,
+                                    "text": "指导老师✿",
+                                    "layout_right_offset": {
+                                        "x": 9,
+                                        "y": -21
+                                    }
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cq808pgnpds0",
+                    "created": 1675333727542,
+                    "text": "功能实现",
+                    "layout_mind_offset": {
+                        "x": 8.99999947845933,
+                        "y": 558.2500018440186
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cq809a77jog0",
+                            "created": 1675333772683,
+                            "text": "悔棋",
+                            "layout_right_offset": {
+                                "x": 17.499999739229622,
+                                "y": -32.49999951571215
+                            }
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cq809jp37ko0",
+                            "created": 1675333793355,
+                            "text": "先后手",
+                            "layout_right_offset": {
+                                "x": 2.499999962747154,
+                                "y": -12.499999813735371
+                            }
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cq80akalaps0",
+                            "created": 1675333873019,
+                            "text": "重开",
+                            "layout_right_offset": {
+                                "x": 16.249999757856187,
+                                "y": 12.499999813735599
+                            }
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cq80aom1rs00",
+                    "created": 1675333882419,
+                    "text": "执棋落子",
+                    "layout_mind_offset": {
+                        "x": 15,
+                        "y": -529
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cq80nxtwmg00",
+                            "created": 1675334921220,
+                            "text": "点击判断是否落子",
+                            "layout_right_offset": {
+                                "x": -7,
+                                "y": -44
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq80qc72sv40",
+                                    "created": 1675335109219,
+                                    "text": "模糊算法"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cq80poxmnds0",
+                            "created": 1675335058582,
+                            "text": "加载透明图片",
+                            "layout_right_offset": {
+                                "x": 2,
+                                "y": -19
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq80pwnf6hc0",
+                                    "created": 1675335075379,
+                                    "text": "图片加载位运算",
+                                    "layout_right_offset": {
+                                        "x": -1,
+                                        "y": -23
+                                    }
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cq80bvz8mu80",
+                    "created": 1675333976819,
+                    "text": "判断输赢",
+                    "layout_mind_offset": {
+                        "x": 483.1666669357154,
+                        "y": 617.6666654083464
+                    }
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cq80c5hscbk0",
+                    "created": 1675333997531,
+                    "text": "AI算法",
+                    "layout_mind_offset": {
+                        "x": 836,
+                        "y": -118.99999999999999
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cq80yxfagu00",
+                            "created": 1675335782342,
+                            "text": "分数评估",
+                            "layout_right_offset": {
+                                "x": 16,
+                                "y": 48
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq810mcn1600",
+                                    "created": 1675335914965,
+                                    "text": "某点分数评估",
+                                    "layout_right_offset": {
+                                        "x": 58,
+                                        "y": -23
+                                    }
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cq811rajk1c0",
+                                            "created": 1675336004086,
+                                            "text": "8方向+中心权重",
+                                            "layout_right_offset": {
+                                                "x": 19.000001192092782,
+                                                "y": -35.999998211860714
+                                            }
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cq812s7ml7k0",
+                                            "created": 1675336084451,
+                                            "text": "存储于结构数组"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cq810vo5hz40",
+                                    "created": 1675335935252,
+                                    "text": "局面优势分",
+                                    "layout_right_offset": {
+                                        "x": 55,
+                                        "y": -8
+                                    }
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cq80xz5mfwo0",
+                            "created": 1675335707747,
+                            "text": "alpha_β剪枝算法",
+                            "layout_right_offset": {
+                                "x": 46.50000029802317,
+                                "y": 17.833334690994604
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq81a0zesqw0",
+                                    "created": 1675336652094,
+                                    "text": "算法理解",
+                                    "image": "https://kityminder-img.gz.bcebos.com/d101d01a29dba34ffe82b91dad91c72f1ff56bb8",
+                                    "imageTitle": "",
+                                    "imageSize": {
+                                        "width": 147,
+                                        "height": 200
+                                    },
+                                    "layout_right_offset": {
+                                        "x": 246,
+                                        "y": -20
+                                    }
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cq817vpsabk0",
+                            "created": 1675336483900,
+                            "text": "结构数组",
+                            "layout_right_offset": {
+                                "x": 16,
+                                "y": 0
+                            }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cq818ihitm00",
+                                    "created": 1675336533467,
+                                    "text": "状态"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq818mkx00o0",
+                                    "created": 1675336542379,
+                                    "text": "位置"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cq818ozv3r40",
+                                    "created": 1675336547636,
+                                    "text": "分数"
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
