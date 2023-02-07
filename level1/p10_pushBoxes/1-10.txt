@@ -1,10 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
 #include <Windows.h>
 #include <conio.h>
+
 #define ROW 12   
 #define COL 12   
 #define NUM 6   
-#include<windows.h>
 
 struct MAP
 {
@@ -100,7 +101,7 @@ int main()
             break;
         case 1:  system("cls"), game();
             break;
-        case 3:  system("cls"), wanfa();
+        case 3:  system("cls"), HowToPlay();
             break;
         default:  system("cls"), printf("\n\n\n\n\t\t**你选的啥？丹丹姐看不懂捏**\n\n");
             printf("\t\t**按任意键继续回到主菜单,丹丹姐要求你重新选择**\n");
@@ -171,7 +172,7 @@ void find_man(char(*map)[COL], const int* row, const int* col, int* x, int* y)
 }
 void print_map(char(*map)[COL], const int* row, const int* col) 
 {
-    int i = 0;...llllkkkkkkkkkkkkkkkkkkkkkkkk
+    int i = 0;
     system("cls");
     printf("-------------------------------------------------------------\n");
     printf("-------------------------------------------------------------\n\n");
@@ -601,7 +602,7 @@ void game()
                 system("cls");
                 print_map(pmap->map, &(pmap->row), &(pmap->col));
                 system("cls");
-                qinzhu();
+                congratulation();
                 printf("\n");
                 printf("\t\t\t\t你真棒!");
                 printf("--你已经完成了第%d关\n\n\n\n", i);
