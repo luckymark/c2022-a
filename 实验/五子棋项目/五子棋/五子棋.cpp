@@ -702,11 +702,13 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 		root->listend = root->listend->bor_node;
 	}
 }
-bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
+bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,int* stoppos) {
 	AI_Estimate();//贪心
+	int ret_fa_expectation;
 	if (height % 2)
 	{
 		if (count % 2) {
+			ret_fa_expectation = AI_Estimation_BLACK - AI_Estimation_WHITE;
 			if (l5_b)
 			{
 				root->expectation = INT_MAX;
@@ -724,7 +726,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				return true;
 			}
 			else if (l4_w || d4_w) {
-				root->expectation = INT_MIN + 1;
+				root->expectation = INT_MIN + 10 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -740,7 +742,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_w && !(d4_b || l4_b))
 			{
-				root->expectation = INT_MIN + 1;
+				root->expectation = INT_MIN + 10 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -756,7 +758,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if ((d4_b == 2) || l4_b)
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -772,7 +774,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (d4_b && l3_b)
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -788,7 +790,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_b == 2 && !(l3_w || d3_w))
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -802,8 +804,21 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				d3_w = 0;
 				return true;
 			}
+			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
+			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
 		}
 		else {
+			ret_fa_expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
 			if (l5_w)
 			{
 				root->expectation = INT_MAX;
@@ -821,7 +836,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				return true;
 			}
 			else if (l4_b || d4_b) {
-				root->expectation = INT_MIN + 1;
+				root->expectation = INT_MIN + 10 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -837,7 +852,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_b && !(d4_w || l4_w))
 			{
-				root->expectation = INT_MIN + 1;
+				root->expectation = INT_MIN + 10 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -853,7 +868,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if ((d4_w == 2) || l4_w)
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -869,7 +884,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (d4_w && l3_w)
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -885,7 +900,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_w == 2 && !(l3_b || d3_b))
 			{
-				root->expectation = INT_MAX - 2;
+				root->expectation = INT_MAX - 20 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -899,11 +914,24 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				d3_w = 0;
 				return true;
 			}
+			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
+			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
 		}
 	}
 	else {
 		if (count % 2)
 		{
+			ret_fa_expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
 			if (l5_b) {
 				root->expectation = INT_MIN;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
@@ -920,7 +948,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				return true;
 			}
 			else if (l4_w || d4_w) {
-				root->expectation = INT_MAX - 1;
+				root->expectation = INT_MAX - 10 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -936,7 +964,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_w && !(d4_b || l4_b))
 			{
-				root->expectation = INT_MAX - 1;
+				root->expectation = INT_MAX - 10 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -952,7 +980,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if ((d4_b == 2) || l4_b)
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -968,7 +996,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (d4_b && l3_b)
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -984,7 +1012,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_b == 2 && !(l3_w || d3_w))
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -998,8 +1026,21 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				d3_w = 0;
 				return true;
 			}
+			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
+			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
 		}
 		else {
+			ret_fa_expectation = AI_Estimation_BLACK - AI_Estimation_WHITE;
 			if (l5_w)
 			{
 				root->expectation = INT_MIN;
@@ -1017,7 +1058,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				return true;
 			}
 			else if (l4_b || d4_b) {
-				root->expectation = INT_MAX - 1;
+				root->expectation = INT_MAX - 10 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -1033,7 +1074,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_b && !(d4_w || l4_w))
 			{
-				root->expectation = INT_MAX - 1;
+				root->expectation = INT_MAX - 10 - height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -1050,7 +1091,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if ((d4_w == 2) || l4_b)
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -1066,7 +1107,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (d4_w && l3_w)
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -1082,7 +1123,7 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 			}
 			else if (l3_w == 2 && !(l3_b || d3_b))
 			{
-				root->expectation = INT_MIN + 2;
+				root->expectation = INT_MIN + 20 + height;
 				chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
 				l5_b = 0;
 				l5_w = 0;
@@ -1096,8 +1137,21 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height) {
 				d3_w = 0;
 				return true;
 			}
+			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
+				if (*stoppos<=MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
+			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
+				if (*stoppos <= MAX_DEPTH && height > 1)
+				{
+					(*stoppos) += 2;
+				}
+			}
 		}
 	}
+	*fa_expectation = ret_fa_expectation;
 	l5_b = 0;
 	l5_w = 0;
 	l4_b = 0;
@@ -1114,7 +1168,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 	if (height < stoppos)//如果不使用GPU，就此AI程序而言，到4层树已经是极限了
 	{
 			if (height) {
-				if (AI_Judgetree_Greedy(root, height)) {
+				if (AI_Judgetree_Greedy(root, height, &fa_expectation,&stoppos)) {
 					return;
 				}
 			}
@@ -1147,7 +1201,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
 			i->kid_node = AI_Judgetree_MakeTree(height);
-			AI_Judgetree_BuildTree(i->kid_node, height + 1,stoppos,root->expectation,i->expectation);//此处进行递归
+			AI_Judgetree_BuildTree(i->kid_node, height + 1,stoppos,root->expectation,fa_expectation);//此处进行递归
 			i->expectation = i->kid_node->expectation;
 			AI_JudgeTree_Delete(i->kid_node);//实时删除无用内存
 			i->kid_node = NULL;
@@ -1194,7 +1248,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 		}
 	}
 	else {//最深层对每种可能局面评估
-		if (AI_Judgetree_Greedy(root, height)) {
+		if (AI_Judgetree_Greedy(root, height,&fa_expectation,&stoppos)) {
 			return;
 		}
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
