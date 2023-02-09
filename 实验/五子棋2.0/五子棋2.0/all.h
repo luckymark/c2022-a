@@ -47,6 +47,6 @@ int judge21();
 
 void dfs(int* row, int* line);
 
-void dfs1(int deepth, int num,int step, int* m, int* n,int turn);
+void dfs1(int depth, int min_cut, int max_cut, int num, int all_point, int cur_point, int* row, int* line);
 
 int jud(int monitor[]);

@@ -21,41 +21,6 @@ void board()
 
 
 
-//void player(int x, int y)
-//{
-//	FlushMouseMsgBuffer();
-//	setfillcolor(BLACK);
-//	MOUSEMSG m;
-//	int line, row;
-//	while (true)
-//	{
-//	flag:
-//		m = GetMouseMsg();
-//		switch (m.uMsg)
-//		{
-//		case WM_LBUTTONDOWN:
-//			row = m.x;
-//			line = m.y;
-//			chess(&row, &line);
-//			if (Chess[mm][n] == 0)
-//			{
-//				Chess[mm][n] = 1;
-//				printf("(%d,%d) %d\n", mm, n, 1);
-//				solidcircle(row, line, 10);
-//			}
-//			else
-//				goto flag;
-//			//case WM_MOUSEMOVE:
-//			//	char s[12];
-//			//	setfillcolor(BLACK);
-//			//	solidrectangle(0, 0, 75, 20);
-//			//	sprintf(s, "[%d,%d]", m.x, m.y);
-//			//	outtextxy(0, 0, s);
-//		}
-//		if (m.uMsg == WM_LBUTTONUP)
-//			break;
-//	}
-//}
 
 
 
@@ -117,45 +82,12 @@ void chess(int *row,int *line)
 void computer()
 {
 	setfillcolor(WHITE);
-	int row = 7, line = 7;
+	int row = 7 , line  = 7;
 	dfs(&row,&line);
 	solidcircle(60*row, 60*line, 10);
 }
 
-//void computer()
-//{
-//	MOUSEMSG m;
-//	int line, row;
-//	while (true)
-//	{
-//	flag1:
-//		setfillcolor(WHITE);
-//		m = GetMouseMsg();
-//		switch (m.uMsg)
-//		{
-//		case WM_LBUTTONDOWN:
-//			row = m.x;
-//			line = m.y;
-//			chess(&row, &line);
-//			if (Chess[mm][n] ==0)
-//			{
-//				Chess[mm][n] = 2;
-//				printf("(%d,%d) %d\n", mm, n, 2);
-//				solidcircle(row, line, 10);
-//			}
-//			else
-//				goto flag1;
-//		//case WM_MOUSEMOVE:
-//		//	char s[12];
-//		//	setfillcolor(WHITE);
-//		//	solidrectangle(0, 0, 75, 20);
-//		//	sprintf(s, "[%d,%d]", m.x, m.y);
-//		//	outtextxy(0, 0, s);
-//		}
-//		if (m.uMsg == WM_LBUTTONUP)
-//			break;
-//	}
-//}
+
 
 
 
@@ -180,56 +112,11 @@ int judge1()
 
 
 
-//int judge12()
-//{
-//	int num = 1;
-//	for (int i = 1; i <5; i++)
-//	{
-//		if (mm - i >= 0 && mm - i < 15 && n - i >= 0 && n - i < 15)
-//		{
-//			if (Chess[mm - i][n - i] == Chess[mm][n] && Chess[mm][n] != 0)
-//				num++;
-//		}
-//		if (mm + i > 0 && mm - i < 15 && n + i>0 && n + i < 15)
-//		{
-//			if (Chess[mm + i][n + i] == Chess[mm][n] && Chess[mm][n] != 0)
-//				num++;
-//		}
-//	}
-//	if (num==5)
-//		return 1;
-//	return 0;
-//}
 
 
 
 
 
-
-
-
-//int judge21()
-//{
-//	int num = 1;
-//	for (int i = 1; i < 5; i++)
-//	{
-//		if (mm - i >= 0 && mm - i < 15 && n + i >= 0 && n + 1 < 15)
-//		{
-//			if (Chess[mm - i][n + i] == Chess[mm][n] && Chess[mm][n] != 0)
-//			{
-//				num++;
-//			}
-//		}
-//		if (mm + i >= 0 && mm + i < 15 && n - i >= 0 && n - i < 15)
-//		{
-//			if (Chess[mm + i][n - i] == Chess[mm][n] && Chess[mm][n] != 0)
-//				num++;
-//		}
-//	}
-//	if (num==5)
-//		return 1;
-//	return 0;
-//}
 int judge12()
 {
 	for (int i = 0; i < ROW; i++)
@@ -470,7 +357,7 @@ int saving()
 							fprintf(fp, "%d ", Chess[i][j]);
 						}
 					}
-					fclose;
+					fclose(fp);
 					return 1;
 				}
 			case WM_LBUTTONUP:

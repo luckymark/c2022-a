@@ -84,716 +84,176 @@ int done2[7] = { 0,0,2,1,0,0,0 };//10
 
 
 
-void turn(int array[][7], int y)
+
+
+
+ 
+int judge(int num,int block)
 {
-	for (int i = 0; i < y; i++)
+	if (num == 5)
+		return 10000000;
+	if (num == 4 && block == 0)
+		return 1000000;
+	if (num == 4 && block == 1)
+		return 10000;
+	if (num == 3 && block == 0)
+		return 8000;
+	if (num == 3&& block == 1)
 	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (array[i][j] == 1)
-				array[i][j] = 2;
-			else if (array[i][j] == 2)
-				array[i][j] = 1;
-		}
+		return 1000;
 	}
+	if (num == 2 && block == 0)
+	{
+		return 800;
+	}
+	if (num == 2 && block == 1)
+	{
+		return 50;
+	}
+	else
+		return 10;
 }
+
+
+
+
+
 
 
 
 
 int evaluate(int Chess[][15], int m, int n)
 {
-	int cpoint = 0;
-	if (Chess[m][n] != five[0][3])
+
+	int num = 1;
+	int block =0;
+	int point = 0;
+	if (Chess[m][n + 1] == Chess[m][n])
 	{
-		turn(five, 5);
-		turn(four, 4);
-		turn(cfour, 6);
-		turn(three, 3);
-		turn(dthree, 6);
-		turn(two, 2);
-		turn(dtwo, 4);
-		turn(done, 2);
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m][n + i] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
 	}
-	for (int i = 0; i < 7; i++)
+	if (Chess[m][n - 1] == Chess[m][n])
 	{
-		if (m-3+i < 0 || m-3+i>15)//不够，要扩大容量来判断，不然五个的很容易漏掉
-			break;
-		else
-			monitor[i] = Chess[m - 3 + i][n];
-	}//0001000
-	cpoint = jud(monitor);
-	for (int i = 0; i < 7; i++)
-	{
-		if (n -3 + i < 0 || n - 3+ i>15)
-			break;
-		else
-			monitor[i] = Chess[m ][n-3+i];
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m][n - i] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
 	}
-	if (cpoint < jud(monitor))
-		cpoint = jud(monitor);
-	for (int i = 0; i < 7; i++)
+	//左右
+	point += judge(num, block);
+	num = 1;
+	block = 0;
+	if (Chess[m+1][n] == Chess[m][n])
 	{
-		if (n - 3 + i < 0 || n - 3 + i>15|| m - 3 + i < 0 || m - 3 + i>15)
-			break;
-		else
-			monitor[i] = Chess[m-3+i][n - 3 + i];
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m+i][n] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
 	}
-	if (cpoint < jud(monitor))
-		cpoint = jud(monitor);
-	for (int i = 0; i < 7; i++)
+	if (Chess[m - 1][n] == Chess[m][n])
 	{
-		if (n + 3 - i < 0 || n + 3 - i>15 || m - 3 + i < 0 || m - 3 + i>15)
-			break;
-		else
-			monitor[i] = Chess[m -  3+ i][n + 3 - i];
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m - i][n] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
 	}
-	if (cpoint < jud(monitor))
-		cpoint = jud(monitor);
-	//turn(five, 5);
-	//turn(four, 4);
-	//turn(cfour, 6);
-	//turn(three, 3);
-	//turn(dthree, 6);
-	//turn(two, 2);
-	//turn(dtwo, 4);
-	//turn(done, 2);
-	return cpoint;
+	//上下
+	///先找到相同的，再去循环
+	point += judge(num,block);
+	num = 1;
+	block = 0;
+	if (Chess[m + 1][n + 1] == Chess[m][n])
+	{
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m + i][n + i] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
+	}
+	if (Chess[m - 1][n - 1] == Chess[m][n])
+	{
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m - i][n - i] != Chess[m][n])
+			{
+				block++;
+				break;
+			}
+			else
+				num++;
+		}
+	}
+	// "\"方向
+	num = 1;
+	block = 0;
+	point += judge(num, block);
+	if (Chess[m + 1][n - 1] == Chess[m][n])
+	{
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m + i][n - i] != Chess[m][n])
+			{
+				block;
+				break;
+			}
+			else
+				num++;
+		}
+	}
+	if (Chess[m - 1][n + 1] == Chess[m][n])
+	{
+		for (int i = 1; i < 5; i++)
+		{
+			if (Chess[m - i][n + i] != Chess[m][n])
+			{
+				block;
+				break;
+			}
+			else
+				num++;
+		}
+	}
+	// "/"方向
+	point += judge(num, block);
+	return point;
 }
 
 
 
 
-int jud(int monitor[])
-{
-	int cont = 0;
-	for (int i = 0; i < 5; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == five[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 10000000;
-		else
-			cont = 0;
-    }
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == four[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 1000000;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 6; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == cfour[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 8000;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == three[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 10000;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 6; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == dthree[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 5000;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == two[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont == 7)
-			return 1000;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == dtwo[i][j])
-				cont++;
-			else
-				break;//要相应改进一下，不然情况就固定死了
-		}
-		if (cont >= 5)
-			return 500;
-		else
-			cont = 0;
-	}
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			if (monitor[j] == done[i][j])
-				cont++;
-			else
-				break;
-		}
-		if (cont >= 5)
-			return 50;
-		else
-			cont = 0;
-	}
-	return 0;
-}
-//
-//
-//
-//int judge(int num,int block)
-//{
-//	if (num == 5)
-//		return 10000000;
-//	if (num == 4 && block == 0)
-//		return 1000000;
-//	if (num == 4 && block == 1)
-//		return 500000;
-//	if (num == 3 && block == 0)
-//		return 80000;
-//	if (num == 3&& block == 1)
-//	{
-//		return 40000;
-//	}
-//	if (num == 2 && block == 0)
-//	{
-//		return 10000;
-//	}
-//	if (num == 2 && block == 1)
-//	{
-//		return 5000;
-//	}
-//	else
-//		return 100;
-//}
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//int evaluate(int Chess[][15], int m, int n)
-//{
-//	int num = 0;
-//	int block =0;
-//	int point = 0;
-//	int pin = 0;
-//		int* sp = &Chess[m][n];
-//		int* search = sp;
-//		if (search[--pin] == *sp)
-//		{
-//			for (int i = 0; i < 5; i++)
-//			{
-//				if (search[pin] == *sp)
-//				{
-//					pin--;
-//					num++;
-//				}
-//				else
-//				{
-//					if (search[pin] != 0)
-//						block++;
-//					break;
-//				}
-//			}
-//		}
-//		pin = 0;
-//		if(search[++pin]==*sp)
-//		{
-//			for (int i = 0; i < 5; i++)
-//			{
-//				if (search[pin] == *sp)
-//				{
-//					pin++;
-//					num++;
-//				}
-//				else
-//				{
-//					if (search[pin] != 0)
-//						block++;
-//					break;
-//				}
-//			}
-//		}
-//	point += judge(num, block);
-//	num = 0;
-//	block = 0;
-//	pin = 0;
-//	//point = judge(num, block);
-//	//num = 0;
-//	//block = 0;
-//	//for (int i = 0; i < 10; i++)
-//	//{
-//	//	if (m + i < 15&&m - 4>0)
-//	//	{
-//	//		if(Chess[m+i-4][n]!=Chess[m][n])
-//	//		if (Chess[m + i-4][n] == Chess[m][n]&&Chess[m+i-4][n] == Chess[m + i - 3][n])
-//	//		{
-//	//			num++;
-//	//		}
-//	//		else
-//	//		{
-//	//			if (Chess[m + i][n] != 0)
-//	//			{
-//	//				block++;
-//	//				break;
-//	//			}
-//	//		}
-//	//	}
-//	//}//先找到相同的，再去循环
-//	//point = judge(num,block);
-//	//num = 1;
-//	//block = 0;
-//	//for (int i = 0; i < 10; i++)
-//	//{
-//	//	if (n + i < 15 && n - 4>0)
-//	//	{
-//	//		if (Chess[m ][n+i-4] == Chess[m][n] && Chess[m][n+i-4] == Chess[m][n + i - 3])
-//	//		{
-//	//			num++;
-//	//		}
-//	//		else
-//	//		{
-//	//			if (Chess[m + i][n] != 0)
-//	//				block;
-//	//		}
-//	//	}
-//	//}
-//	//point += judge(num, block);
-//	//for (int i = 0; i < 10; i++)
-//	//{
-//	//	if (m + i < 15 && m - 4>0&&n+i<15&&n-4>0)
-//	//	{
-//	//		if (Chess[m + i - 4][n+i-4] == Chess[m][n] && Chess[m + i - 4][n+i-4] == Chess[m + i - 3][n+i-3])
-//	//		{
-//	//			num++;
-//	//		}
-//	//		else
-//	//		{
-//	//			if (Chess[m + i][n] != 0)
-//	//				block++;
-//	//			break;
-//	//		}
-//	//	}
-//	//}
-//	//point += judge(num, block);
-//	//num = 1;
-//	//block = 0;
-//
-//	//for (int i = 0; i < 10; i++)
-//	//{
-//	//	if (m + i < 15 && m - 4>0 && n + i < 15 && n - 4>0)
-//	//	{
-//	//		if (Chess[m + i - 4][n +4-i] == Chess[m][n] && Chess[m + i - 4][n +4-i] == Chess[m + i - 3][n +3-i])
-//	//		{
-//	//			num++;
-//	//		}
-//	//		else
-//	//		{
-//	//			if (Chess[m + i][n] != 0)
-//	//				block++;
-//	//			break;
-//	//		}
-//	//	}
-//	//}
-//	//point += judge(num, block);
-//	//num = 1;
-//	//block = 0;
-//	return point;
-//}
 
-
-
-
-//int evaluate(int Chess[][15], int m, int n)
-//{
-//	int point = 10;
-//	int v1 = 10, v2 = 10, v3 = 10, v4 = 10, v5 = 10, v6 = 10, v7 = 10, v8 = 10;
-//	int score = 10;
-//	//左四个
-//	int x = 1, y = 0;
-//	for (x = 1, y = 1; Chess[m - y][n] == Chess[m][n]||Chess[m-y][n]==0&&m-y>0 && x<6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v1 = 0;
-//	}
-//	else
-//	{
-//		v1 = 10;
-//		for (x = 1; Chess[m - x][n] == Chess[m][n] && x < 5; x++)
-//		{
-//			v1 *= score;
-//		}
-//	}
-//	//右四个
-//	for (x = 1, y = 1; Chess[m + y][n] == Chess[m][n] || Chess[m + y][n] == 0 && m + y <15 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v2 = 0;
-//	}
-//	else
-//	{
-//		v2 = 10;
-//		for (x = 1; Chess[m + x][n] == Chess[m][n] && x < 5; x++)
-//		{
-//			v2 *= score;
-//		}
-//		if (v1 > 10)
-//		{
-//			v1 *= v2;
-//			v2 = 0;
-//		}
-//	}
-//	//上四个
-//	for (x = 1, y = 1; Chess[m][n-y] == Chess[m][n] || Chess[m][n-y] == 0 && n - y > 0 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v3 = 0;
-//	}
-//	else
-//	{
-//		v3 = 10;
-//		for (x = 1; Chess[m][n-x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v3 *= score;
-//		}
-//	}
-//	//下四
-//	for (x = 1, y = 1; Chess[m ][n+y] == Chess[m][n] || Chess[m][n+y] == 0 && n+y<15 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v4 = 0;
-//	}
-//	else
-//	{
-//		v4 = 10;
-//		for (x = 1; Chess[m][n+x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v4 *= score;
-//		}
-//		if (v3 > 10)
-//		{
-//			v3 *= v4;
-//			v4 = 0;
-//		}
-//	}
-//	//左斜四
-//	for (x = 1, y = 1; Chess[m - y][n-y] == Chess[m][n] || Chess[m - y][n-y] == 0 && m - y > 0&&n - y>0 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v5 = 0;
-//	}
-//	else
-//	{
-//		v5 = 10;
-//		for (x = 1; Chess[m - x][n-x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v5 *= score;
-//		}
-//	}
-//	//右斜四
-//	for (x = 1, y = 1; Chess[m + y][n + y] == Chess[m][n] || Chess[m + y][n + y] == 0 && m + y <15 && n +y<15 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v6 = 0;
-//	}
-//	else
-//	{
-//		v6 = 10;
-//		for (x = 1; Chess[m + x][n + x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v6 *= score;
-//		}
-//		if (v5 > 10)
-//		{
-//			v5 *= v6;
-//			v6 = 0;
-//		}
-//	}
-//	//左斜
-//	for (x = 1, y = 1; Chess[m - y][n + y] == Chess[m][n] || Chess[m - y][n + y] == 0 && m - y > 0 && n +y <15 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v7 = 0;
-//	}
-//	else
-//	{
-//		v7 = 10;
-//		for (x = 1; Chess[m - x][n + x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v7 *= score;
-//		}
-//	}
-//	//右斜
-//	for (x = 1, y = 1; Chess[m + y][n - y] == Chess[m][n] || Chess[m + y][n - y] == 0 && m +y<15 && n - y > 0 && x < 6; x++, y++)
-//	{
-//	}
-//	if (x < 5)
-//	{
-//		v8 = 0;
-//	}
-//	else
-//	{
-//		v8 = 10;
-//		for (x = 1; Chess[m + x][n - x] == Chess[m][n] && x < 5; x++)
-//		{
-//			v8 *= score;
-//		}
-//		if (v7 > 10)
-//		{
-//			v7 *= v8;
-//			v8 = 0;
-//		}
-//	}
-//	point = v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
-//	if (Chess[m][n] == 1)
-//		point = -point;
-//	return point;
-//}
-//
-//int evaluate2(int Chess[][15], int m, int n)
-//{
-//	int x = 1; 
-//	int point = 10;
-//	int v1 = 10, v2 = 10, v3 = 10, v4 = 10, v5 = 10, v6 = 10, v7 = 10, v8 = 10;
-//	int score = 10;
-//	if (Chess[m][n] != Chess[m + 1][n] && Chess[m + 1][n] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m + x][n] || Chess[m + x][n] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v1 = 10000000;
-//		}
-//	}
-//	else
-//		v1 = 0;
-//	if (Chess[m][n] != Chess[m - 1][n] && Chess[m - 1][n] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m - x][n] || Chess[m - x][n] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v2 = 10000000;
-//		}
-//	}
-//	else
-//	{
-//		v2 = 0;
-//	}//上下
-//	if (Chess[m][n] != Chess[m][n - 1] && Chess[m][n - 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m][n - x] || Chess[m][n - x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v3 = 10000000;
-//		}
-//	}
-//	else
-//		v3 = 0;
-//	if (Chess[m][n] != Chess[m][n + 1] && Chess[m][n + 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m][n + x] || Chess[m][n + x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v4 = 10000000;
-//		}
-//	}
-//	else
-//		v4 = 0;//左右
-//	if (Chess[m][n] != Chess[m + 1][n + 1] && Chess[m + 1][n + 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m + x][n + x] || Chess[m + x][n + x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v5 = 10000000;
-//		}
-//	}
-//	else
-//		v5 = 0;
-//	if (Chess[m][n] != Chess[m - 1][n - 1] && Chess[m - 1][n - 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m - x][n - x] || Chess[m - x][n - x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v6 = 10000000;
-//		}
-//	}
-//	else
-//		v6 = 0;//斜1
-//	if (Chess[m][n] != Chess[m + 1][n - 1] && Chess[m + 1][n - 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m + x][n - x] || Chess[m + x][n - x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v7 = 10000000;
-//		}
-//	}
-//	else
-//		v7 = 0;
-//	if (Chess[m][n] != Chess[m - 1][n + 1] && Chess[m - 1][n + 1] != 0)
-//	{
-//		for (x = 1; x < 5; x++)
-//		{
-//			if (Chess[m][n] == Chess[m - x][n + x] || Chess[m - x][n + x] == 0)
-//			{
-//				break;
-//			}
-//		}
-//		if (x > 2)
-//		{
-//			v8 = 10000000;
-//		}
-//	}
-//	else
-//		v8 = 0;
-//	point = v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
-//	if (Chess[m][n] == 1)
-//		point = -point;
-//	return point;
-//}
-
-
-
-//void dfs(int *row,int *line)
-//{
-//	int p = 0;
-//	int max = 0, num = 0, max1 = 0;
-//	int p1 = 0, p2 = 0;
-//	int a = 0, b = 0;
-//
-//	for (int i = 0; i < 15; i++)
-//	{
-//		for (int j = 0; j < 15; j++)
-//		{
-//			if (Chess[i][j] == 0)
-//			{
-//				Chess[i][j] = 2;
-//				p = evaluate(Chess, i, j);
-//				Chess[i][j] = 1;
-//				p1 = evaluate(Chess, i, j);
-//				/*p1 = evaluate1(Chess, i, j);*/
-//				if (p + p1>max)
-//				{
-//					max = p+ p1;
-//					*row = i;
-//					*line = j;
-//				}
-//				Chess[i][j] = 0;
-//			}
-//			if (Chess[i][j] == 2)
-//				num++;
-//		}
-//	}
-//	if (num == 0)
-//	{
-//		srand((unsigned)time(NULL));
-//		*row = 7/*rand()%14*/;
-//		*line = 7/*rand()%14*/;
-//	}
-//	Chess[*row][*line] = 2;
-//	printf("(%d,%d) %d\n", *row, *line, 2);
-//}
 
 void dfs(int* row,int* line)
 {
@@ -801,81 +261,139 @@ void dfs(int* row,int* line)
 	int max = 0, num = 0, max1 = 0;
 	int p1 = 0, p2 = 0;
 	int a = 0, b = 0;
-
 	for (int i = 0; i < 15; i++)
 	{
 		for (int j = 0; j < 15; j++)
 		{
 			if (Chess[i][j] != 0)
+			{
 				num++;
+			}
 		}
+		if (num>1)
+			break;
 	}
-	if (num == 0)
+	if (num == 0||(num == 1&&Chess[7][7] == 1))
 	{
 		srand((unsigned)time(NULL));
 		*row = 7/*rand()%14*/;
 		*line = 7/*rand()%14*/;
+		if (Chess[7][7] == 1)
+			(*row)++;
 	}
 	else
 	{
 		memset(memory, 0, sizeof(memory));
 		memset(box, 0, sizeof(box));
-		dfs1(0,num,0,row,line,0);
+		dfs1(0,1000000,-10000000,0,0,0,row,line);
 	}
 	Chess[*row][*line] = 2;
 	printf("(%d,%d) %d\n", *row, *line, 2);
 }
 
-void dfs1(int deepth, int num, int step, int* m, int* n, int turn)//修改问题：一开始传入了一个二维数组，运算时发现数组是新的，地址和传进来的都不一样，原因猜想应该是Chess数组已经被常定义了
+
+
+void dfs1(int depth, int min_cut, int max_cut,int num,int all_point,int cur_point,int *row,int *line)
 {
-	int point;
-	int all = 0;
-	int max = 0;
-	int point1,point2;
-	if (deepth == 1)
+	if (depth == 3)
 	{
-		all = memory[0] + memory[1] + memory[2];
-		max = memory[3];
-		if (max < all)
+		if (all_point > memory[0])
 		{
-			*m = box[0][0];
-			*n = box[0][1];
-			memory[3] = all;
+			memory[0] = all_point;
+			*row = box[0][0];
+			*line = box[0][1];
 		}
-		return;
 	}
 	else
 	{
-		for (int i = 0; i < 15; i++)
+		for (int i = 1; i < 14; i++)
 		{
-			for (int j = 0; j < 15; j++)
+			for (int j = 1; j < 14; j++)
 			{
 				if (Chess[i][j] == 0)
 				{
 					if (num % 2 == 0)
 					{
 						Chess[i][j] = 2;
-						point1 = evaluate(Chess, i, j);
-						Chess[i][j] = 1;
-						point2 = evaluate(Chess, i, j);
+						cur_point = evaluate(Chess, i, j);
 					}
 					else
 					{
 						Chess[i][j] = 1;
-					    point1 = evaluate(Chess, i, j);
-					    Chess[i][j] = 2;
-					    point2 = evaluate(Chess, i, j);
-				    }
-					point = point1 + point2;//进攻
-					//point2 = evaluate2(Chess, i, j);//防守
-					box[step][0] = i;
-					box[step][1] = j;
-					memory[step] = point;
-					dfs1( deepth+1, num+1,step+1,m,n,turn+1);
+						cur_point = -evaluate(Chess, i, j);
+					}
+					box[depth][0] = i;
+					box[depth][1] = j;
+				    dfs1(depth + 1, min_cut, max_cut, num + 1, all_point + cur_point, cur_point, row, line);
 					Chess[i][j] = 0;
 				}
 			}
 		}
 	}
-	return;
 }
+
+
+
+
+
+//
+//int dfs1(int depth, int min_cut, int max_cut, int num, int all_point, int cur_point, int* row, int* line)
+//{
+//	if (depth == 3)
+//	{
+//		if (all_point > memory[0])
+//		{
+//			memory[0] = all_point;
+//			*row = box[0][0];
+//			*line = box[0][1];
+//		}
+//		if (max_cut < cur_point)
+//		{
+//			max_cut = cur_point;
+//		}
+//		return max_cut;
+//	}
+//	else
+//	{
+//		for (int i = 0; i < 15; i++)
+//		{
+//			for (int j = 0; j < 15; j++)
+//			{
+//				if (num % 2 == 0)
+//				{
+//					Chess[i][j] = 2;
+//					cur_point = evaluate(Chess, i, j);
+//				}
+//				else
+//				{
+//					Chess[i][j] = 1;
+//					cur_point = evaluate(Chess, i, j);
+//				}
+//				box[depth][0] = i;
+//				box[depth][1] = j;
+//				if (depth % 2 == 0)
+//				{
+//					int max = dfs1(depth + 1, min_cut, max_cut, num + 1, all_point + cur_point, cur_point, row, line);
+//					max_cut = (max > max_cut) ? max : max_cut;
+//				}
+//				else
+//				{
+//					int min = dfs1(depth + 1, min_cut, max_cut, num + 1, all_point - cur_point, cur_point, row, line);
+//					min_cut = (min < min_cut) ? min : min_cut;
+//				}
+//				Chess[i][j] = 0;
+//				if (min_cut < max_cut)
+//				{
+//					if (depth % 2 == 1)
+//						return max_cut;
+//					else
+//						return min_cut;
+//				}
+//			}
+//		}
+//	}
+//	if (depth % 2 == 1)
+//		return max_cut;
+//	else
+//		return min_cut;
+//}
