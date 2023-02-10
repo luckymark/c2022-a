@@ -146,7 +146,7 @@
   <ItemGroup>
     <ClCompile Include="graphic.cpp" />
     <ClCompile Include="HEAD.h" />
-    <ClCompile Include="五子棋.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HEAD_G.h" />

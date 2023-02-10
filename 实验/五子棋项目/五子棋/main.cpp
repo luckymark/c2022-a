@@ -3,12 +3,11 @@
 #include"HEAD_G.h"
 int gamemode = 0;//ÓÎÍæÄ£Ê½£¬1ÎªË«ÈË£¬2ÎªÈË»ú
 int gamer_color = -1;//ÈË»úÄ£Ê½ÏÂÍæ¼ÒÆåÉ«
-int MAX_DEPTH = 3;//²©ŞÄÊ÷×î´óÉî¶È
+const int MAX_DEPTH = 3;//²©ŞÄÊ÷×î´óÉî¶È
 int AI_Estimation_BLACK;//ºÚÆåÈ«¾Ö¹ÀÖµ
 int AI_Estimation_WHITE;//°×ÆåÈ«¾Ö¹ÀÖµ
 int AI_ThinkWidth[4] = { 15,-1,15,-1 };//AIÑİËãÇøÓò
 chess chessmap[15][15];//Æå¾ÖĞÅÏ¢
-chess_pos chess_pos_cursor = { 0,0 };//×îĞÂÂä×Ó×ø±ê
 int chess_draw_list[15 * 15][3] = { 0 };//äÖÈ¾Æå×ÓĞòÁĞ£¬ÓÃÓÚäÖÈ¾µÄÊı¾İ£¬0´æ´¢Æå×ÓÑÕÉ«£¬1´æ´¢xÖµ£¬2´æ´¢yÖµ(1-15)
 int count = 0;//Âä×ÓÊÖÊı
 int l5_b = 0;
@@ -172,7 +171,7 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 			else {
 				d4_w++;
 			}
-			return 0;
+			return 5;
 		}
 
 	}
@@ -246,13 +245,16 @@ int AI_Analysis(int cnt, int btw, int dis_1, int dis_2,int i) {//¸ù¾İ´«µ½²ÎÊı·ÖÎ
 void AI_Estimate() {
 	int Estimate_BLACK = 0;
 	int Estimate_WHITE = 0;
-	int i = 0;
+	int done_hor[15][15] = { 0 };//Ë®Æ½
+	int done_ver[15][15] = { 0 };//ÊúÖ±
+	int done_Majdia[15][15] = { 0 };//Ö÷¶Ô½Ç
+	int done_Mindia[15][15] = { 0 };//¸±¶Ô½Ç
 	//¶ÔäÖÈ¾ĞòÁĞ½øĞĞËÄ´Î±éÀú£¬·Ö±ğ¶ÔÃ¿¸ö×ÓºáÊú¡¢Ö÷´Î¶Ô½ÇËÄ¸ö·½ÏòÆÀ·Ö£¬²¢×îÖÕ»ã×ÜÎªÈ«¾ÖºÚ°×·½ÆÀ·Ö
-	for (int done[15][15] = { 0 }; i < count; i++)//×óÓÒ
+	for (int i = 0; i < count; i++)
 	{
 		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
-			done[nowchess[1] - 1][nowchess[2] - 1] = true;
+		if (i == 0 || !done_hor[nowchess[1] - 1][nowchess[2] - 1]) {
+			done_hor[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -269,7 +271,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 - i][nowchess[2] - 1] = true;
+					done_hor[nowchess[1] - 1 - i][nowchess[2] - 1] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -290,7 +292,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 + i][nowchess[2] - 1] = true;
+					done_hor[nowchess[1] - 1 + i][nowchess[2] - 1] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -310,13 +312,8 @@ void AI_Estimate() {
 				Estimate_WHITE += pcnt;
 			}
 		}
-	}
-	i = 0;
-	for (int done[15][15] = { 0 }; i < count; i++)//ÉÏÏÂ
-	{
-		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
-			done[nowchess[1] - 1][nowchess[2] - 1] = true;
+		if (i == 0 || !done_ver[nowchess[1] - 1][nowchess[2] - 1]) {
+			done_ver[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -333,7 +330,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1][nowchess[2] - 1 - i] = true;
+					done_ver[nowchess[1] - 1][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -354,7 +351,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1][nowchess[2] - 1 + i] = true;
+					done_ver[nowchess[1] - 1][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -365,7 +362,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2, i);
 
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
@@ -374,13 +371,8 @@ void AI_Estimate() {
 				Estimate_WHITE += pcnt;
 			}
 		}
-	}
-	i = 0;
-	for (int done[15][15] = { 0 }; i < count; i++)//·½Ïò"\"
-	{
-		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
-			done[nowchess[1] - 1][nowchess[2] - 1] = true;
+		if (i == 0 || !done_Majdia[nowchess[1] - 1][nowchess[2] - 1]) {
+			done_Majdia[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -397,7 +389,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 - i][nowchess[2] - 1 - i] = true;
+					done_Majdia[nowchess[1] - 1 - i][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -418,7 +410,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 + i][nowchess[2] - 1 + i] = true;
+					done_Majdia[nowchess[1] - 1 + i][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -429,7 +421,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2, i);
 
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
@@ -438,13 +430,8 @@ void AI_Estimate() {
 				Estimate_WHITE += pcnt;
 			}
 		}
-	}
-	i = 0;
-	for (int done[15][15] = { 0 }; i < count; i++)//·½Ïò"/"
-	{
-		int nowchess[3] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2] };
-		if (i == 0 || !done[nowchess[1] - 1][nowchess[2] - 1]) {
-			done[nowchess[1] - 1][nowchess[2] - 1] = true;
+		if (i == 0 || !done_Mindia[nowchess[1] - 1][nowchess[2] - 1]) {
+			done_Mindia[nowchess[1] - 1][nowchess[2] - 1] = true;
 			int pcnt = 0;//·ÖÊıÍ³¼Æ
 			int cnt = 1;//Í¬É«×ÓÊı
 			int btw = 0;//¼ä¿ÕÊı
@@ -461,7 +448,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 - i][nowchess[2] - 1 + i] = true;
+					done_Mindia[nowchess[1] - 1 - i][nowchess[2] - 1 + i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -482,7 +469,7 @@ void AI_Estimate() {
 					{
 						break;
 					}
-					done[nowchess[1] - 1 + i][nowchess[2] - 1 - i] = true;
+					done_Mindia[nowchess[1] - 1 + i][nowchess[2] - 1 - i] = true;
 					btw += temp_dis;
 					temp_dis = 0;
 					cnt++;
@@ -493,7 +480,7 @@ void AI_Estimate() {
 			}
 			dis_2 += temp_dis;
 			temp_dis = 0;
-			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2,i);
+			pcnt += AI_Analysis(cnt, btw, dis_1, dis_2, i);
 			if (nowchess[0] == BLACK) {
 				Estimate_BLACK += pcnt;
 			}
@@ -674,9 +661,6 @@ struct judgetree* AI_Judgetree_MakeTree(int height) {//²ÉÓÃ×Ó½ÚµãÁ´±íÊ¾·¨
 	return newroot;
 }
 void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height) {
-
-	if (root->listend == root)
-	{
 		if (height % 2)
 		{
 			root->listend->expectation = INT_MAX;
@@ -688,19 +672,6 @@ void AI_Judgetree_AddNode(struct judgetree* root, chess_pos newchess, int height
 		root->listend->bor_node = AI_Judgetree_MakeTree(height);
 		root->listend = root->listend->bor_node;
 		return;
-	}
-	else {
-		if (height % 2)
-		{
-			root->listend->expectation = 20000;
-		}
-		else {
-			root->listend->expectation = -20000;
-		}
-		root->listend->donepos = newchess;
-		root->listend->bor_node = AI_Judgetree_MakeTree(height);
-		root->listend = root->listend->bor_node;
-	}
 }
 bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,int* stoppos) {
 	AI_Estimate();//Ì°ĞÄ
@@ -804,18 +775,18 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,
 				d3_w = 0;
 				return true;
 			}
-			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
-			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
+			//else if (ret_fa_expectation - *fa_expectation < -50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
+			//else if (ret_fa_expectation - *fa_expectation > 50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
 		}
 		else {
 			ret_fa_expectation = AI_Estimation_WHITE - AI_Estimation_BLACK;
@@ -914,18 +885,18 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,
 				d3_w = 0;
 				return true;
 			}
-			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
-			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
+			//else if (ret_fa_expectation - *fa_expectation < -50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
+			//else if (ret_fa_expectation - *fa_expectation > 50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
 		}
 	}
 	else {
@@ -1026,18 +997,18 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,
 				d3_w = 0;
 				return true;
 			}
-			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
-			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
+			//else if (ret_fa_expectation - *fa_expectation < -50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
+			//else if (ret_fa_expectation - *fa_expectation > 50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
 		}
 		else {
 			ret_fa_expectation = AI_Estimation_BLACK - AI_Estimation_WHITE;
@@ -1137,18 +1108,18 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,
 				d3_w = 0;
 				return true;
 			}
-			else if (ret_fa_expectation - *fa_expectation < -25 * height) {
-				if (*stoppos<=MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
-			else if (ret_fa_expectation - *fa_expectation > 25 * height) {
-				if (*stoppos <= MAX_DEPTH && height > 1)
-				{
-					(*stoppos) += 2;
-				}
-			}
+			//else if (ret_fa_expectation - *fa_expectation < -50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
+			//else if (ret_fa_expectation - *fa_expectation > 50 * height) {
+			//	if (*stoppos <= MAX_DEPTH && height > 1)
+			//	{
+			//		(*stoppos) += 2;
+			//	}
+			//}
 		}
 	}
 	*fa_expectation = ret_fa_expectation;
@@ -1167,11 +1138,11 @@ bool AI_Judgetree_Greedy(struct judgetree* root, int height,int* fa_expectation,
 void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int gd_expectation,int fa_expectation) {
 	if (height < stoppos)//Èç¹û²»Ê¹ÓÃGPU£¬¾Í´ËAI³ÌĞò¶øÑÔ£¬µ½4²ãÊ÷ÒÑ¾­ÊÇ¼«ÏŞÁË
 	{
-			if (height) {
-				if (AI_Judgetree_Greedy(root, height, &fa_expectation,&stoppos)) {
-					return;
-				}
+		if (height) {
+			if (AI_Judgetree_Greedy(root, height, &fa_expectation, &stoppos)) {
+				return;
 			}
+		}
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)//ÑİËãÇøÓòÄÚ±éÀúËùÓĞ¿ÉÄÜ
 		{
 			for (int j = AI_ThinkWidth[2]; j <= AI_ThinkWidth[3]; j++)
@@ -1201,7 +1172,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 			chess_draw_list[count][2] = i->donepos.ypos + 1;
 			count++;
 			i->kid_node = AI_Judgetree_MakeTree(height);
-			AI_Judgetree_BuildTree(i->kid_node, height + 1,stoppos,root->expectation,fa_expectation);//´Ë´¦½øĞĞµİ¹é
+			AI_Judgetree_BuildTree(i->kid_node, height + 1, stoppos, root->expectation, fa_expectation);//´Ë´¦½øĞĞµİ¹é
 			i->expectation = i->kid_node->expectation;
 			AI_JudgeTree_Delete(i->kid_node);//ÊµÊ±É¾³ıÎŞÓÃÄÚ´æ
 			i->kid_node = NULL;
@@ -1226,7 +1197,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 			}
 			if (height % 2)//¸üĞÂµ±Ç°²ãÆÚÍû¼«Öµ
 			{
-				if (root->expectation > i->expectation) 
+				if (root->expectation > i->expectation)
 				{
 					root->expectation = i->expectation;
 				}
@@ -1248,7 +1219,7 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 		}
 	}
 	else {//×îÉî²ã¶ÔÃ¿ÖÖ¿ÉÄÜ¾ÖÃæÆÀ¹À
-		if (AI_Judgetree_Greedy(root, height,&fa_expectation,&stoppos)) {
+		if (AI_Judgetree_Greedy(root, height, &fa_expectation, &stoppos)) {
 			return;
 		}
 		for (int i = AI_ThinkWidth[0]; i <= AI_ThinkWidth[1]; i++)
@@ -1316,7 +1287,6 @@ void AI_Judgetree_BuildTree(struct judgetree* root, int height,int stoppos,int g
 			}
 		}
 	}
-
 }
 void AI_JudgeTree_Choose(struct judgetree* root) {//Ö´ĞĞ´Ëº¯ÊıÊ±£¬×îÇ³²ãµÄÆÚÍû×îÓÅÕß¼´ÎªAI×îÓÅÂä×Ó
 	int expectation = INT_MIN;
@@ -1345,29 +1315,29 @@ void AI_JudgeTree_Choose(struct judgetree* root) {//Ö´ĞĞ´Ëº¯ÊıÊ±£¬×îÇ³²ãµÄÆÚÍû×î
 				chess_draw_list[count][1] = nextchess.xpos + 1;
 				chess_draw_list[count][2] = nextchess.ypos + 1;
 			}
-			if (nextchess.xpos - 1 < AI_ThinkWidth[2]) {
-				AI_ThinkWidth[2] = nextchess.xpos - 3;
+			if (chess_pos_cursor.xpos - 1 < AI_ThinkWidth[2] + 2) {
+				AI_ThinkWidth[2] = chess_pos_cursor.xpos - 3;
 				if (AI_ThinkWidth[2] < 0)
 				{
 					AI_ThinkWidth[2] = 0;
 				}
 			}
-			if (nextchess.xpos - 1 > AI_ThinkWidth[3]) {
-				AI_ThinkWidth[3] = nextchess.xpos + 1;
+			if (chess_pos_cursor.xpos - 1 > AI_ThinkWidth[3] - 2) {
+				AI_ThinkWidth[3] = chess_pos_cursor.xpos + 1;
 				if (AI_ThinkWidth[3] > 14)
 				{
 					AI_ThinkWidth[3] = 14;
 				}
 			}
-			if (nextchess.ypos - 1 < AI_ThinkWidth[0]) {
-				AI_ThinkWidth[0] = nextchess.ypos - 3;
+			if (chess_pos_cursor.ypos - 1 < AI_ThinkWidth[0] + 2) {
+				AI_ThinkWidth[0] = chess_pos_cursor.ypos - 3;
 				if (AI_ThinkWidth[0] < 0)
 				{
 					AI_ThinkWidth[0] = 0;
 				}
 			}
-			if (nextchess.ypos - 1 > AI_ThinkWidth[1]) {
-				AI_ThinkWidth[1] = nextchess.ypos + 1;
+			if (chess_pos_cursor.ypos - 1 > AI_ThinkWidth[1] - 2) {
+				AI_ThinkWidth[1] = chess_pos_cursor.ypos + 1;
 				if (AI_ThinkWidth[1] > 14)
 				{
 					AI_ThinkWidth[1] = 14;
@@ -1395,7 +1365,7 @@ void AI_JudgeTree_Delete(struct judgetree* root) {
 }
 void AI_Running() {
 	struct judgetree* judgetree = AI_Judgetree_MakeTree(0);
-	AI_Judgetree_BuildTree(judgetree, 0,MAX_DEPTH,INT_MAX,INT_MIN);
+	AI_Judgetree_BuildTree(judgetree, 0,MAX_DEPTH,INT_MAX,0);
 	AI_JudgeTree_Choose(judgetree);
 	AI_JudgeTree_Delete(judgetree);
 	return;

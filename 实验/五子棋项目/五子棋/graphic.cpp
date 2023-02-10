@@ -9,7 +9,8 @@ GLuint fs[2] = { 0 };
 GLuint rendering_program1;//管线1，渲染棋盘
 GLuint rendering_program2;//管线2，渲染棋子
 GLuint vertex_array_object;
-bool fallback=true;
+chess_pos chess_pos_cursor = { 0,0 };//最新落子坐标
+double fallbacktime=0;
 int running(int running_mode)
 {
 	//glfw库调用
@@ -50,91 +51,53 @@ int running(int running_mode)
 	startup();
 	//渲染循环
 	while (!glfwWindowShouldClose(window)) {
-		double timeValue = glfwGetTime();
-		render(timeValue,window,running_mode);
+		render(window,running_mode);
 		winchack(chess_draw_list[count - 1]);
 		if (isWin) {
 			break;
 		}
 	}
-	if (isWin)
-	{
-		static const GLfloat blackwin[]{ 0.1f,0.2f,0.3f,1.0f };
-		static const GLfloat whitewin[]{ 0.3f,0.4f,0.5f,1.0f };
-		if (count%2)
-		{
-			glClearBufferfv(GL_COLOR, 0, blackwin);
-		}
-		else {
-			glClearBufferfv(GL_COLOR, 0, whitewin);
-		}
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glUseProgram(rendering_program1);
-		glDrawArrays(GL_PATCHES, 0, 4);
-		if (count) {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-			glUseProgram(rendering_program2);
-			for (int i = 0; i < count; i++)
-			{
-				GLfloat onechess[4] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2],1.0f };
-				glVertexAttrib4fv(0, onechess);
-				glDrawArrays(GL_POINTS, 0, 1);
-			}
-			glPointSize(38.0);
-			GLfloat chessflag[4] = { abs(chess_draw_list[count - 1][0] / 2 - 2),chess_draw_list[count - 1][1] + 0.25,chess_draw_list[count - 1][2] - 0.25,1.0f };
-			glVertexAttrib4fv(0, chessflag);
-			glDrawArrays(GL_POINTS, 0, 1);
-			glPointSize(80.0);
-		}
-		glfwSwapBuffers(window);
-		if (count % 2)
-		{
-			MessageBox(0, TEXT("黑棋胜利"), TEXT("result"), 0);
-		}
-		else {
-			MessageBox(0, TEXT("白棋胜利"), TEXT("result"), 0);
-		}
-	}
-	return 0;
-
 	//进行渲染循环后处理
-	shutdown();
+	shutdown(window);
 	//结束glfw库调用
 	glfwTerminate();
 	return 0;
 }
 void board_button_callback(GLFWwindow* window,int key,int scancode,int action,int mods) {
-	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-		if (fallback)
-		{
-			fallback = !fallback;
-			switch (gamemode)
+		if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+			if (glfwGetTime() -fallbacktime > 0.25)
 			{
-			case 1:
-				if (count - 1 >= 0)
+				if (gamemode == 2)
 				{
-					chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
-					count -= 1;
+					fallbacktime = glfwGetTime();
 				}
-				break;
-			case 2:
-				if (count - 2 >= 0)
+
+				switch (gamemode)
 				{
-					chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
-					chessmap[chess_draw_list[count - 2][1] - 1][chess_draw_list[count - 2][2] - 1].chesskind = EMPTY;
-					count -= 2;
+				case 1:
+					if (count - 1 >= 0)
+					{
+						chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+						count -= 1;
+					}
+					break;
+				case 2:
+					if (count - 2 >= 0)
+					{
+						chessmap[chess_draw_list[count - 1][1] - 1][chess_draw_list[count - 1][2] - 1].chesskind = EMPTY;
+						chessmap[chess_draw_list[count - 2][1] - 1][chess_draw_list[count - 2][2] - 1].chesskind = EMPTY;
+						count -= 2;
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
 			}
 		}
-	}
 }
 void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 	//实时将点击鼠标时距离光标坐标最近的落子点坐标传给全局变量chess_pos_cursor
-	int current_xpos = xpos / (windowWidth / 16);//current_xpos为0~16的数字，代表棋盘坐标
+	int current_xpos = xpos / (windowWidth / 16);//current_xpos为0~16的数字，代表光标在棋盘的x坐标
 	double ex_current_xpos = xpos / (windowWidth / 16.0f);//ex_current_xpos为0~16度量轴下光标x坐标的精确值
 	if (ex_current_xpos - current_xpos > 0.5)
 		current_xpos++;
@@ -152,56 +115,56 @@ void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 		chess_pos_cursor.ypos = -1;
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-	//鼠标点击时，将全局变量chess_pos_cursor传入棋子渲染序列，视为完成落子
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		if (chess_pos_cursor.xpos != -1 && chess_pos_cursor.ypos != -1) {
-			if (chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind == EMPTY) {
-				if (count % 2) {
-					chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind = WHITE;
-					chess_draw_list[count][0] = WHITE;
-					chess_draw_list[count][1] = chess_pos_cursor.xpos;
-					chess_draw_list[count][2] = chess_pos_cursor.ypos;
-				}
-				else {
-					chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind = BLACK;
-					chess_draw_list[count][0] = BLACK;
-					chess_draw_list[count][1] = chess_pos_cursor.xpos;
-					chess_draw_list[count][2] = chess_pos_cursor.ypos;
-				}
-				//更新AI演算区域
-				if (chess_pos_cursor.xpos - 1 < AI_ThinkWidth[2]+2) {
-					AI_ThinkWidth[2] = chess_pos_cursor.xpos - 3;
-					if (AI_ThinkWidth[2]<0)
-					{
-						AI_ThinkWidth[2] = 0;
+		//鼠标点击时，将全局变量chess_pos_cursor传入棋子渲染序列，视为完成落子
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+			if (chess_pos_cursor.xpos != -1 && chess_pos_cursor.ypos != -1) {
+				if (chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind == EMPTY) {
+					if (count % 2) {
+						chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind = WHITE;
+						chess_draw_list[count][0] = WHITE;
+						chess_draw_list[count][1] = chess_pos_cursor.xpos;
+						chess_draw_list[count][2] = chess_pos_cursor.ypos;
+					}
+					else {
+						chessmap[chess_pos_cursor.xpos - 1][chess_pos_cursor.ypos - 1].chesskind = BLACK;
+						chess_draw_list[count][0] = BLACK;
+						chess_draw_list[count][1] = chess_pos_cursor.xpos;
+						chess_draw_list[count][2] = chess_pos_cursor.ypos;
+					}
+					//更新落子手数，完成落子
+					count++;
+					//更新AI演算区域
+					if (chess_pos_cursor.xpos - 1 < AI_ThinkWidth[2] + 2) {
+						AI_ThinkWidth[2] = chess_pos_cursor.xpos - 3;
+						if (AI_ThinkWidth[2] < 0)
+						{
+							AI_ThinkWidth[2] = 0;
+						}
+					}
+					if (chess_pos_cursor.xpos - 1 > AI_ThinkWidth[3] - 2) {
+						AI_ThinkWidth[3] = chess_pos_cursor.xpos + 1;
+						if (AI_ThinkWidth[3] > 14)
+						{
+							AI_ThinkWidth[3] = 14;
+						}
+					}
+					if (chess_pos_cursor.ypos - 1 < AI_ThinkWidth[0] + 2) {
+						AI_ThinkWidth[0] = chess_pos_cursor.ypos - 3;
+						if (AI_ThinkWidth[0] < 0)
+						{
+							AI_ThinkWidth[0] = 0;
+						}
+					}
+					if (chess_pos_cursor.ypos - 1 > AI_ThinkWidth[1] - 2) {
+						AI_ThinkWidth[1] = chess_pos_cursor.ypos + 1;
+						if (AI_ThinkWidth[1] > 14)
+						{
+							AI_ThinkWidth[1] = 14;
+						}
 					}
 				}
-				if (chess_pos_cursor.xpos - 1 > AI_ThinkWidth[3]-2) {
-					AI_ThinkWidth[3] = chess_pos_cursor.xpos + 1;
-					if (AI_ThinkWidth[3]>14)
-					{
-						AI_ThinkWidth[3] = 14;
-					}
-				}
-				if (chess_pos_cursor.ypos - 1 < AI_ThinkWidth[0]+2) {
-					AI_ThinkWidth[0] = chess_pos_cursor.ypos - 3;
-					if (AI_ThinkWidth[0]<0)
-					{
-						AI_ThinkWidth[0] = 0;
-					}
-				}
-				if (chess_pos_cursor.ypos - 1 > AI_ThinkWidth[1]-2) {
-					AI_ThinkWidth[1] = chess_pos_cursor.ypos + 1;
-					if (AI_ThinkWidth[1]>14)
-					{
-						AI_ThinkWidth[1] = 14;
-					}
-				}
-				//更新落子手数，完成落子
-				count++;
 			}
 		}
-	}
 }
 void delete_shader(void) {
 	int i = 0;
@@ -412,7 +375,7 @@ void startup() {
 	glLineWidth(6.0);
 	glPointSize(80.0);
 }
-void render(double currentTime,GLFWwindow* window,int running_mode) {
+void render(GLFWwindow* window,int running_mode) {
 	//设置渲染背景色
 	static const GLfloat black[]{ 0.2f,0.3f,0.4f,1.0f };
 	glClearBufferfv(GL_COLOR, 0, black);
@@ -444,10 +407,48 @@ void render(double currentTime,GLFWwindow* window,int running_mode) {
 	}
 	else {
 		AI_Running();
-		fallback = true;
 	}
 }
-void shutdown() {
+void shutdown(GLFWwindow* window) {
+	if (isWin)
+	{
+		static const GLfloat blackwin[]{ 0.1f,0.2f,0.3f,1.0f };
+		static const GLfloat whitewin[]{ 0.3f,0.4f,0.5f,1.0f };
+		if (count % 2)
+		{
+			glClearBufferfv(GL_COLOR, 0, blackwin);
+		}
+		else {
+			glClearBufferfv(GL_COLOR, 0, whitewin);
+		}
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glUseProgram(rendering_program1);
+		glDrawArrays(GL_PATCHES, 0, 4);
+		if (count) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			glUseProgram(rendering_program2);
+			for (int i = 0; i < count; i++)
+			{
+				GLfloat onechess[4] = { chess_draw_list[i][0],chess_draw_list[i][1],chess_draw_list[i][2],1.0f };
+				glVertexAttrib4fv(0, onechess);
+				glDrawArrays(GL_POINTS, 0, 1);
+			}
+			glPointSize(38.0);
+			GLfloat chessflag[4] = { abs(chess_draw_list[count - 1][0] / 2 - 2),chess_draw_list[count - 1][1] + 0.25,chess_draw_list[count - 1][2] - 0.25,1.0f };
+			glVertexAttrib4fv(0, chessflag);
+			glDrawArrays(GL_POINTS, 0, 1);
+			glPointSize(80.0);
+		}
+		glfwSwapBuffers(window);
+		if (count % 2)
+		{
+			MessageBox(0, TEXT("黑棋胜利"), TEXT("result"), 0);
+		}
+		else {
+			MessageBox(0, TEXT("白棋胜利"), TEXT("result"), 0);
+		}
+	}
 	//删除着色器、管线、顶点数组
 	delete_shader();
 	glDeleteVertexArrays(1, &vertex_array_object);
