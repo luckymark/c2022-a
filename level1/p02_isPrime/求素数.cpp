@@ -4,21 +4,12 @@
 #include<stdio.h>
 #include<math.h>
 #include<time.h>
-#include<windows.h>
-//enum Color{black,blue,green,lakeblue,red,purple,yellow,white,gray};
-//void setClock(unsigned short backColor=0,unsigned short backColor=7){
-//char command[9]="color 07";
-//command[6]='0'+backColor;
-//command[7]='0'+backColor;
-//}
-//clock_t start,stop;
-//double duration;
+clock_t start,stop;
+double duration;
 int main()
-////{
-	//setColor(1,2);
-//}
+
 {
-	//start=clock();
+	start=clock();
 	for(int a=2;a<=1000;a++)
 	{
 		int  k=(int)sqrt(a);	int s=1;
@@ -35,7 +26,7 @@ int main()
 		
 		
 	}
-	//stop=clock();
-	//printf("%.1f",((double)(stop-start)/CLK_TCK));
+	stop=clock();
+	printf("%.1f",((double)(stop-start)/CLK_TCK));
 	return 0;
 }
