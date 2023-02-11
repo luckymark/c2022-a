@@ -1,0 +1,4 @@
+"D:\clion\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/clion/CLion 2022.2.3/bin/ninja/win/ninja.exe" -G Ninja -S C:\Users\ASUS\c2022-a\level1\p07_encrypt_decrypt -B C:\Users\ASUS\c2022-a\level1\p07_encrypt_decrypt\cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/ASUS/c2022-a/level1/p07_encrypt_decrypt/cmake-build-debug
