@@ -1,183 +1,68 @@
 //
-// Created by XuanCheng on 2023/1/2.
+// Created by XuanCheng on 2023/2/11.
 //
 
-#include "Chess.h"
+#include <algorithm>
+#include <random>
 #include "AI.h"
+#include "Board.h"
+#include "Chess.h"
 
 using namespace std;
 
-int c = 1;
+int AI::negamax(int deep, int alpha, int beta, int role, std::vector<point> &candidates) {
+    int v;
+    int best = MIN;
 
-bool genboard(int deep, vector<poi>  &points) {
-    vector<poi> fives;
-    vector<poi> fours;
-    vector<poi> doubleThrees;
-    vector<poi> threes;
-    vector<poi> twos;
-    vector<poi> neighbors;
-    vector<poi> nextNeighbors;
-    poi temp;
-
-    for (int i = 0; i < 15; ++i) {
-        for (int j = 0; j < 15; ++j) {
-            if(board[i][j] == R.emp){
-                if (HasNeighbor(i,j,1,1)){
-                    board[i][j] = R.hum;
-                    int scoreHum = score_point(i,j,R.hum);
-                    board[i][j] = R.emp;
-
-                    board[i][j] = R.com;
-                    int scoreCom = score_point(i,j,R.com);
-                    board[i][j] = R.emp;
-
-                    if(scoreCom >= FIVE_SCORE){
-                        temp.coor = {i,j};
-                        points.push_back(temp);
-                        return true;
-                    }else if(scoreHum >= FIVE_SCORE){
-                        temp.coor = {i,j};
-                        fives.push_back(temp);
-                    } else if (scoreHum >= FOUR_SCORE){
-                        temp.coor = {i,j};
-                        fours.push_back(temp);
-                    }else if(scoreCom >= FOUR_SCORE){
-                        temp.coor = {i,j};
-                        fours.insert(fours.begin(),temp);
-                    }else if(scoreHum >= 2*THREE_SCORE){
-                        temp.coor = {i,j};
-                        doubleThrees.push_back(temp);
-                    }else if(scoreCom >= 2*THREE_SCORE){
-                        temp.coor = {i,j};
-                        doubleThrees.insert(doubleThrees.begin(),temp);
-                    } else if(scoreCom >= THREE_SCORE){
-                        temp.coor = {i,j};
-                        threes.insert(threes.begin(),temp);
-                    }else if(scoreHum >= THREE_SCORE){
-                        temp.coor = {i,j};
-                        threes.push_back(temp);
-                    }else if (scoreCom >= TWO_SCORE){
-                        temp.coor = {i,j};
-                        twos.insert(twos.begin(),temp);
-                    } else if (scoreHum >= TWO_SCORE){
-                        temp.coor = {i,j};
-                        twos.push_back(temp);
-                    } else {
-                        temp.coor = {i,j};
-                        neighbors.push_back(temp);
-                    }
-                    //change
-                }else if(deep >= 2 && HasNeighbor(i,j,2,2)){
-                    temp.coor = {i,j};
-                    nextNeighbors.push_back(temp);
-                }
-            }
+    for (auto & candidate : candidates) {
+        pair<int,int>p = candidate.coor;
+        board.put(p, role);
+        v = -r(deep - 1, -beta, -alpha, R.trans(role));
+        board.remove(p,role);
+        alpha = max(best, alpha);
+        candidate.score = v;
+        if(v > best){
+            best = v;
         }
     }
-
-    if(!fives.empty()){
-        points = fives;
-        return true;
-    }
-    if(!fours.empty()){
-        points = fours;
-        return true;
-    }
-    if(!doubleThrees.empty()){
-        points = doubleThrees;
-        return true;
-    }
-
-    //此处temp用于储存拼接结果
-    points.insert(points.end(),threes.begin(),threes.end());
-    points.insert(points.end(),twos.begin(),twos.end());
-    points.insert(points.end(),neighbors.begin(),neighbors.end());
-    points.insert(points.end(),nextNeighbors.begin(),nextNeighbors.end());
-    return true;
+    return alpha;
 }
 
-int negamax(int deep, int alpha, int beta, int color, std::vector<poi> &candidates) {
-    int v = score(color);
-    if(deep <= 0 || wincondition()){
+int AI::r(int deep, int alpha, int beta, int role) {
+    int v = board.score(role);
+    if(deep <= 0 || GUI::WinCondition()){
         return v;
     }
 
     int best = MIN;
 
-    for (int i = 0; i < candidates.size(); ++i) {
-        pair<int,int>p = candidates[i].coor;
-        board[p.first][p.second] = color;
+    vector<point>candidates;
+    board.GenerateBoard(deep, role, candidates);
+
+    for (auto & candidate : candidates) {
+        pair<int,int>p = candidate.coor;
+        board.put(p, role);
         alpha = max(best, alpha);
-        v = -r(deep - 1, -beta, -alpha, R.trans(color));
-        board[p.first][p.second] = R.emp;
-        candidates[i].score = v;
+        v = -r(deep - 1, -beta, -alpha, R.trans(role));
+        board.remove(p,role);
         if(v > best){
             best = v;
+        }
+        if(v >= beta){
+            return v;
+        }
+        if(deep <= 2 && role == R.com && best < FOUR_SCORE && best > (FOUR_SCORE * (-1))){
+            vector<point>mate;
+            bool m = kill(role, 8, mate);
+            if(m){
+                return FIVE_SCORE * pow(0.8,(double)mate.size());
+            }
         }
     }
     return best;
 }
 
-void AI() {
-    fontset(BLACK, 24, ANTIALIASED_QUALITY, _T("黑体"));
-    outtextxy(913, 0, _T("伟大机器人正在推翻人类暴政 "));
-    if (R.com == 1) {
-        setfillcolor(BLACK);
-    }
-    else {
-        setfillcolor(WHITE);
-    }
-
-    if(c>1)
-    {
-        poi bestpos = GiveBestPoint();
-        solidcircle(X[bestpos.coor.first], Y[bestpos.coor.second], 28);
-        board[bestpos.coor.first][bestpos.coor.second] = R.com;
-        clearrectangle(913, 0, 1500, 30);
-    }
-    else if(c == 1) {
-        if (board[7][7] == 0) {
-            solidcircle(X[7], Y[7], 28);
-            board[7][7] = R.com;
-            clearrectangle(913, 0, 1500, 30);
-        }
-        else {
-            solidcircle(X[8], Y[8], 28);
-            board[8][8] = R.com;
-            clearrectangle(913, 0, 1500, 30);
-        }
-    }
-    c++;
-    //
-    int k = score(R.com);
-    printf("com:%d\n",k);
-    //
-}
-
-double random() {
-    random_device rd;
-    auto gen = default_random_engine(rd());
-    uniform_real_distribution<double> dis(0,1);
-    double randk = dis(gen);
-    return randk;
-}
-void AIdo(){
-    AI();
-    finish();
-}
-
-int HasNeighbor(int i, int j, int length, int wideth)   {
-    for(int m = i - length ;m>=0 && m<15 && m <= i+length; m++){
-        for(int n = j - wideth ;n>=0 && n<15 && n <= j+wideth; n++){
-            if(m != n && board[m][n] != 0){
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
-
-bool deeppp(int deep, int color, vector<poi> &result, vector<poi> &candidates) {
+bool AI::deeppp(int deep, int color, std::vector<point> &result, std::vector<point> &candidates) {
     int bestscore;
     for(int i = 2;i <=deep;i += 2){
         bestscore = negamax(i,MIN,MAX,color,candidates);
@@ -187,7 +72,7 @@ bool deeppp(int deep, int color, vector<poi> &result, vector<poi> &candidates) {
     }
     sort(candidates.begin(), candidates.end(), cmp);
     result.push_back((candidates[0]));
-    for (int i = 0; i < candidates.size(); ++i) {
+    for (int i = 0; i < candidates.size() - 1; ++i) {
         if(candidates[i].score == candidates[i+1].score){
             result.push_back(candidates[i + 1]);
         }else{
@@ -197,48 +82,135 @@ bool deeppp(int deep, int color, vector<poi> &result, vector<poi> &candidates) {
     return false;
 }
 
-poi GiveBestPoint(int color, int deep) {
-    vector<poi> candidates;
-    genboard(deep, candidates);
+point AI::GiveBestPoint(int color, int deep) {
+    vector<point> candidates;
+    board.GenerateBoard(deep, color, candidates);
 
-    vector<poi> result;
+    vector<point> result;
     deeppp(deep, color, result, candidates);
 
     int k = (int)(((int)(result.size()-1))*random());
     return result[k];
 }
 
-int r(int deep, int alpha, int beta, int color) {
-    //去除candidates干扰，集成算杀
-    int v = score(color);
-    if(deep <= 0 || wincondition()){
-        return v;
+bool AI::maxx(int role, int deep, vector<point> &result) {
+    int w = GUI::WinCondition();
+    if(w == role){
+        return true;
+    }
+    if(w == R.trans(role) || deep < 0){
+        return false;
     }
 
-    int best = MIN;
-
-    vector<poi>candidates;
-    genboard(deep,candidates);
-
-    for (int i = 0; i < candidates.size(); ++i) {
-        pair<int,int>p = candidates[i].coor;
-        board[p.first][p.second] = color;
-        alpha = max(best, alpha);
-        v = -r(deep - 1, -beta, -alpha, R.trans(color));
-        board[p.first][p.second] = R.emp;
-        if(v > best){
-            best = v;
-        }
-        if(v >= beta){
-            return v;
-        }
-        if(deep <= 2 && color == R.com && best < FOUR_SCORE && best > (FOUR_SCORE*(-1))){
-            vector<poi>mate;
-            bool m = kill(color, 8, mate);
-            if(m){
-                return FIVE_SCORE * pow(0.8,(double)mate.size());
-            }
+    vector<point>points;
+    board.find(role, FOUR_DIE_SCORE, points);
+    if(points.empty()){
+        return false;
+    }
+    for(auto & point : points){
+        result.clear();
+        pair<int,int>p = point.coor;
+        board.put(p, role);
+        bool m = minn(role, deep - 1, result);
+        board.remove(p,role);
+        if(m){
+            result.insert(result.begin(),point);
+            return true;
         }
     }
-    return best;
+    return false;
+}
+
+bool AI::minn(int role, int deep, vector<point> &result) {
+    result.clear();
+    int w = GUI::WinCondition();
+    if(w == role){
+        return true;
+    }
+    if(w == R.trans(role) || deep < 0){
+        return false;
+    }
+
+    vector<point>points;
+    board.find(role, FOUR_DIE_SCORE, points);
+    if(points.empty()){
+        return false;
+    }
+    vector<vector<point>> candidates;
+    for(auto & point : points){
+        result.clear();
+        pair<int,int>p = point.coor;
+        board.put(p,R.trans(role));
+        bool m = minn(role, deep - 1, result);
+        board.remove(p,R.trans(role));
+        if(m){
+            result.insert(result.begin(),point);
+            candidates.push_back(result);
+            continue;
+        }else{
+            return false;
+        }
+    }
+    int k = (int)(((int)(candidates.size()-1))*random());
+    result = candidates[k];
+    return true;
+}
+
+bool AI::kill(int color, int deep, vector<point> &result) {
+    result.clear();
+    for (int i = 2; i <= deep; i += 2) {
+        bool m = maxx(color, i, result);
+        if(m){
+            return true;
+        }
+    }
+    return false;
+}
+
+double AI::random() {
+    random_device rd;
+    auto gen = default_random_engine(rd());
+    uniform_real_distribution<double> dis(0,1);
+    double randk = dis(gen);
+    return randk;
+}
+
+void AI::AIdo() {
+    GUI::fontset(BLACK, 24, ANTIALIASED_QUALITY, _T("黑体 "));
+    outtextxy(913, 0, _T("伟推翻人类暴政！ "));
+    if (R.com == 1) {
+        setfillcolor(BLACK);
+    }
+    else {
+        setfillcolor(WHITE);
+    }
+
+    if(GameRound>1)
+    {
+        point bestpos = GiveBestPoint(R.com,4);
+        solidcircle(X[bestpos.coor.first], Y[bestpos.coor.second], 28);
+        board.put(bestpos.coor,R.com);
+        clearrectangle(913, 0, 1500, 30);
+    }
+    else if(GameRound == 1) {
+        if (board.board[7][7] == 0) {
+            solidcircle(X[7], Y[7], 28);
+            board.put({7,7},R.com);
+            clearrectangle(913, 0, 1500, 30);
+        }
+        else {
+            solidcircle(X[8], Y[8], 28);
+            board.put({7,7},R.com);
+            clearrectangle(913, 0, 1500, 30);
+        }
+    }
+    GameRound++;
+    //
+    int k = board.score(R.com);
+    printf("com:%d\n",k);
+    //
+}
+
+bool AI::cmp(point x, point y) {
+    return x.score > y.score;
 }

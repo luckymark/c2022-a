@@ -11,4 +11,4 @@ link_directories(${EasyX_LINK})
 link_libraries(EasyXa)
 link_libraries(EasyXw)
 
-add_executable(ChessAI main.cpp Chess.h Init.cpp Init.h  Score.cpp Score.h AI.cpp AI.h hum.cpp hum.h resource.h Chess.rc kill.cpp kill.h poi.h col.cpp col.h)
+add_executable(ChessAI resource.h Chess.rc Board.cpp Board.h role.cpp role.h point.h score.h point.cpp GUI.cpp GUI.h AI.cpp AI.h Chess.h Chess.cpp)

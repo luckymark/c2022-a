@@ -1,23 +1,21 @@
 //
-// Created by XuanCheng on 2023/1/1.
+// Created by XuanCheng on 2023/2/11.
 //
 
 #ifndef CHESSAI_CHESS_H
 #define CHESSAI_CHESS_H
 
-#include <cstdio>
-#include <random>
-#include "Init.h"
-#include "easyx.h"
-#include "resource.h"
-#include "Score.h"
-#include "hum.h"
+#include "Board.h"
+#include "GUI.h"
+#include "point.h"
+#include "role.h"
+#include "score.h"
 #include "AI.h"
-#include "kill.h"
-#include "poi.h"
-#include "col.h"
 
-extern int board[20][20];
+extern Board board;
+extern role R;
+extern int GameRound;
+
 //y0 = 1;per y = 4.3;y per xiangsu = 15.621;permission = +-1
 const int Y[15] = {16,83,150,218,284,351,419,486,553,621,688,755,822,889,955};
 //x0 = 1.7;per x = 4.1;x per xiangsu = 15.431;permission = +-1
