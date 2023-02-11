@@ -52,7 +52,7 @@ int running(int running_mode)
 	//‰÷»æ—≠ª∑
 	while (!glfwWindowShouldClose(window)) {
 		render(window,running_mode);
-		winchack(chess_draw_list[count - 1]);
+		wincheck(chess_draw_list[count - 1]);
 		if (isWin) {
 			break;
 		}
