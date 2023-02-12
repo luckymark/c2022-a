@@ -2,7 +2,7 @@
 #include <math.h>
 void main()
 {
-	int a, b, sum.c d;
+	int a, b, sum，c d;
 		double e;
 		scanf_s("%d %d", &a, &b);
 		sum = a + b;

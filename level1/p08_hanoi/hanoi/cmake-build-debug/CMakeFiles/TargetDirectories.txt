@@ -1,0 +1,3 @@
+C:/Users/ASUS/c2022-a/level1/hanoi/cmake-build-debug/CMakeFiles/hanoi.dir
+C:/Users/ASUS/c2022-a/level1/hanoi/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/c2022-a/level1/hanoi/cmake-build-debug/CMakeFiles/rebuild_cache.dir
