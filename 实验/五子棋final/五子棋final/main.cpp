@@ -55,11 +55,13 @@ bool checkOver() {
 		if (game.playerSign == false) {  //黑棋赢（玩家赢）,此时标记已经反转，轮到白棋落子
 			mciSendString(_T("不错.mp3"), 0, 0, 0);
 			loadimage(0, _T("胜利.jpg"));
+			Sleep(3500);
 			score += 100;
 		}
 		else {
 			mciSendString(_T("失败.mp3"), 0, 0, 0);
 			loadimage(0, _T("失败.jpg"));
+			Sleep(3500);
 			score -= 100;
 		}
 
