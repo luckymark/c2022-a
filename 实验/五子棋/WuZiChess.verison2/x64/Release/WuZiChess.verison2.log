@@ -1,0 +1,100 @@
+﻿  ChessData.cpp
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\ChessData.h(3,30): warning C4305: “初始化”: 从“double”到“float”截断
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\ChessData.h(5,35): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+  tools.cpp
+  源.cpp
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\ChessData.h(3,30): warning C4305: “初始化”: 从“double”到“float”截断
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\ChessData.h(5,35): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(74,31): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(74,2): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [15]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(74,15): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(74,31): message : 尝试匹配参数列表“(int, const char [15])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(75,45): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [19]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(75,16): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(91,32): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(91,2): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [14]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(91,15): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(91,32): message : 尝试匹配参数列表“(int, const char [14])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(94,45): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [19]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(94,16): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(96,73): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(259,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,LPCTSTR,int,int,bool)”
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 或    “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(96,2): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [14]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(96,28): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(96,73): message : 尝试匹配参数列表“(IMAGE *, const char [14], const float, const float, bool)”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(97,73): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(259,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,LPCTSTR,int,int,bool)”
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 或    “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(97,2): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [14]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(97,28): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(97,73): message : 尝试匹配参数列表“(IMAGE *, const char [14], const float, const float, bool)”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(107,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(108,10): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(110,18): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(111,18): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(117,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(128,12): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(130,13): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(141,22): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(142,22): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(143,13): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(155,22): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(156,13): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(172,45): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [19]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(172,16): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(174,8): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(175,8): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(283,48): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [18]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(283,18): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(284,33): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(284,4): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [13]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(284,17): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(284,33): message : 尝试匹配参数列表“(int, const char [13])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(288,48): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [18]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(288,18): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(289,33): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(289,4): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [13]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(289,17): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(289,33): message : 尝试匹配参数列表“(int, const char [13])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(295,32): error C2665: “outtextxy”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(226,6): message : 可能是“void outtextxy(int,int,TCHAR)”
+G:\VS\VC\Auxiliary\VS\include\easyx.h(225,6): message : 或    “void outtextxy(int,int,LPCTSTR)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(295,3): message : “void outtextxy(int,int,LPCTSTR)”: 无法将参数 3 从“char [64]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(295,23): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(225,6): message : 参见“outtextxy”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(295,32): message : 尝试匹配参数列表“(int, int, char [64])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(309,36): error C2665: “settextstyle”: 4 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(249,6): message : 可能是“void settextstyle(int,int,LPCTSTR)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(309,2): message : “void settextstyle(int,int,LPCTSTR)”: 无法将参数 3 从“const char [9]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(309,22): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(249,6): message : 参见“settextstyle”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(309,36): message : 尝试匹配参数列表“(int, int, const char [9])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(370,48): error C2664: “MCIERROR mciSendStringW(LPCWSTR,LPWSTR,UINT,HWND)”: 无法将参数 1 从“const char [21]”转换为“LPCWSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(370,17): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+D:\Windows Kits\10\Include\10.0.19041.0\um\mciapi.h(88,1): message : 参见“mciSendStringW”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(383,32): error C2665: “loadimage”: 2 个重载中没有一个可以转换所有参数类型
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 可能是“void loadimage(IMAGE *,LPCTSTR,int,int,bool)”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(383,2): message : “void loadimage(IMAGE *,LPCTSTR,int,int,bool)”: 无法将参数 2 从“const char [14]”转换为“LPCTSTR”
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(383,15): message : 指向的类型不相关; 转换需要 reinterpret_cast、C 样式强制转换或带圆括号的函数样式强制转换
+G:\VS\VC\Auxiliary\VS\include\easyx.h(258,6): message : 参见“loadimage”的声明
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(383,32): message : 尝试匹配参数列表“(int, const char [14])”时
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(388,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(389,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(394,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+I:\codeworks\WuZiChess.verison2\WuZiChess.verison2\源.cpp(395,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
