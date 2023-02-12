@@ -5,6 +5,8 @@
 
 #define NODE_WIDTH 50
 
+int score=0;
+char scoretext[3];
 
 enum MyEnum
 {
@@ -87,6 +89,7 @@ void move()
 				map[person.x - 1][person.y] = Person;
 				map[person.x][person.y] = Space;
 				person.x = person.x - 1;
+				score += 1;
 			}
 			else if (map[person.x - 1][person.y] == Box)
 			{
@@ -96,6 +99,7 @@ void move()
 					map[person.x - 1][person.y] = Person;
 					map[person.x][person.y] = Space;
 					person.x = person.x - 1;
+					score += 1;
 				}
 				else if (map[person.x - 2][person.y] == Dest)
 				{
@@ -103,6 +107,7 @@ void move()
 					map[person.x - 1][person.y] = Person;
 					map[person.x][person.y] = Space;
 					person.x = person.x - 1;
+					score += 1;
 				}
 			}
 			break;
@@ -114,6 +119,7 @@ void move()
 			map[person.x + 1][person.y] = Person;
 			map[person.x][person.y] = Space;
 			person.x = person.x + 1;
+			score += 1;
 		}
 		else if (map[person.x + 1][person.y] == Box)
 		{
@@ -123,6 +129,7 @@ void move()
 				map[person.x + 1][person.y] = Person;
 				map[person.x][person.y] = Space;
 				person.x = person.x + 1;
+				score += 1;
 			}
 			else if (map[person.x + 2][person.y] == Dest)
 			{
@@ -130,6 +137,7 @@ void move()
 				map[person.x + 1][person.y] = Person;
 				map[person.x][person.y] = Space;
 				person.x = person.x + 1;
+				score += 1;
 			}
 		}
 
@@ -141,6 +149,7 @@ void move()
 			map[person.x][person.y - 1] = Person;
 			map[person.x][person.y] = Space;
 			person.y = person.y - 1;
+			score += 1;
 		}
 		else if (map[person.x][person.y - 1] == Box)
 		{
@@ -150,6 +159,7 @@ void move()
 				map[person.x][person.y - 1] = Person;
 				map[person.x][person.y] = Space;
 				person.y = person.y - 1;
+				score += 1;
 			}
 			else if (map[person.x][person.y - 2] == Dest)
 			{
@@ -157,6 +167,7 @@ void move()
 				map[person.x][person.y - 1] = Person;
 				map[person.x][person.y] = Space;
 				person.y = person.y - 1;
+				score += 1;
 			}
 		}
 		break;
@@ -167,6 +178,7 @@ void move()
 			map[person.x][person.y + 1] = Person;
 			map[person.x][person.y] = Space;
 			person.y = person.y + 1;
+			score += 1;
 		}
 		else if (map[person.x][person.y + 1] == Box)
 		{
@@ -176,6 +188,7 @@ void move()
 				map[person.x][person.y + 1] = Person;
 				map[person.x][person.y] = Space;
 				person.y = person.y + 1;
+				score += 1;
 			}
 			else if (map[person.x][person.y + 2] == Dest)
 			{
@@ -183,6 +196,7 @@ void move()
 				map[person.x][person.y + 1] = Person;
 				map[person.x][person.y] = Space;
 				person.y = person.y + 1;
+				score += 1;
 			}
 		}
 
@@ -224,6 +238,12 @@ int main()
 	{
 		cleardevice();
 		paintGrid();
+		sprintf_s(scoretext, "%d", score);
+		settextstyle(25, 12, "宋体");
+		settextcolor(RED);
+		outtextxy(0,0,"score:");
+		outtextxy(5,30,scoretext);
+
 		paintMap();
 		FlushBatchDraw();
 		move();
