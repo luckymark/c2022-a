@@ -107,7 +107,7 @@ void loadbk()
 	BeginBatchDraw();
 	cleardevice();
 	IMAGE bk; //背景变量
-	loadimage(&bk, L"renju/shagou.png");//加载背景
+	loadimage(&bk, L"renju/五子棋界面.png");//加载背景
 	putimage(0, 0, &bk);//输出背景
 	draw();
 	EndBatchDraw();
