@@ -1,11 +1,11 @@
 #include<stdio.h>
-void hanoi(int n, char ch1, char ch2, char ch3);//将ch1上的通过ch2移动到ch3
-void move(char ch4, char ch5);//将ch4移动到ch5
+void hanoi(int n ,char ch1,char ch2,char ch3 );//灏哻h1涓婄殑閫氳繃ch2绉诲姩鍒癱h3
+void move(char ch4, char ch5);//灏哻h4绉诲姩鍒癱h5
 #define number 3
 int main()
 {
 	char ch1 = 'A', ch2 = 'B', ch3 = 'C';
-	hanoi(number, ch1, ch2, ch3);
+	hanoi(number,ch1,ch2,ch3);
 	return 0;
 }
 void hanoi(int n, char ch1, char ch2, char ch3)
