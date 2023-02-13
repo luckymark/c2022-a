@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <string.h>
+#include <conio.h>
+#include <Windows.h>
+
+struct GOOD {
+    char name;
+    int num;
+};
+
+typedef struct Node {
+    GOOD good;
+    struct Node *pre, * next;
+}*Node;
+
+Node headNode;
+Node tail;
+
+void Linklist() {
+    Node Pre = tail;
+    if (tail == NULL) {
+        tail = (Node)malloc(sizeof(Node));
+        headNode = tail;
+    }else {
+        tail->next = (Node)malloc(sizeof(Node));
+        tail = tail->next;
+    }
+    if (Pre != NULL) {
+        Pre->next = tail;
+    }
+    tail->pre = Pre;
+    tail->next = NULL;
+}
+
+int main()
+{
+    printf("//////////////////\n");
+    printf("   库存进销菜单\n");
+    printf("1、显示存货列表\n");
+    printf("2、入库\n");
+    printf("3、出库\n");
+    printf("4、退出程序\n");
+    printf("//////////////////\n");
+
+    FILE* fp = fopen("WAREHOUSE", "r");
+    char goodname[100];
+    int goodnum;
+    int op;
+
+    while (fscanf_s(fp, "%s%d", &goodname, &goodnum) != EOF) {
+        Linklist();
+        int len = strlen(goodname);
+        tail->good.name = (char)malloc(sizeof(char) * (len + 1));
+        strcpy(tail->good.name, goodname);
+        tail->good.num = goodnum;
+    }
+    fclose(fp);
+
+    while (1) {
+        scanf_s("%d,&op");
+        switch (op)
+        {
+            case 1:
+                for (Node p = headNode; p != NULL; p = p->next) {
+                    printf("%s %d\n", p->good.name, p->good.num);
+                }break;
+            case 2:
+                printf("Input the names and the numbers of the goods:\n");
+                scanf_s("%s %d", &goodname, &goodnum);
+                {int isFind = 0;
+                for (Node p = headNode; p != NULL; p = p->next) {
+                     if (strcmp(p->good.name, goodname) == 0) {
+                         p->good.num += goodnum;
+                             isFind = 1;
+                             break;
+                     }
+                 }
+                if (!isFind) {
+                    Linklist();
+                    int len = strlen(goodname);
+                    tail->good.name = (char)malloc(sizeof(char) * (len + 1));
+                    strcpy(tail->good.name, goodname);
+                    tail->good.num = goodnum;
+                }
+                }break;
+            case 3:
+                printf("出库\n");
+                scanf_s("%s%d", goodname, &goodnum);
+                for (Node p = headNode; p != NULL; p = p->next) {
+                    if (strcmp(p->good.name, goodname) == 0) {
+                        p->good.num -= goodnum;
+                        if (!p->good.num) {
+                            if (p->pre != NULL) {
+                                p->pre->next = p->next;
+                            }
+                            if (p->next != NULL) {
+                                p->next->pre = p->pre;
+                            }
+                            if (p == headNode) {
+                                headNode = p->next;
+                            }
+                            if (p == tail) {
+                                tail = p->pre;
+                            }
+                            free(p);
+                        }
+                        break;
+                    }
+                }break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+            
+    }
+    return 0;
+ }
