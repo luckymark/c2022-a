@@ -1,0 +1,10 @@
+﻿已启动生成...
+1>------ 已启动生成: 项目: 五子棋, 配置: Release x64 ------
+1>源.cpp
+1>正在生成代码
+1>2 of 5 functions (40.0%) were compiled, the rest were copied from previous compilation.
+1>  0 functions were new in current compilation
+1>  0 functions had inline decision re-evaluated but remain unchanged
+1>已完成代码的生成
+1>五子棋.vcxproj -> D:\wuziqi\五子棋\x64\Release\五子棋.exe
+========== “生成”: 1 成功，0 失败，0 更新，0 已跳过 ==========
