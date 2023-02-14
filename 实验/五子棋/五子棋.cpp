@@ -75,16 +75,16 @@ int MAX(int a, int b)
 	int ret;
 	if (a >= b)
 		ret = a;
-	else
+	else if(b >= a)
 		ret = b;
 	return ret;
 }
 int MIN(int a, int b)
 {
 	int ret;
-	if (a <= b)
+	if (a <= b )
 		ret = a;
-	else
+	else if (b < a)
 		ret = b;
 	return ret;
 }
@@ -93,7 +93,7 @@ int main()
 {
 	srand(time(NULL));
 	//´´½¨´°¿Ú
-	initgraph(width, length);
+	initgraph(width, length, EW_SHOWCONSOLE);
 	position.player = black;
 	BeginBatchDraw();
 	chooseGame();
@@ -105,7 +105,6 @@ int main()
 void loadbk()
 {
 	BeginBatchDraw();
-	cleardevice();
 	IMAGE bk; //±³¾°±äÁ¿
 	loadimage(&bk, L"renju/Îå×ÓÆå½çÃæ.png");//¼ÓÔØ±³¾°
 	putimage(0, 0, &bk);//Êä³ö±³¾°
@@ -207,70 +206,91 @@ void Man_MousePressMsg(ExMessage* msg)
 //AIÏÂ×Ó
 void AI_EasyPlay()
 {
-	int ScoreMax = -100000;
-	int depth = 0;
-	Score play = MinMax(depth, -100000, 100000);
+	int BlackScore[row][col] = { 0 };
+	int WhiteScore[row][col] = { 0 };
+	int ScoreMax = -100000,ScoreMax_x,ScoreMax_y;
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			if (map[i][j] == none)  //Èç¹û¸ÃÎ»ÖÃÃ»ÓÐÆå×Ó
+			{
+				BlackScore[i][j] = judgeAll_BlackScore(i, j);
+				WhiteScore[i][j] = judgeAll_WhiteScore(i, j);
+				if (fabs(WhiteScore[i][j] - BlackScore[i][j]) >= ScoreMax)
+				{
+					ScoreMax = fabs(WhiteScore[i][j] - BlackScore[i][j]);
+					ScoreMax_x = i;
+					ScoreMax_y = j;
+				}
+			}
+		}
 	if (position.player == white)
 	{
-		map[play.ScoreMax_x][play.ScoreMax_y] = white;
+		map[ScoreMax_x][ScoreMax_y] = white;
 		position.player = black;
 		cnt++;
 	}
 }
 void AI_MiddlePlay()
 {
-	int ScoreMax = -100000;
+	int BlackScoreMax = -100000, BlackScoreMax_x, BlackScoreMax_y;
+	int WhiteScoreMax = -100000, WhiteScoreMax_x, WhiteScoreMax_y;
+	int ScoreMax_x, ScoreMax_y;
 	int depth;
 	if (cnt < 5)
 		depth = 0;
 	else if (5 <= cnt)
 		depth = 2;
-
 	Score play = MinMax(depth, -100000, 100000);
-	int NowScore[row][col] = { 0 };
+	ScoreMax_x = play.ScoreMax_x;
+	ScoreMax_y = play.ScoreMax_y;
 	if (cnt >= 5)
 	{
-		int jd = 0;
 		for (int i = 0; i < row; i++)
 		{
-			if (jd == 1)
-				break;
 			for (int j = 0; j < col; j++)
 			{
 				if (map[i][j] == none)
 				{
-					if (judgeAll_WhiteScore(i, j) < 10000)
+					if (judgeAll_BlackScore(i, j) >= BlackScoreMax)
 					{
-						NowScore[i][j] = fabs(play.NowValue[i][j] - judgeAll_BlackScore(i, j));
-						if (NowScore[i][j] >= ScoreMax)
-						{
-							ScoreMax = NowScore[i][j];
-							play.ScoreMax_x = i;
-							play.ScoreMax_y = j;
-						}
+						BlackScoreMax = judgeAll_BlackScore(i, j);
+						BlackScoreMax_x = i;
+						BlackScoreMax_y = j;
 					}
-					else
+					if (judgeAll_WhiteScore(i, j) >= WhiteScoreMax)
 					{
-						ScoreMax = judgeAll_WhiteScore(i, j);
-						play.ScoreMax_x = i;
-						play.ScoreMax_y = j;
-						jd = 1;
-						break;
+						WhiteScoreMax = judgeAll_WhiteScore(i, j);
+						WhiteScoreMax_x = i;
+						WhiteScoreMax_y = j;
 					}
 				}
 			}
 		}
+
+			 if (play.value <= WhiteScoreMax && WhiteScoreMax >= BlackScoreMax)
+			{
+				ScoreMax_x = WhiteScoreMax_x;
+				ScoreMax_y = WhiteScoreMax_y;
+			}
+			else if (play.value <= BlackScoreMax&&WhiteScoreMax<=BlackScoreMax)
+			{
+				ScoreMax_x = BlackScoreMax_x;
+				ScoreMax_y = BlackScoreMax_y;
+			}
 	}
 	if (position.player == white)
 	{
-		map[play.ScoreMax_x][play.ScoreMax_y] = white;
+		map[ScoreMax_x][ScoreMax_y] = white;
 		position.player = black;
 		cnt++;
 	}
 }
 void AI_DifficultPlay()
 {
-	int ScoreMax = -100000;
+	int BlackScoreMax = -100000, BlackScoreMax_x, BlackScoreMax_y;
+	int WhiteScoreMax = -100000, WhiteScoreMax_x, WhiteScoreMax_y;
+	int ScoreMax_x, ScoreMax_y;
 	int depth;
 	if (cnt < 5)
 		depth = 0;
@@ -279,43 +299,46 @@ void AI_DifficultPlay()
 	else if (10 < cnt)
 		depth = 4;
 	Score play = MinMax(depth, -100000, 100000);
-	int NowScore[row][col] = { 0 };
+	ScoreMax_x = play.ScoreMax_x;
+	ScoreMax_y = play.ScoreMax_y;
 	if (cnt >= 5)
 	{
-		int jd = 0;
 		for (int i = 0; i < row; i++)
 		{
-			if (jd == 1)
-				break;
 			for (int j = 0; j < col; j++)
 			{
 				if (map[i][j] == none)
 				{
-					if (judgeAll_WhiteScore(i, j) < 10000)
+					if (judgeAll_BlackScore(i, j) >= BlackScoreMax)
 					{
-						NowScore[i][j] = fabs(play.NowValue[i][j] - judgeAll_BlackScore(i, j));
-						if (NowScore[i][j] >= ScoreMax)
-						{
-							ScoreMax = NowScore[i][j];
-							play.ScoreMax_x = i;
-							play.ScoreMax_y = j;
-						}
+						BlackScoreMax = judgeAll_BlackScore(i, j);
+						BlackScoreMax_x = i;
+						BlackScoreMax_y = j;
 					}
-					else
+					if (judgeAll_WhiteScore(i, j) >= WhiteScoreMax)
 					{
-						ScoreMax = judgeAll_WhiteScore(i, j);
-						play.ScoreMax_x = i;
-						play.ScoreMax_y = j;
-						jd = 1;
-						break;
+						WhiteScoreMax = judgeAll_WhiteScore(i, j);
+						WhiteScoreMax_x = i;
+						WhiteScoreMax_y = j;
 					}
 				}
 			}
 		}
+
+		if (play.value <= WhiteScoreMax && WhiteScoreMax >= BlackScoreMax)
+		{
+			ScoreMax_x = WhiteScoreMax_x;
+			ScoreMax_y = WhiteScoreMax_y;
+		}
+		else if (play.value <= BlackScoreMax && WhiteScoreMax <= BlackScoreMax)
+		{
+			ScoreMax_x = BlackScoreMax_x;
+			ScoreMax_y = BlackScoreMax_y;
+		}
 	}
 	if (position.player == white)
 	{
-		map[play.ScoreMax_x][play.ScoreMax_y] = white;
+		map[ScoreMax_x][ScoreMax_y] = white;
 		position.player = black;
 		cnt++;
 	}
@@ -344,21 +367,21 @@ void Man_Man()
 		{
 			printf("ºÚÆå»ñÊ¤");
 			settextstyle(50, 0, L"Õý¿¬");
-			outtextxy(width / 2, length / 2, L"ºÚÆåÊ¤");
+			outtextxy(3 * width / 4, length / 2, L"ºÚÆåÊ¤");
 			break;
 		}
 		else if (ret == 2)
 		{
 			printf("°×Æå»ñÊ¤");
 			settextstyle(50, 0, L"Õý¿¬");
-			outtextxy(width / 2, length / 2, L"°×ÆåÊ¤");
+			outtextxy(3 * width / 4, length / 2, L"°×ÆåÊ¤");
 			break;
 		}
 		else if (ret == 3)
 		{
 			printf("Æ½¾Ö");
 			settextstyle(50, 0, L"Õý¿¬");
-			outtextxy(width / 2, length / 2, L"ºÍÆå");
+			outtextxy(3 * width / 4, length / 2, L"ºÍÆå");
 			break;
 		}
 	}
@@ -392,7 +415,7 @@ void EasyMan_AI()
 		{
 			printf("ºÚÆåÊ¤");
 			settextstyle(50, 0, L"Õý¿¬");
-			outtextxy(width / 2, length / 2, L"ºÚÆåÊ¤");
+			outtextxy(3 * width / 4, length / 2, L"ºÚÆåÊ¤");
 			break;
 		}
 		else if (ret == 2)
@@ -406,7 +429,7 @@ void EasyMan_AI()
 		{
 			printf("Æ½¾Ö");
 			settextstyle(50, 0, L"Õý¿¬");
-			outtextxy(width / 2, length / 2, L"ºÍÆå");
+			outtextxy(3 * width / 4, length / 2, L"ºÍÆå");
 			break;
 		}
 	}
@@ -442,21 +465,21 @@ void MiddleMan_AI()
 			{
 				printf("ºÚÆåÊ¤");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"ºÚÆåÊ¤");
+				outtextxy(3 * width / 4, length / 2, L"ºÚÆåÊ¤");
 				break;
 			}
 			else if (ret == 2)
 			{
 				printf("°×ÆåÊ¤");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"°×ÆåÊ¤");
+				outtextxy(3 * width / 4, length / 2, L"°×ÆåÊ¤");
 				break;
 			}
 			else if (ret == 3)
 			{
 				printf("Æ½¾Ö");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"ºÍÆå");
+				outtextxy(3 * width / 4, length / 2, L"ºÍÆå");
 				break;
 			}
 		}
@@ -493,21 +516,21 @@ void DifficultMan_AI()
 			{
 				printf("ºÚÆåÊ¤");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"ºÚÆåÊ¤");
+				outtextxy(3 * width / 4, length / 2, L"ºÚÆåÊ¤");
 				break;
 			}
 			else if (ret == 2)
 			{
 				printf("°×ÆåÊ¤");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"°×ÆåÊ¤");
+				outtextxy(3 * width / 4, length / 2, L"°×ÆåÊ¤");
 				break;
 			}
 			else if (ret == 3)
 			{
 				printf("Æ½¾Ö");
 				settextstyle(50, 0, L"Õý¿¬");
-				outtextxy(width / 2, length / 2, L"ºÍÆå");
+				outtextxy(3 * width / 4, length / 2, L"ºÍÆå");
 				break;
 			}
 		}
@@ -672,20 +695,26 @@ int judgeBlackScore(int BlackNum, int EmptyNum)
 	if (BlackNum == 0)
 		score += 0;
 
-	else if (BlackNum == 1 && EmptyNum == 1)
+	else if (BlackNum == 1 && EmptyNum == 2)
 		score += 15;
-	else if (BlackNum == 1 && EmptyNum == 0)
+	else if (BlackNum == 1 && EmptyNum == 1)
 		score += 8;
-
+	else if (BlackNum == 1 && EmptyNum == 0)
+		score += 3;
+	else if (BlackNum == 2 && EmptyNum == 2)
+		score += 150;
 	else if (BlackNum == 2 && EmptyNum == 1)
-		score += 40;
+		score += 80;
 	else if (BlackNum == 2 && EmptyNum == 0)
-		score += 30;
-
+		score += 6;
+	else if (BlackNum == 3 && EmptyNum == 2)
+		score += 1500;
 	else if (BlackNum == 3 && EmptyNum == 1)
-		score += 200;
+		score += 800;
 	else if (BlackNum == 3 && EmptyNum == 0)
-		score += 60;
+		score += 9;
+	else if (judgeResult()==1)
+		score += 200000;
 	else
 		score += 20000;
 	return score;
@@ -697,20 +726,26 @@ int judgeWhiteScore(int WhiteNum, int EmptyNum)
 	if (WhiteNum == 0)
 		score += 0;
 
-	else if (WhiteNum == 1 && EmptyNum == 1)
+	else if (WhiteNum == 1 && EmptyNum == 2)
 		score += 20;
-	else if (WhiteNum == 1 && EmptyNum == 0)
+	else if (WhiteNum == 1 && EmptyNum == 1)
 		score += 10;
-
+	else if (WhiteNum == 1 && EmptyNum == 0)
+		score += 5;
+	else if (WhiteNum == 2 && EmptyNum == 2)
+		score += 200;
 	else if (WhiteNum == 2 && EmptyNum == 1)
-		score += 50;
+		score += 100;
 	else if (WhiteNum == 2 && EmptyNum == 0)
-		score += 25;
-
+		score += 8;
+	else if (WhiteNum == 3 && EmptyNum == 2)
+		score += 2000;
 	else if (WhiteNum == 3 && EmptyNum == 1)
-		score += 300;
+		score += 1000;
 	else if (WhiteNum == 3 && EmptyNum == 0)
-		score += 55;
+		score += 15;
+	else if (judgeResult() == 2)
+		score += 300000;
 	else
 		score += 30000;
 	return score;
@@ -732,9 +767,6 @@ int judgeAll_BlackScore(int i, int j)
 		else if (map[i + x][j] == white || i + x >= row)
 			break;
 	}
-	score += judgeBlackScore(BlackNum, EmptyNum);
-	BlackNum = 0, EmptyNum = 0;
-
 	for (int x = 1; x <= 4; x++)
 	{
 		if (map[i - x][j] == black && 0 <= i - x)
@@ -749,6 +781,8 @@ int judgeAll_BlackScore(int i, int j)
 	}
 	score += judgeBlackScore(BlackNum, EmptyNum);
 	BlackNum = 0, EmptyNum = 0;
+
+	
 	//ÅÐ¶ÏÊúÏò
 	for (int y = 1; y <= 4; y++)
 	{
@@ -762,9 +796,6 @@ int judgeAll_BlackScore(int i, int j)
 		else if (map[i][j + y] == white || i + y >= col)
 			break;
 	}
-	score += judgeBlackScore(BlackNum, EmptyNum);
-	BlackNum = 0, EmptyNum = 0;
-
 	for (int y = 1; y <= 4; y++)
 	{
 		if (map[i][j - y] == black && 0 <= i - y)
@@ -793,8 +824,6 @@ int judgeAll_BlackScore(int i, int j)
 		else if (map[i + x][j - y] == white || j - y < 0 || i + x >= row)
 			break;
 	}
-	score += judgeBlackScore(BlackNum, EmptyNum);
-	BlackNum = 0, EmptyNum = 0;
 
 	//ÅÐ¶Ï×óÏÂ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
@@ -811,7 +840,6 @@ int judgeAll_BlackScore(int i, int j)
 	}
 	score += judgeBlackScore(BlackNum, EmptyNum);
 	BlackNum = 0, EmptyNum = 0;
-
 	//ÅÐ¶ÏÓÒÏÂ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
 	{
@@ -825,9 +853,6 @@ int judgeAll_BlackScore(int i, int j)
 		else if (map[i + x][j + y] == white || j + y >= col || i + x >= row)
 			break;
 	}
-	score += judgeBlackScore(BlackNum, EmptyNum);
-	BlackNum = 0, EmptyNum = 0;
-
 	//ÅÐ¶Ï×óÉÏ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
 	{
@@ -864,9 +889,6 @@ int judgeAll_WhiteScore(int i, int j)
 		else if (map[i + x][j] == black || i + x >= row)
 			break;
 	}
-	score += judgeWhiteScore(WhiteNum, EmptyNum);
-	WhiteNum = 0, EmptyNum = 0;
-
 	for (int x = 1; x <= 4; x++)
 	{
 		if (map[i - x][j] == white && 0 <= i - x)
@@ -895,9 +917,6 @@ int judgeAll_WhiteScore(int i, int j)
 		else if (map[i][j + y] == black || i + y >= col)
 			break;
 	}
-	score += judgeWhiteScore(WhiteNum, EmptyNum);
-	WhiteNum = 0, EmptyNum = 0;
-
 	for (int y = 1; y <= 4; y++)
 	{
 		if (map[i][j - y] == white && 0 <= i - y)
@@ -912,6 +931,7 @@ int judgeAll_WhiteScore(int i, int j)
 	}
 	score += judgeWhiteScore(WhiteNum, EmptyNum);
 	WhiteNum = 0, EmptyNum = 0;
+	
 
 	//ÅÐ¶ÏÓÒÉÏ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
@@ -926,9 +946,6 @@ int judgeAll_WhiteScore(int i, int j)
 		else if (map[i + x][j - y] == black || j - y < 0 || i + x >= row)
 			break;
 	}
-	score += judgeWhiteScore(WhiteNum, EmptyNum);
-	WhiteNum = 0, EmptyNum = 0;
-
 	//ÅÐ¶Ï×óÏÂ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
 	{
@@ -945,6 +962,7 @@ int judgeAll_WhiteScore(int i, int j)
 	score += judgeWhiteScore(WhiteNum, EmptyNum);
 	WhiteNum = 0, EmptyNum = 0;
 
+
 	//ÅÐ¶ÏÓÒÏÂ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
 	{
@@ -958,9 +976,6 @@ int judgeAll_WhiteScore(int i, int j)
 		else if (map[i + x][j + y] == black || j + y >= col || i + x >= row)
 			break;
 	}
-	score += judgeWhiteScore(WhiteNum, EmptyNum);
-	WhiteNum = 0, EmptyNum = 0;
-
 	//ÅÐ¶Ï×óÉÏ
 	for (int x = 1, y = 1; x <= 4 && y <= 4; x++, y++)
 	{
@@ -976,6 +991,8 @@ int judgeAll_WhiteScore(int i, int j)
 	}
 	score += judgeWhiteScore(WhiteNum, EmptyNum);
 	WhiteNum = 0, EmptyNum = 0;
+
+	
 
 	return score;
 }
@@ -1022,7 +1039,7 @@ Score evaluate()
 	int BlackScore[row][col] = { 0 };
 	int WhiteScore[row][col] = { 0 };
 	Score ScoreMax;
-	ScoreMax.value = -100000000;
+	ScoreMax.value = -100000;
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
 		{
@@ -1079,9 +1096,9 @@ Score Max(int depth, int alpha, int beta)
 						val.ScoreMax_y = j;
 					}
 					map[i][j] = none;
-					if (num.value >= val.beta)
+					val.alpha = MAX(val.alpha, num.value);
+					if (val.alpha >= val.beta)
 						return val;
-					val.alpha = max(val.alpha, val.value);
 				}
 			}
 		return val;
@@ -1113,10 +1130,9 @@ Score Min(int depth, int alpha, int beta)
 						val.ScoreMin_y = j;
 					}
 					map[i][j] = none;
-
-					if (num.value <= val.alpha)
+					val.beta = MIN(val.beta, num.value);
+					if (val.beta <= val.alpha)
 						return val;
-					val.beta = MIN(val.beta, val.value);
 				}
 			}
 		return val;
