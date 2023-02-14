@@ -11,6 +11,7 @@ void board()
 	settextcolor(WHITE);
 	settextstyle(25, 0, _T("Consolas"));
 	outtextxy(900, 300, _T("保存记录"));
+	outtextxy(900, 500, _T("悔棋"));
 	for (int i = 0; i < 16; i++)
 	{
 		line(900/15*i, 0, 900/15*i, 900);
@@ -273,10 +274,10 @@ int menu()
 void beginanimation()
 {
 	settextcolor(WHITE);
-	outtextxy(350, 500, _T(">  clik to play  <"));
+	outtextxy(250, 500, _T(">  clik any key in the control board to play  <"));
 	Sleep(100);
 	settextcolor(BLACK);
-	outtextxy(350, 500, _T(">  clik to play  <"));
+	outtextxy(250, 500, _T(">  clik any key in the control board to play  <"));
 	Sleep(100);
 }
 
@@ -339,26 +340,19 @@ int saving()
 			case WM_LBUTTONDOWN:
 				if (m.x < 900)
 				{
+					save_file();
 					player(m.x, m.y);
 					return 0;
 				}				
-				if (m.y > 275 || m.y < 350)
+				if (m.y > 300 && m.y < 325)
 				{
-					FILE* fp = fopen("./记录/记录.text", "w");
-					if (!fp)
-					{
-						printf("error");
-						return 0;
-					}
-					for (int i = 0; i < 15; i++)
-					{
-						for (int j = 0; j < 15; j++)
-						{
-							fprintf(fp, "%d ", Chess[i][j]);
-						}
-					}
-					fclose(fp);
+					save_file();
 					return 1;
+				}
+				if (m.y > 500 || m.y < 525)
+				{
+					reading();
+					continue;
 				}
 			case WM_LBUTTONUP:
 				break;
@@ -367,11 +361,29 @@ int saving()
 	return 0;
 }
 
+void save_file()
+{
+	FILE* fp = fopen("./记录/记录.txt", "w");
+	if (!fp)
+	{
+		printf("error");
+		return;
+	}
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			fprintf(fp, "%d ", Chess[i][j]);
+		}
+		fprintf(fp, "\n");
+	}
+	fclose(fp);
+}
 
 
 void reading()
 {
-	FILE* fp = fopen("./记录/记录.text", "r");
+	FILE* fp = fopen("./记录/记录.txt", "r");
 	if (!fp)
 	{
 		printf("error");
@@ -383,8 +395,11 @@ void reading()
 		{
 			fscanf(fp,"%d ", &Chess[i][j]);
 		}
+		fscanf(fp, "\n");
 	}
 	fclose(fp);
+	cleardevice();
+	board();
 	for (int i = 0; i < 15; i++)
 	{
 		for (int j = 0; j < 15; j++)

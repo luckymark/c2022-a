@@ -34,6 +34,7 @@ int menu();
 void beginanimation();
 int showchoice();
 int saving(); 
+void save_file();
 void reading();
 
 

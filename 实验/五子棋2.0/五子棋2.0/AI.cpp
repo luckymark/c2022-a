@@ -330,7 +330,7 @@ void dfs1(int depth, int min_cut, int max_cut,int num,int all_point,int cur_poin
 			}
 		}
 	}
-}
+}//或许用树的结构可能会好一些
 
 
 
