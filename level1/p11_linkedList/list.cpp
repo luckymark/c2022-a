@@ -13,7 +13,7 @@ Linklist* linklistcreate(int n) {
     end = head;
     for (int i = 0; i < n; i++) {
         node = (Linklist*)malloc(sizeof(Linklist));
-        printf("请输入数值");
+        printf("请逐个输入数值(输入一个后按回车键)");
         scanf("%d", &node->data);
         end->next = node;
         end = node;
@@ -26,8 +26,9 @@ void ptintflist(Linklist* head)
     Linklist* t = head;
     while (t->next != NULL) {
         t = t->next;
-        printf("%d\n", t->data);
+        printf("   %d ", t->data);
     }
+    printf("\n");
 }
 void insert(Linklist* head, int n,int da)
 {
@@ -118,7 +119,7 @@ int main()
            t = t->next;
            num++;
        }
-       printf("该节点序号为%d", num);
+       printf("该节点序号为%d\n", num);
    }
    else
        printf("没找到\n");
