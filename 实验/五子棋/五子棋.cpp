@@ -206,24 +206,39 @@ void Man_MousePressMsg(ExMessage* msg)
 //AI下子
 void AI_EasyPlay()
 {
-	int BlackScore[row][col] = { 0 };
-	int WhiteScore[row][col] = { 0 };
-	int ScoreMax = -100000,ScoreMax_x,ScoreMax_y;
+
+	int BlackScoreMax = -100000, BlackScoreMax_x, BlackScoreMax_y;
+	int WhiteScoreMax = -100000, WhiteScoreMax_x, WhiteScoreMax_y;
+	int ScoreMax_x, ScoreMax_y;
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
 		{
 			if (map[i][j] == none)  //如果该位置没有棋子
 			{
-				BlackScore[i][j] = judgeAll_BlackScore(i, j);
-				WhiteScore[i][j] = judgeAll_WhiteScore(i, j);
-				if (fabs(WhiteScore[i][j] - BlackScore[i][j]) >= ScoreMax)
+				if (judgeAll_BlackScore(i, j) >= BlackScoreMax)
 				{
-					ScoreMax = fabs(WhiteScore[i][j] - BlackScore[i][j]);
-					ScoreMax_x = i;
-					ScoreMax_y = j;
+					BlackScoreMax = judgeAll_BlackScore(i, j);
+					BlackScoreMax_x = i;
+					BlackScoreMax_y = j;
+				}
+				if (judgeAll_WhiteScore(i, j) >= WhiteScoreMax)
+				{
+					WhiteScoreMax = judgeAll_WhiteScore(i, j);
+					WhiteScoreMax_x = i;
+					WhiteScoreMax_y = j;
 				}
 			}
 		}
+	if (WhiteScoreMax >= BlackScoreMax)
+	{
+		ScoreMax_x = WhiteScoreMax_x;
+		ScoreMax_y = WhiteScoreMax_y;
+	}
+	else if (WhiteScoreMax < BlackScoreMax)
+	{
+		ScoreMax_x = BlackScoreMax_x;
+		ScoreMax_y = BlackScoreMax_y;
+	}
 	if (position.player == white)
 	{
 		map[ScoreMax_x][ScoreMax_y] = white;
@@ -237,17 +252,16 @@ void AI_MiddlePlay()
 	int WhiteScoreMax = -100000, WhiteScoreMax_x, WhiteScoreMax_y;
 	int ScoreMax_x, ScoreMax_y;
 	int depth;
-	if (cnt < 5)
+	if (cnt < 3)
 		depth = 0;
-	else if (5 <= cnt)
+	else if (3 <= cnt)
 		depth = 2;
 	Score play = MinMax(depth, -100000, 100000);
 	ScoreMax_x = play.ScoreMax_x;
 	ScoreMax_y = play.ScoreMax_y;
-	if (cnt >= 5)
+	if (cnt >= 3)
 	{
 		for (int i = 0; i < row; i++)
-		{
 			for (int j = 0; j < col; j++)
 			{
 				if (map[i][j] == none)
@@ -266,8 +280,6 @@ void AI_MiddlePlay()
 					}
 				}
 			}
-		}
-
 			 if (play.value <= WhiteScoreMax && WhiteScoreMax >= BlackScoreMax)
 			{
 				ScoreMax_x = WhiteScoreMax_x;
@@ -292,16 +304,16 @@ void AI_DifficultPlay()
 	int WhiteScoreMax = -100000, WhiteScoreMax_x, WhiteScoreMax_y;
 	int ScoreMax_x, ScoreMax_y;
 	int depth;
-	if (cnt < 5)
+	if (cnt < 3)
 		depth = 0;
-	else if (5 <= cnt && cnt < 10)
+	else if (3 <= cnt && cnt < 10)
 		depth = 2;
 	else if (10 < cnt)
 		depth = 4;
 	Score play = MinMax(depth, -100000, 100000);
 	ScoreMax_x = play.ScoreMax_x;
 	ScoreMax_y = play.ScoreMax_y;
-	if (cnt >= 5)
+	if (cnt >= 3)
 	{
 		for (int i = 0; i < row; i++)
 		{
@@ -725,7 +737,6 @@ int judgeWhiteScore(int WhiteNum, int EmptyNum)
 	int score = 0;
 	if (WhiteNum == 0)
 		score += 0;
-
 	else if (WhiteNum == 1 && EmptyNum == 2)
 		score += 20;
 	else if (WhiteNum == 1 && EmptyNum == 1)
@@ -1048,7 +1059,7 @@ Score evaluate()
 				BlackScore[i][j] = judgeAll_BlackScore(i, j);
 				WhiteScore[i][j] = judgeAll_WhiteScore(i, j);
 				int count;
-				if (cnt < 5)
+				if (cnt < 3)
 					count = fabs(WhiteScore[i][j] - BlackScore[i][j]);
 				else
 					count = WhiteScore[i][j];
@@ -1076,9 +1087,7 @@ Score Max(int depth, int alpha, int beta)
 	val.alpha = alpha;
 	val.beta = beta;
 	if (depth <= 0 || judgeResult())
-	{
 		return evaluate();
-	}
 	else
 	{
 		for (int i = 0; i < row; i++)
@@ -1088,7 +1097,6 @@ Score Max(int depth, int alpha, int beta)
 				{
 					map[i][j] = white;
 					Score num = Min(depth - 1, val.alpha, val.beta);
-					val.NowValue[i][j] = num.value;
 					if (val.value <= num.value)
 					{
 						val.value = num.value;
@@ -1111,9 +1119,7 @@ Score Min(int depth, int alpha, int beta)
 	val.alpha = alpha;
 	val.beta = beta;
 	if (depth <= 0 || judgeResult())
-	{
 		return evaluate();
-	}
 	else
 	{
 		for (int i = 0; i < row; i++)
