@@ -1,0 +1,21 @@
+#include<stdio.h>
+int main()
+{
+	int n, i;
+	int x,max;
+	printf("请输入数字个数");
+	scanf_s("%d",&n);
+	printf("请输入%d个整数，我将告诉你,它们谁大！", n);
+	scanf_s("%d",&x);
+	max = x;
+	for (i = 0; i < n-1; i++)
+	{
+		scanf_s("%d",&x);
+		if (x > max)
+		{
+			max = x;
+		}
+	}
+	printf("%d最大！", max);
+	return 0;
+}

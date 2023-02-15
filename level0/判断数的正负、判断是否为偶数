@@ -1,0 +1,28 @@
+#include<stdio.h>
+int main()
+{
+	printf("请输入一个整数\n");
+	int m;
+	scanf_s("%d", &m);
+	if (m > 0)
+	{
+		printf("%d是正数\n", m);
+	}
+	else if (m < 0)
+	{
+		printf("%d是负数\n", m);
+	}
+	else
+	{
+		printf("%d是正数\n", m);
+	}
+	if (m % 2 == 0)
+	{
+		printf("%d是偶数\n", m);
+	}
+	else
+	{
+		printf("%d是奇数\n", m);
+	}
+	return 0;
+}

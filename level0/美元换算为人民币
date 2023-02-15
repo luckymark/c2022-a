@@ -1,0 +1,15 @@
+#include<stdio.h>
+#define change 7.0496
+void RMB(float money);
+int main()
+{
+	float money;
+	printf("请输入美元值：");
+	scanf_s("%f",&money);
+	RMB(money);
+	return 0;
+}
+void RMB(float money)
+{
+	printf("换算成人民币是%.2f元", money * change);
+}

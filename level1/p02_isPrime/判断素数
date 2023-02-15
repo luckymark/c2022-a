@@ -1,0 +1,37 @@
+#include<stdio.h>
+
+void Infer(float n);
+
+int main()
+{
+	int i;
+	float n;
+	printf("请输入一个正整数：");
+	scanf_s("%d", &n);
+	Infer(n);
+	if(n>2&&(n-(int)n<1e-10))
+	{
+		for (i = 2; i < n; i++)
+		{
+			if (n % i == 0)
+			{
+				printf("%d不是素数", (int)n);
+				break;
+			}
+
+		}
+		if (i == n)
+			printf("%d是素数", （int）n);
+	}
+	return 0;
+}
+
+void Infer(float n)
+{
+	if (n <= 0|| (n - (int)n >= 1e-10))
+		printf("error!");
+	if (n == 1)
+		printf("%d不是素数", (int)n);
+	if (n == 2)
+		printf("%d是素数", (int)n);
+}
