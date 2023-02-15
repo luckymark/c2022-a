@@ -3,9 +3,8 @@
 #include "GameModel.h"
 #include "tools.h"
 #include <mmsystem.h>
-
+#include<Windows.h>
 #pragma comment(lib, "winmm.lib")
-
 ChessData game; // 游戏指针
 int clickPosRow, clickPosCol; // 存储点击的位置
 
@@ -20,8 +19,10 @@ void init() {
 	loadimage(&background, _T("棋盘.jpg"));
 	putimage(0, 0, &background);
 
-	mciSendString(_T("start.wav"), 0, 0, 0);
-		
+	mciSendString("open start.WAV", 0, 0, 0);
+	mciSendString("play music", 0, 0, 0);//播放音乐
+	Sleep(100);
+	mciSendString("close music", 0, 0, 0);
 	loadimage(&chessBlackImg, _T("black.png"), BLOCK_SIZE, BLOCK_SIZE, true);
 	loadimage(&chessWhiteImg, _T("white.png"), BLOCK_SIZE, BLOCK_SIZE, true);
 
@@ -30,8 +31,10 @@ void init() {
 }
 
 void chessDown(int row, int col, chessKind kind) {
-	mciSendString(_T("down8.WAV"), 0, 0, 0);
-
+	mciSendString("open down8.wav", 0, 0, 0);
+	mciSendString("play music", 0, 0, 0);
+	Sleep(100);
+	mciSendString("close music", 0, 0, 0);
 	int x = leftBoard + col * BLOCK_SIZE - 0.5 * BLOCK_SIZE;
 	int y = topBoard + row * BLOCK_SIZE - 0.5 * BLOCK_SIZE;
 
@@ -53,13 +56,19 @@ bool checkOver() {
 	if (checkWin(&game, clickPosRow, clickPosCol)) {
 		Sleep(1500);
 		if (game.playerSign == false) {  //黑棋赢（玩家赢）,此时标记已经反转，轮到白棋落子
-			mciSendString(_T("不错.mp3"), 0, 0, 0);
+			mciSendString("open 不错.mp3", 0, 0, 0);
+			mciSendString("play music", 0, 0, 0);
+			Sleep(100);
+			mciSendString("close music", 0, 0, 0);
 			loadimage(0, _T("胜利.jpg"));
 			Sleep(3500);
 			score += 100;
 		}
 		else {
-			mciSendString(_T("失败.mp3"), 0, 0, 0);
+			mciSendString("open 失败.mp3", 0, 0, 0);
+			mciSendString("play music", 0, 0, 0);
+			Sleep(100);
+			mciSendString("close music", 0, 0, 0);
 			loadimage(0, _T("失败.jpg"));
 			Sleep(3500);
 			score -= 100;
