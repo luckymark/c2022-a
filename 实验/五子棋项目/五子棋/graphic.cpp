@@ -372,8 +372,8 @@ void startup() {
 	//glPatchParameteri中将参数设置为4，进而能在细分着色器中进行四边形细分
 	glPatchParameteri(GL_PATCH_VERTICES, 4);
 	//设置绘制线宽、像素点大小，以像素点作为棋子
-	glLineWidth(6.0);
-	glPointSize(80.0);
+	glLineWidth(LineWidth);
+	glPointSize(ChessSize);
 }
 void render(GLFWwindow* window,int running_mode) {
 	//设置渲染背景色
@@ -394,11 +394,11 @@ void render(GLFWwindow* window,int running_mode) {
 			glDrawArrays(GL_POINTS, 0, 1);
 		}
 		//绘制上一落子标识
-		glPointSize(38.0);
+		glPointSize(ChessSize/2);
 		GLfloat chessflag[4] = { abs(chess_draw_list[count - 1][0] / 2 - 2),chess_draw_list[count-1][1]+0.25,chess_draw_list[count-1][2] - 0.25,1.0f };
 		glVertexAttrib4fv(0, chessflag);
 		glDrawArrays(GL_POINTS, 0, 1);
-		glPointSize(80.0);
+		glPointSize(ChessSize);
 	}
 	glfwSwapBuffers(window);
 	//在双人模式中，以及人机模式人落子阶段识别落子，在人机模式AI落子阶段完成评估并落子

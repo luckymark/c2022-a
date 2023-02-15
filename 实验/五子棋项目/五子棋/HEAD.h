@@ -13,6 +13,8 @@ extern int gamemode;
 extern int gamer_color;
 const int windowWidth = 1440;
 const int windowHeight = 1440;
+const int LineWidth = 6;
+const int ChessSize = 80;
 const enum kind { EMPTY, WHITE, BLACK };
 struct chess {//Æå×Ó
 	int chesskind = EMPTY;
