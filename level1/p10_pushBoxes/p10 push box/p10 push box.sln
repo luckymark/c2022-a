@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33027.164
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "p10 push box", "p10 push box\p10 push box.vcxproj", "{EEC5F838-7D6E-4405-9760-076971C7762B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Debug|x64.ActiveCfg = Debug|x64
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Debug|x64.Build.0 = Debug|x64
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Debug|x86.ActiveCfg = Debug|Win32
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Debug|x86.Build.0 = Debug|Win32
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Release|x64.ActiveCfg = Release|x64
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Release|x64.Build.0 = Release|x64
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Release|x86.ActiveCfg = Release|Win32
+		{EEC5F838-7D6E-4405-9760-076971C7762B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36081ABA-D4AC-4DFA-9FD8-4750ACB538CA}
+	EndGlobalSection
+EndGlobal
