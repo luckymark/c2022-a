@@ -3,6 +3,8 @@ extern int Chess[ROW][LINE];
 
 extern int mm ;
 extern int	n ;
+int X;
+int Y;
 int box[40][3] = { 0 };
 int memory[30] = { 0 };
 
@@ -285,7 +287,10 @@ void dfs(int* row,int* line)
 	{
 		memset(memory, 0, sizeof(memory));
 		memset(box, 0, sizeof(box));
-		dfs1(0,1000000,-10000000,0,0,0,row,line);
+		Minmax(Chess, NGIF, PTIF, 2, 0);
+		*row = X;
+		*line = Y;
+		//dfs1(0,1000000,-10000000,0,0,0,row,line);
 	}
 	Chess[*row][*line] = 2;
 	printf("(%d,%d) %d\n", *row, *line, 2);

@@ -24,6 +24,9 @@
     <ClCompile Include="AI.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="al update.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="all.h">

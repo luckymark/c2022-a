@@ -8,6 +8,8 @@
 #define LINE 15//l上下 r左右
 #define OROW 0
 #define OLINE 0
+#define PTIF 2147483647//正无穷,Beta
+#define NGIF -2147483648//负无穷,Alpha
 constexpr auto S = 900/15;
 
 
@@ -18,6 +20,7 @@ constexpr auto S = 900/15;
 #include<Windows.h>
 #include<time.h>
 #include <conio.h>
+#include<math.h>
 
 
 
@@ -51,3 +54,6 @@ void dfs(int* row, int* line);
 void dfs1(int depth, int min_cut, int max_cut, int num, int all_point, int cur_point, int* row, int* line);
 
 int jud(int monitor[]);
+
+int Minmax(int Chess[ROW][LINE], int Alpha, int Beta, int cur_color, int depth);
+int score(int a, int co[ROW][LINE], int n);

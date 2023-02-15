@@ -224,22 +224,24 @@ int game()
 		computer();
 		if (judge1()==1||judge12()==1||judge21()==1)
 		{
+			cleardevice();
 			settextcolor(RED);
 			settextstyle(60, 0, _T("Consolas"));
 			outtextxy(350, 300, _T("computer win"));
 			printf("computer win");
-			Sleep(100);
+			Sleep(500);
 			break;
 		}
 		if (saving() == 1)
 			break;
 		if (judge2() == 1||judge12()==1||judge21()==1)
 		{
+			cleardevice();
 			settextcolor(RED);
 			settextstyle(60, 0, _T("Consolas"));
-			outtextxy(350, 300, _T("you win"));
+			outtextxy(350, 300, _T("player win"));
 			printf("player win");
-			Sleep(100);
+			Sleep(500);
 			break;
 		}
 
