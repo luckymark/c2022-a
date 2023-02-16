@@ -51,13 +51,13 @@ void Map() {
     scanf_s("%d", &level);
     switch (level) {
         case 1:
-            fp = fopen("F:/Map/map1.txt", "r");
+            fp = fopen("C:/Users/Lenovo/c2022-a/level1/p10_pushBoxes/Map/map1.txt", "r");
             break;
         case 2:
-            fp = fopen("F:/Map/map2.txt", "r");
+            fp = fopen("C:/Users/Lenovo/c2022-a/level1/p10_pushBoxes/Map/map2.txt", "r");
             break;
         case 3:
-            fp = fopen("F:/Map/map3.txt", "r");
+            fp = fopen("C:/Users/Lenovo/c2022-a/level1/p10_pushBoxes/Map/map3.txt", "r");
             break;
         default:
             printf_s("不存在该地图，请在1~3中选择");
