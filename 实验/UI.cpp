@@ -19,6 +19,7 @@ place record_for_check[230];
 int clen = 0;
 point record_for_state[25][25];
 int player;
+int no_robot = 0;
 
 void begin(struct point state[25][25], int play) {
 	MOUSEMSG m;
@@ -35,9 +36,7 @@ void begin(struct point state[25][25], int play) {
 	if (play == 0) player = 1;
 	else player = -1;
 	while (TRUE) {
-		if (bTurn > num) {
-			canMakeMinSearch = 1;
-		}
+	
 		setbkcolor(BG_COLOR);
 		int color;
 		if (num % 2 == 0) {
@@ -49,8 +48,7 @@ void begin(struct point state[25][25], int play) {
 			setfillcolor(WHITE);
 		}
 		fillcircle(925, 125, 40);
-		if (color == player) {//test
-			int state;
+		if (color == player || no_robot == 1) {//test
 			setrop2(R2_COPYPEN);//R2_COPYPEN 當前顔色
 			while (true) {
 				m = GetMouseMsg();
@@ -78,7 +76,7 @@ void begin(struct point state[25][25], int play) {
 					if (m.uMsg == WM_LBUTTONDOWN) {
 						if (len > 1 && num > 1) {
 							regret(p);
-							regret(p);//2 times;
+							if (!no_robot) regret(p);//2 times;
 							break;
 						}
 						else {
@@ -120,16 +118,11 @@ void begin(struct point state[25][25], int play) {
 					if (i < MAX && j < MAX && i >= MIN && j >= MIN) {
 						if (p[i][j].state == 0) {
 							execute(p, i, j, color,false);
-							set_neighnors(p,p[i][j],0);
 							walk[len].x = i;
 							walk[len].y = j;
 							len++;
 							record_for_check[clen] = { i,j };
 							clen++;
-							if (((i <= 8 || i >= 16) || (j <= 8 || j >= 16)) && canMakeMinSearch != 0) {
-								canMakeMinSearch = 0;
-								bTurn = num;
-							}
 							num++;
 							setbkcolor(BG_COLOR);
 							clearrectangle(800, 700, 1200, 800);
@@ -144,9 +137,9 @@ void begin(struct point state[25][25], int play) {
 			//place = robot2(p, -player, f);
 			//place = findBestMove(p);
 			if (ROBOT_MODE == 1) {
-				place = robotTry(p, f);
+				place = robot3(p, f);
 				while (!(place.x < MAX && place.y < MAX && place.x >= MIN && place.y >= MIN && p[place.x][place.y].state == 0)) {
-				place = robot2(p, -player, f);
+					place = robot3(p, f);
 				
 				}
 			}
@@ -164,7 +157,7 @@ void begin(struct point state[25][25], int play) {
 			}
 			
 			execute(p, place.x, place.y, color,false);
-			walk[len].x = place.x;
+ 			walk[len].x = place.x;
 			walk[len].y = place.y;
 			len++;
 			record_for_check[clen] = { place.x,place.y };
@@ -181,8 +174,6 @@ void begin(struct point state[25][25], int play) {
 		f = 1;
 	}
 }
-
-
 
 void board() {//draw the board
 	setbkcolor(BG_COLOR);
@@ -259,17 +250,21 @@ int first() {//set player color
 	setfillcolor(BUTTON_COLOR);
 	settextcolor(WHITE);
 	settextstyle(40, 0, _T("Consolas"));
-	fillrectangle(175, 375, 475, 465);
-	fillrectangle(575, 375, 875, 465);
+	fillrectangle(50, 375, 375, 465);
+	fillrectangle(475, 375, 675, 465);
+	fillrectangle(775, 375, 1000, 465);
 	TCHAR s1[] = _T("選擇白子/黑子");
-	TCHAR s2[] = _T("隨機");
-	outtextxy(200, 400, s1);
-	outtextxy(685, 400, s2);
+	TCHAR s2[] = _T("雙人模式");
+	TCHAR s3[] = _T("隨機");
+	outtextxy(90, 400, s1);
+	outtextxy(500, 400, s2);
+	outtextxy(850, 400, s3);
+
 	while (true) {
 		n = GetMouseMsg();
-		if (n.x <= 475 && n.x >= 175 && n.y >= 375 && n.y <= 465) {
+		if (n.x <= 375 && n.x >= 50 && n.y >= 375 && n.y <= 465) {
 			settextcolor(LIGHTCYAN);
-			outtextxy(200, 400, s1);
+			outtextxy(90, 400, s1);
 			if (n.uMsg == WM_LBUTTONDOWN) {
 				setbkcolor(BG_COLOR);
 				cleardevice();
@@ -305,11 +300,25 @@ int first() {//set player color
 		}
 		else {
 			settextcolor(WHITE);
-			outtextxy(200, 400, s1);
+			outtextxy(90, 400, s1);
 		}
-		if (n.x <= 875 && n.x >= 575 && n.y >= 375 && n.y <= 465) {
+
+		if (n.x <= 675 && n.x >= 475 && n.y >= 375 && n.y <= 465) {
 			settextcolor(LIGHTCYAN);
-			outtextxy(685, 400, s2);
+			outtextxy(500, 400, s2);
+			if (n.uMsg == WM_LBUTTONDOWN) {
+				no_robot = 1;
+				return 1;
+			}
+		}
+		else {
+			settextcolor(WHITE);
+			outtextxy(500, 400, s2);
+		}
+
+		if (n.x <= 1000 && n.x >= 775 && n.y >= 375 && n.y <= 465) {
+			settextcolor(LIGHTCYAN);
+			outtextxy(850, 400, s3);
 			if (n.uMsg == WM_LBUTTONDOWN) {
 				num = random();
 				while (true) {
@@ -343,7 +352,7 @@ int first() {//set player color
 		}
 		else {
 			settextcolor(WHITE);
-			outtextxy(685, 400, s2);
+			outtextxy(850, 400, s3);
 		}
 	}
 }
@@ -470,17 +479,6 @@ void regret(struct point p[25][25]) {
 			if (p[i][j].state != 0) {
 				execute(p, i, j, p[i][j].state,true);
 			}
-		}
-	}
-}
-
-void set_neighnors(struct point p[25][25],point p1,int regect) {
-	for (int i = -1; i < 2; i++) {
-		for (int j = 0; j < 2; j++) {
-			if (!regect)
-				p[p1.place.x + i][p1.place.y + j].has_neighnors += 1;
-			else
-				p[p1.place.x + i][p1.place.y + j].has_neighnors -= 1;
 		}
 	}
 }

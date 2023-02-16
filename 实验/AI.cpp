@@ -1,175 +1,148 @@
 ﻿#include<time.h>
 #include<stdlib.h>
+#include<stdio.h>
 #include"point.h"
 #include"check.h"
 #include"AI.h"
 #include"UI.h"
 
-int canMakeMinSearch = 1;
-int bTurn,round;
+int bTurn;
+MOVE bestMove = { {12,12},-INFINITY };
 
-long double MiniMax(struct point p[25][25], int color, int depth, long double min, long double max) {
-	int m, n, t = 0, br = 0;
-	long double va = 0;
-	if (depth == 0 || end(p) != 0)
-	{
-		return checkStateVal(p);
-	}
-	else if (color == player)
-	{
-		for (m = MIN; m < MAX; m++)
-		{
-			if (br == 1) {
-				break;
-			}
-			for (n = MIN; n < MAX; n++)
-			{
-				if (p[m][n].state == 0 &&
-					((canMakeMinSearch != 0 && m >= 8 && m <= 16 && n >= 8 && n <= 16) ||
-						canMakeMinSearch == 0))
-				{
-					if (num < 80) {
-						t = 0;
-						if (p[m][n].has_neighnors != 0)
-							t = 1;
-					}
-					else {
-						t = 1;
-					}
-					if (t == 0)
-					{
-						va = INFINITY;
-					}
-					else {
-						p[m][n].state = player;
-						set_neighnors(p, p[m][n], 0);
-						round++;
-						if (((m <= 8 || m >= 16) || (n <= 8 || n >= 16)) && canMakeMinSearch != 0) {
-							canMakeMinSearch = 0;
-							bTurn = round;
-						}
-						va = MiniMax(p, -player, depth - 1, min, max);
-						p[m][n].state = 0;
-						set_neighnors(p, p[m][n], 1);
-						round--;
-						if (bTurn > round) {
-							canMakeMinSearch = 1;
-						}
-					}
-					if (va < max)
-					{
-						max = va;
-					}
-					if (max < min)
-					{
-						br = 1;
-						break;
-					}
-				}
-			}
+void copyBoard(point p1[25][25], point p2[25][25]){
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 25; j++) {
+			p2[i][j].place = { i,j };
+			if (p1[i][j].state == 1) p2[i][j].state = 1;
+			else if (p1[i][j].state == 0) p2[i][j].state = 0;
+			else if (p1[i][j].state == 2) p2[i][j].state = 2;
+			else p2[i][j].state = -1;
 		}
-		return max;
 	}
-	else if (color == -player)
-	{
-		for (m = MIN; m < MAX; m++)
-		{
-			if (br == 1) {
-				break;
-			}
-			for (n = MIN; n < MAX; n++)
-			{
-				if (p[m][n].state == 0 && 
-					((canMakeMinSearch != 0 && m >= 8 && m <= 16 && n >= 8 && n <= 16) ||
-						canMakeMinSearch == 0))
-				{
-					if (num < 80) {
-						t = 0;
-						if (p[m][n].has_neighnors != 0) {
-							t = 1;
-						}
-					}
-					else {
-						t = 1;
-					}
-					if (t == 0)
-					{
-						va = -INFINITY;
-					}
-					else {
-						p[m][n].state = -player;
-						set_neighnors(p, p[m][n], 0);
-						round++;
-						if (((m <= 8 || m >= 16) || (n <= 8 || n >= 16)) && canMakeMinSearch != 0) {
-							canMakeMinSearch = 0;
-							bTurn = round;
-						}
-						va = MiniMax(p, player, depth - 1, min, max);
-						p[m][n].state = 0;
-						set_neighnors(p, p[m][n], 1);
-						round--;
-						if (bTurn > round) {
-							canMakeMinSearch = 1;
-						}
-					}
-					if (va > min)
-					{
-						min = va;
-					}
-					if (max < min)
-					{
-						br = 1;
-						break;
-					}
-				}
-			}
-		}
-		return min;
-	}
-	return 0;
 }
 
-place robotTry(struct point p[25][25], int f) {//AI 
-	place MaxMove = { 12,12 }, MinMove = { 12,12 }, bestMove;
-	long double MaxVal = -INFINITY;
-	int neighnors;
-	round = num;
-	if (num == 0) return{ 12,12 };
+void reverseBoard(point p1[25][25], point p2[25][25]) {//反轉思考
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 25; j++) {
+			p2[i][j].place = { i,j };
+			if (p1[i][j].state == 0) p2[i][j].state = 0;
+			else if (p1[i][j].state == 2) p2[i][j].state = 2;
+			else if (p1[i][j].state == 1) p2[i][j].state = -1;
+			else p2[i][j].state = 1;
+		}
+	}
+}
+
+
+EvaPoint evaluate(point p[25][25])//生成最佳可能落子位置
+{
+	bool board[25][25];
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 25; j++) {
+			board[i][j] = false;
+		}
+	}
 	for (int i = MIN; i < MAX; i++) {
 		for (int j = MIN; j < MAX; j++) {
-			if (p[i][j].state == 0 && ((i>=8 && i <=16 && j >= 8 && j <= 16)||canMakeMinSearch == 0)) {
-				if (p[i][j].has_neighnors != 0) {
-					p[i][j].state = -player;
-					round++;
-					set_neighnors(p, p[i][j], 0);
-					if (((i <= 8 || i >= 16) || (j <= 8 || j >= 16)) && canMakeMinSearch != 0) {
-						canMakeMinSearch = 0;
-						bTurn = round;
-					}
-					if (end(p) != 0) {
-						return { i,j };
-					}
-					p[i][j].val = MiniMax(p, player, 3, -INFINITY, INFINITY);
-					p[i][j].state = 0;
-					set_neighnors(p, p[i][j], 1);
-					round--;
-					if (bTurn > round){
-						canMakeMinSearch = 1;
-					}
-					
-					if (p[i][j].val >= MaxVal) {
-						MaxVal = p[i][j].val;
-						bestMove = { i,j };
-					}
+			if (p[i][j].state != 0) {
+				for (int k = -2; k <= 2; k++) {
+					board[i + k][j] = true;
+					board[i + k][j + k] = true;
+					board[i + k][j - k] = true;
+					board[i][j + k] = true;
 				}
 			}
 		}
 	}
 
-	return bestMove;
+	long double worth[25][25];
+	EvaPoint bestPoints;
+	long double w;
+	for (int i = MIN; i < MAX; i++) {
+		for (int j = MIN; j < MAX; j++) {
+			worth[i][j] = -INFINITY;
+			if (p[i][j].state == 0 && board[i][j]==true) {
+				p[i][j].state = -player;
+				worth[i][j] = checkStateVal(p);
+				p[i][j].state = 0;
+			}
+		}
+	}
+	for (int k = 0; k < numOfEvaluate; k++) {
+		w = -INFINITY;
+		for (int i = MIN; i < MAX; i++) {
+			for (int j = MIN; j < MAX; j++) {
+				if (worth[i][j] >= w) {
+					w = worth[i][j];
+					bestPoints.place[k] = { i,j };
+				}
+			}
+		}
+		bestPoints.score[k] = w;
+		worth[bestPoints.place[k].x][bestPoints.place[k].y] = -INFINITY;//避免重複
+	}
+	return bestPoints;
 }
 
-place robot2(struct point p[25][25], int color, int f) {//AI (純綷一層思考)
+long double MiniMax(struct point p[25][25], int color, int depth, long double alpha, long double beta) {
+	if (depth == 0 || end(p) != 0) {
+		if (depth == 0) {
+			EvaPoint P;
+			P = evaluate(p);
+			return P.score[0];
+		}
+		else return checkStateVal(p);
+	}
+	else if (color == -player) {//AI
+		point sameP[25][25];
+		copyBoard(p, sameP);
+		EvaPoint P;
+		P = evaluate(sameP);
+
+		for (int i = 0; i < numOfEvaluate; i++) {
+			sameP[P.place[i].x][P.place[i].y].state = -player;
+			long double val = MiniMax(sameP, player, depth - 1, alpha, beta);
+			sameP[P.place[i].x][P.place[i].y].state = 0;;
+
+			if (val > alpha) {
+				alpha = val;
+				if (depth == DEPTH) {
+					bestMove.place = P.place[i];
+					bestMove.val = val;
+				}
+			}
+			if (beta<= alpha) break;
+		}
+		return alpha;
+	}
+	else {//player
+		point reverseP[25][25];
+		reverseBoard(p, reverseP);
+		EvaPoint P;
+		P = evaluate(reverseP);
+
+		point sameP[25][25];
+		copyBoard(p, sameP);
+
+		for (int i = 0; i < numOfEvaluate; i++) {
+			sameP[P.place[i].x][P.place[i].y].state = player;
+			long double val = MiniMax(sameP,-player,depth - 1,alpha,beta);
+			sameP[P.place[i].x][P.place[i].y].state = 0;
+			if (val < beta) beta = val;
+			if (beta <= alpha) break;
+		}
+		return beta;
+	}
+}
+
+place robot3(struct point p[25][25], int f) {//AI 
+
+	if (num == 0) return{ 12,12 };
+	MiniMax(p, -player, DEPTH, -INFINITY, INFINITY);
+	return bestMove.place;
+}
+
+place robot2(struct point p[25][25], int color, int f) {//AI 貪心算法(純綷一層思考)
 	place max_p, min_p;
 	long double min = 0, max = 0;
 	if (f == 0) return { 12,12 };
@@ -177,18 +150,21 @@ place robot2(struct point p[25][25], int color, int f) {//AI (純綷一層思考
 		for (int j = MIN; j < MAX; j++) {
 			p[i][j].a_value = p[i][j].d_value = 0;
 			if (p[i][j].state == 0) {
-				p[i][j].a_value = checkVal(p, p[i][j], color);
+				p[i][j].state = color;
+				p[i][j].a_value = checkPointVal(p,p[i][j], color);
 				if (p[i][j].a_value > max) {
 					max = p[i][j].a_value;
 					max_p.x = i;
 					max_p.y = j;
 				}
-				p[i][j].d_value = checkVal(p, p[i][j], -color);
+				p[i][j].state = -color;
+				p[i][j].d_value = checkPointVal(p,p[i][j], -color);
 				if (p[i][j].d_value > min) {
 					min = p[i][j].d_value;
 					min_p.x = i;
 					min_p.y = j;
 				}
+				p[i][j].state = 0;
 			}
 		}
 	}

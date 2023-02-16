@@ -3,8 +3,9 @@
 #include"check.h"
 #include "UI.h"
 #include "AI.h"
+#include <stdlib.h>
 
-int score[15] = { 10000000,5000000,600000,75000,55000,43000,100,80,65,60,20,1,1,0 };
+int score[15] = { 100000000,5000000,80000,76000,75000,65000,100,80,65,60,20,2,1,0 };
 
 long double abs(long double val) {
 	if (val >= 0) return val;
@@ -267,13 +268,10 @@ int checkL5(point p1, struct point p[25][25], int color) {
 	p[p1.place.x][p1.place.y].state = color;
 	for (int i = Max(MIN, p1.place.x - WIN + 1); i < Min(MAX, p1.place.x + WIN); i++) {
 		for (int j = Max(MIN, p1.place.y - WIN + 1); j < Min(MAX, p1.place.y + WIN); j++) {
-			for (int k = -1; k < 2; k += 2) {
-				count += linkFive(p[i][j], p[i][j + 1*k], p[i][j + 2 * k], p[i][j + 3 * k], p[i][j + 4 * k], color);
-				count += linkFive(p[i][j], p[i + 1 * k][j], p[i + 2 * k][j], p[i + 3 * k][j], p[i + 4 * k][j], color);
-				count += linkFive(p[i][j], p[i + 1 * k][j + 1 * k], p[i + 2 * k][j + 2 * k], p[i + 3 * k][j + 3 * k], p[i + 4 * k][j + 4 * k], color);
-				count += linkFive(p[i][j], p[i + 1 * k][j - 1 * k], p[i + 2 * k][j - 2 * k], p[i + 3 * k][j - 3 * k], p[i + 4 * k][j - 4*k], color);
-			}
-
+			count += linkFive(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			count += linkFive(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			count += linkFive(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			count += linkFive(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -287,12 +285,8 @@ int checkL4(point p1, struct point p[25][25], int color) {//need to check
 		for (int j = Max(MIN + 1, p1.place.y - WIN + 1); j < Min(MAX - 1, p1.place.y + WIN); j++) {
 			count += liveFour(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
 			count += liveFour(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
-			count += liveFour(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][Max(j - 5, 0)], color);
-			count += liveFour(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 24)][j], color);
 			count += liveFour(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += liveFour(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-			count += liveFour(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += liveFour(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -308,10 +302,6 @@ int checkR4A(point p1, struct point p[25][25], int color) {//need to check
 			count += rushFour1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[i + 5][j], color);
 			count += rushFour1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += rushFour1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-			count += rushFour1(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][j - 5], color);
-			count += rushFour1(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[i - 5][j], color);
-			count += rushFour1(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += rushFour1(p[i][j], p[i - 1][j + 1], p[i - 2][j - +2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -327,10 +317,6 @@ int checkR4B(point p1, struct point p[25][25], int color) {//need to check
 			count += rushFour2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
 			count += rushFour2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
 			count += rushFour2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
-			count += rushFour2(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], color);
-			count += rushFour2(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], color);
-			count += rushFour2(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], color);
-			count += rushFour2(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -346,10 +332,6 @@ int checkL3A(point p1, struct point p[25][25], int color) {
 			count += linkThree1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
 			count += linkThree1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
 			count += linkThree1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
-			count += linkThree1(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], color);
-			count += linkThree1(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], color);
-			count += linkThree1(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], color);
-			count += linkThree1(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -365,10 +347,6 @@ int checkL3B(point p1, struct point p[25][25], int color) {
 			count += linkThree2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += linkThree2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += linkThree2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-			count += linkThree2(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][Max(j - 5, 0)], color);
-			count += linkThree2(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += linkThree2(p[i][j], p[i- 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += linkThree2(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -384,10 +362,6 @@ int checkS3A(point p1, struct point p[25][25], int color) {
 			count += sleepThree2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += sleepThree2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += sleepThree2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-			count += sleepThree2(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][Max(j - 5, 0)], color);
-			count += sleepThree2(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += sleepThree2(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += sleepThree2(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -403,10 +377,6 @@ int checkS3B(point p1, struct point p[25][25], int color) {
 			count += sleepThree3(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += sleepThree3(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += sleepThree3(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-			count += sleepThree3(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][Max(j - 5, 0)], color);
-			count += sleepThree3(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i -4][j], p[Max(i - 5, 0)][j], color);
-			count += sleepThree3(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j- 4], p[Max(i-5, 0)][Max(j - 5, 0)], color);
-			count += sleepThree3(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -418,12 +388,10 @@ int checkS3C(point p1, struct point p[25][25], int color) {
 	p[p1.place.x][p1.place.y].state = color;
 	for (int i = Max(MIN, p1.place.x - WIN + 1); i < Min(MAX, p1.place.y + WIN); i++) {
 		for (int j = Max(MIN, p1.place.y - MIN + 1); j < Min(MAX, p1.place.y + WIN); j++) {
-			for (int k = -1; k < 2; k += 2) {
-				count += sleepThree1(p[i][j], p[i][j + 1*k], p[i][j + 2 * k], p[i][j + 3 * k], p[i][j + 4 * k], color);
-				count += sleepThree1(p[i][j], p[i + 1 * k][j], p[i + 2 * k][j], p[i + 3 * k][j], p[i + 4 * k][j], color);
-				count += sleepThree1(p[i][j], p[i + 1 * k][j + 1 * k], p[i + 2 * k][j + 2 * k], p[i + 3 * k][j + 3 * k], p[i + 4 * k][j + 4 * k], color);
-				count += sleepThree1(p[i][j], p[i + 1 * k][j - 1 * k], p[i + 2 * k][j - 2 * k], p[i + 3 * k][j - 3 * k], p[i + 4 * k][j - 4 * k], color);
-			}
+			count += sleepThree1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			count += sleepThree1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			count += sleepThree1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			count += sleepThree1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -439,11 +407,6 @@ int checkS3D(point p1, struct point p[25][25], int color) {//need to check out o
 			count += sleepThree4(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], p[Min(i + 6, 24)][j], color);
 			count += sleepThree4(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], p[Min(i + 6, 24)][Min(j + 6, 24)], color);
 			count += sleepThree4(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], p[Min(i + 6, 24)][Max(j - 6, 0)], color);
-
-			count += sleepThree4(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i][j - 4], p[i][Max(j - 5, 0)], p[i][Max(j - 6, 0)], color);
-			count += sleepThree4(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 0)][j], p[Max(i - 6, 0)][j], color);
-			count += sleepThree4(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], p[Max(i - 6, 0)][Max(j - 6, 0)], color);
-			count += sleepThree4(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], p[Max(i - 6, 0)][Min(j - 6, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -458,10 +421,7 @@ int checkL2A(point p1, struct point p[25][25], int color) {
 			count += liveTwo3(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += liveTwo3(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += liveTwo3(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
-			count += liveTwo3(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);			count += liveTwo3(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += liveTwo3(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += liveTwo3(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += liveTwo3(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
+			count += liveTwo3(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -473,16 +433,14 @@ int checkL2B(point p1, struct point p[25][25], int color) {
 	p[p1.place.x][p1.place.y].state = color;
 	for (int i = Max(MIN, p1.place.x - WIN + 1); i < Min(MAX, p1.place.y + WIN); i++) {
 		for (int j = Max(MIN, p1.place.y - MIN + 1); j < Min(MAX, p1.place.y + WIN); j++) {
-			for (int k = -1; k < 2; k += 2) {
-				count += liveTwo1(p[i][j], p[i][j + 1 * k], p[i][j + 2 * k], p[i][j + 3 * k], color);
-				count += liveTwo1(p[i][j], p[i + 1 * k][j], p[i + 2 * k][j], p[i + 3 * k][j], color);
-				count += liveTwo1(p[i][j], p[i + 1 * k][j + 1 * k], p[i + 2 * k][j + 2 * k], p[i + 3 * k][j + 3 * k], color);
-				count += liveTwo1(p[i][j], p[i + 1 * k][j - 1 * k], p[i + 2 * k][j - 2 * k], p[i + 3 * k][j - 3 * k], color);
-				count += liveTwo2(p[i][j], p[i][j + 1 * k], p[i][j + 2 * k], p[i][j + 3 * k], p[i][j + 4 * k], color);
-				count += liveTwo2(p[i][j], p[i + 1 * k][j], p[i + 2 * k][j], p[i + 3 * k][j], p[i + 4 * k][j], color);
-				count += liveTwo2(p[i][j], p[i + 1 * k][j + 1 * k], p[i + 2 * k][j + 2 * k], p[i + 3 * k][j + 3 * k], p[i + 4 * k][j + 4 * k], color);
-				count += liveTwo2(p[i][j], p[i + 1 * k][j - 1 * k], p[i + 2 * k][j - 2 * k], p[i + 3 * k][j - 3 * k], p[i + 4 * k][j - 4 * k], color);
-			}
+			count += liveTwo1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], color);
+			count += liveTwo1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], color);
+			count += liveTwo1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], color);
+			count += liveTwo1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], color);
+			count += liveTwo2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			count += liveTwo2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			count += liveTwo2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			count += liveTwo2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
@@ -494,29 +452,113 @@ int checkS2(point p1, struct point p[25][25], int color) {
 	p[p1.place.x][p1.place.y].state = color;
 	for (int i = Max(MIN, p1.place.x - WIN + 1); i < Min(MAX, p1.place.y + WIN); i++) {
 		for (int j = Max(MIN, p1.place.y - MIN + 1); j < Min(MAX, p1.place.y + WIN); j++) {
-			for (int k = -1; k < 2; k += 2) {
-				count += sleepTwo1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], color);
-				count += sleepTwo1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
-				count += sleepTwo1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
-				count += sleepTwo1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
-			}
-			
+			count += sleepTwo1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], color);
+			count += sleepTwo1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			count += sleepTwo1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			count += sleepTwo1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
 			count += sleepTwo2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += sleepTwo2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
 			count += sleepTwo2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
 			count += sleepTwo2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
-
-			count += sleepTwo2(p[i][j], p[i][j - 1], p[i][j - 2], p[i][j - 3], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += sleepTwo2(p[i][j], p[i - 1][j], p[i - 2][j], p[i - 3][j], p[i - 4][j], p[Max(i - 5, 0)][j], color);
-			count += sleepTwo2(p[i][j], p[i - 1][j - 1], p[i - 2][j - 2], p[i - 3][j - 3], p[i - 4][j - 4], p[Max(i - 5, 0)][Max(j - 5, 0)], color);
-			count += sleepTwo2(p[i][j], p[i - 1][j + 1], p[i - 2][j + 2], p[i - 3][j + 3], p[i - 4][j + 4], p[Max(i - 5, 0)][Min(j + 5, 24)], color);
 		}
 	}
 	p[p1.place.x][p1.place.y].state = 0;
 	return count;
 }
 
-int checkVal(struct point p[25][25], point p1, int color) {
+int checkVal(struct point p[25][25], int color) {
+	int* st;
+	st = (int*)malloc(13 * sizeof(int));
+	st = checkState(p,color);
+	int val = 0;
+	for (int i = 0; i < 11; i++) {
+		val += *st * score[i];
+		st++;
+	}
+	return val;
+}
+
+
+int *checkState(struct point p[25][25], int color) {
+	static int STAT[13];
+	for (int i = 0; i < 13; i++) {
+		STAT[i] = 0;
+	}
+	for (int i = MIN; i < MAX - 4; i++) {
+		for (int j = MIN; j < MAX - 4; j++) {
+			STAT[0] += linkFive(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			STAT[0] += linkFive(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			STAT[0] += linkFive(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			STAT[0] += linkFive(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
+			STAT[1] += liveFour(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
+			STAT[1] += liveFour(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[1] += liveFour(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[1] += liveFour(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[2] += rushFour1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
+			STAT[2] += rushFour1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[2] += rushFour1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[2] += rushFour1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[3] += rushFour2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			STAT[3] += rushFour2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			STAT[3] += rushFour2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			STAT[3] += rushFour2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
+			STAT[4] += linkThree1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			STAT[4] += linkThree1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			STAT[4] += linkThree1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			STAT[4] += linkThree1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
+			STAT[5] += linkThree2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
+			STAT[5] += linkThree2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[5] += linkThree2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[5] += linkThree2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[6] += sleepThree2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
+			STAT[6] += sleepThree2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[6] += sleepThree2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[6] += sleepThree2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[7] += sleepThree3(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], color);
+			STAT[7] += sleepThree3(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[7] += sleepThree3(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[7] += sleepThree3(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[8] += sleepThree1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color) 
+				+ sleepThree4(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], p[i][Min(j + 5, 24)], p[i][Min(j + 6, 24)], color);
+			STAT[8] += sleepThree1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color) 
+				+ sleepThree4(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], p[Min(i + 6, 24)][j], color);
+			STAT[8] += sleepThree1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color)
+				+ sleepThree4(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], p[Min(i + 6, 24)][Min(j + 6, 24)], color);
+			STAT[8] += sleepThree1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color)
+				+ sleepThree4(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], p[Min(i + 6, 24)][Max(j - 6, 0)], color);
+			STAT[9] += liveTwo3(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[9] += liveTwo3(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[9] += liveTwo3(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[9] += liveTwo3(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+			STAT[10] += liveTwo1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], color);
+			STAT[10] += liveTwo1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], color);
+			STAT[10] += liveTwo1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], color);
+			STAT[10] += liveTwo1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], color);
+			STAT[10] += liveTwo2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i][j + 4], color);
+			STAT[10] += liveTwo2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			STAT[10] += liveTwo2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			STAT[10] += liveTwo2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
+			STAT[11] += sleepTwo1(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], color);
+			STAT[11] += sleepTwo1(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], color);
+			STAT[11] += sleepTwo1(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], color);
+			STAT[11] += sleepTwo1(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], color);
+			STAT[11] += sleepTwo2(p[i][j], p[i][j + 1], p[i][j + 2], p[i][j + 3], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[11] += sleepTwo2(p[i][j], p[i + 1][j], p[i + 2][j], p[i + 3][j], p[i + 4][j], p[Min(i + 5, 24)][j], color);
+			STAT[11] += sleepTwo2(p[i][j], p[i + 1][j + 1], p[i + 2][j + 2], p[i + 3][j + 3], p[i + 4][j + 4], p[Min(i + 5, 24)][Min(j + 5, 24)], color);
+			STAT[11] += sleepTwo2(p[i][j], p[i + 1][j - 1], p[i + 2][j - 2], p[i + 3][j - 3], p[i + 4][j - 4], p[Min(i + 5, 24)][Max(j - 5, 0)], color);
+		}
+	}
+	return STAT;
+}
+
+long double checkStateVal(struct point p[25][25]) {
+	long double s_value = 0;
+	s_value += checkVal(p,-player);
+	s_value -= checkVal(p, player);
+	return s_value;
+}
+
+long double checkPointVal (struct point p[25][25],point p1,int color) {
 	int val = 0;
 	val += checkL5(p1, p, color) * score[0];
 	val += checkL4(p1, p, color) * score[1];
@@ -533,38 +575,4 @@ int checkVal(struct point p[25][25], point p1, int color) {
 	val += checkS2(p1, p, color) * score[11];
 	if (val == 0 && check1(p1, p, color) == 1) val = 1;
 	return val;
-}
-
-long double checkStateVal(struct point state[25][25]) {
-	point p[25][25];
-	int i, j;
-	long double s_value = 0;
-	for (i = 0; i < 24; i++) {
-		for (j = 0; j < 24; j++) {
-			p[i][j] = state[i][j];
-		}
-	}
-	for (i = MIN; i < MAX; i++) {
-		for (j = MIN; j < MAX; j++) {
-			if (p[i][j].state != 0) {
-				p[i][j].val = checkPointVal(p, p[i][j]);
-				s_value += p[i][j].val;
-			}
-		}
-	}
-	return s_value;
-}
-
-long double checkPointVal (struct point p[25][25],point p1) {
-	long double res = 0;
-	if (p1.state == 0) {//NULL
-		res = 0;
-	}
-	else if (p1.state == -player) {
-		res = checkVal(p, p1, -player) + (15 - abs((long double)(12 - p1.place.x)) - abs((long double)(12 - p1.place.y)));
-	}
-	else {//player
-		res = -(checkVal(p, p1, player)+(15 - abs((long double)(12 - p1.place.x)) - abs((long double)(12 - p1.place.y))));
-	}
-	return res;
 }
