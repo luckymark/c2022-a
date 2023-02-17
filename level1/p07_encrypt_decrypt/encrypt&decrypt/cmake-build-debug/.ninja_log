@@ -1,0 +1,5 @@
+# ninja log v5
+0	60	6978243623165499	CMakeFiles/encrypt_decrypt.dir/main.c.obj	5bc36b3d3b6528f5
+63	140	6978243623913121	encrypt_decrypt.exe	d5f5d9827d0882a4
+1	57	6978243757695225	CMakeFiles/encrypt_decrypt.dir/main.c.obj	5bc36b3d3b6528f5
+57	124	6978243758309453	encrypt_decrypt.exe	d5f5d9827d0882a4
