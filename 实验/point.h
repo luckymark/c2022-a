@@ -35,6 +35,7 @@ struct evaluation {
 #define WIN 5
 #define INFINITY 10000000000
 #define numOfEvaluate 5
+
 #endif _POINT_H_
 
 #define C_min 

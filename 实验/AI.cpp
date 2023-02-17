@@ -36,12 +36,8 @@ void reverseBoard(point p1[25][25], point p2[25][25]) {//反轉思考
 
 EvaPoint evaluate(point p[25][25])//生成最佳可能落子位置
 {
-	bool board[25][25];
-	for (int i = 0; i < 25; i++) {
-		for (int j = 0; j < 25; j++) {
-			board[i][j] = false;
-		}
-	}
+	bool board[25][25] = {false};
+
 	for (int i = MIN; i < MAX; i++) {
 		for (int j = MIN; j < MAX; j++) {
 			if (p[i][j].state != 0) {
@@ -94,15 +90,13 @@ long double MiniMax(struct point p[25][25], int color, int depth, long double al
 		else return checkStateVal(p);
 	}
 	else if (color == -player) {//AI
-		point sameP[25][25];
-		copyBoard(p, sameP);
 		EvaPoint P;
-		P = evaluate(sameP);
+		P = evaluate(p);
 
 		for (int i = 0; i < numOfEvaluate; i++) {
-			sameP[P.place[i].x][P.place[i].y].state = -player;
-			long double val = MiniMax(sameP, player, depth - 1, alpha, beta);
-			sameP[P.place[i].x][P.place[i].y].state = 0;;
+			p[P.place[i].x][P.place[i].y].state = -player;
+			long double val = MiniMax(p, player, depth - 1, alpha, beta);
+			p[P.place[i].x][P.place[i].y].state = 0;;
 
 			if (val > alpha) {
 				alpha = val;
@@ -121,13 +115,10 @@ long double MiniMax(struct point p[25][25], int color, int depth, long double al
 		EvaPoint P;
 		P = evaluate(reverseP);
 
-		point sameP[25][25];
-		copyBoard(p, sameP);
-
 		for (int i = 0; i < numOfEvaluate; i++) {
-			sameP[P.place[i].x][P.place[i].y].state = player;
-			long double val = MiniMax(sameP,-player,depth - 1,alpha,beta);
-			sameP[P.place[i].x][P.place[i].y].state = 0;
+			p[P.place[i].x][P.place[i].y].state = player;
+			long double val = MiniMax(p,-player,depth - 1,alpha,beta);
+			p[P.place[i].x][P.place[i].y].state = 0;
 			if (val < beta) beta = val;
 			if (beta <= alpha) break;
 		}
@@ -136,9 +127,10 @@ long double MiniMax(struct point p[25][25], int color, int depth, long double al
 }
 
 place robot3(struct point p[25][25], int f) {//AI 
-
+	point sameP[25][25];
+	copyBoard(p, sameP);
 	if (num == 0) return{ 12,12 };
-	MiniMax(p, -player, DEPTH, -INFINITY, INFINITY);
+	MiniMax(sameP, -player, DEPTH, -INFINITY, INFINITY);
 	return bestMove.place;
 }
 

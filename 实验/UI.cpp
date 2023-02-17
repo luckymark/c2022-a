@@ -402,11 +402,11 @@ void over(int x) {
 	setfillcolor(BUTTON_COLOR);
 	fillrectangle(800, 335, 1065, 400);
 	fillrectangle(800, 485, 1065, 550);
+	
 	TCHAR s1[] = _T("返回遊戲界面");
 	TCHAR s2[] = _T("結束遊戲");
 	outtextxy(820, 350, s1);
 	outtextxy(855, 500, s2);
-
 	while (true)
 	{
 		MOUSEMSG n;
@@ -433,7 +433,7 @@ void over(int x) {
 		else {
 			settextcolor(WHITE);
 			outtextxy(855, 500, s2);
-		}
+		}	
 	}
 }
 
@@ -476,12 +476,13 @@ void regret(struct point p[25][25]) {
 	board();
 	for (int i = MIN; i < MAX; i++) {
 		for (int j = MIN; j < MAX; j++) {
-			if (p[i][j].state != 0) {
+			if (p[i][j].state != 0){
 				execute(p, i, j, p[i][j].state,true);
 			}
 		}
 	}
 }
+
 
 void start() {
 	int number;

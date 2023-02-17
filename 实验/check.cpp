@@ -554,7 +554,7 @@ int *checkState(struct point p[25][25], int color) {
 long double checkStateVal(struct point p[25][25]) {
 	long double s_value = 0;
 	s_value += checkVal(p,-player);
-	s_value -= checkVal(p, player);
+	s_value -= checkVal(p, player)*1.5;
 	return s_value;
 }
 

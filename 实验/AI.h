@@ -8,6 +8,6 @@ void copyBoard(struct point p1[25][25], point p2[25][25]);
 void reverseBoard(struct point p1[25][25], point p2[25][25]);
 EvaPoint evaluate(point p[25][25]);
 
-#define DEPTH 2
+#define DEPTH 4
 extern int bTurn;
 #endif // !_AI_H_
