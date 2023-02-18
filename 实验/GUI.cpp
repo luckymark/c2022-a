@@ -107,7 +107,7 @@ void GUI::HumanDo() {
     ExMessage mouse{};
 
     fontset(BLACK, 24, ANTIALIASED_QUALITY, _T("黑体"));
-    outtextxy(913, 0, _T("推翻人类暴政！ "));
+    outtextxy(913, 0, _T("请您落子 "));
     while(true) {
         mouse.lbutton = false;
         while (!mouse.lbutton) {
