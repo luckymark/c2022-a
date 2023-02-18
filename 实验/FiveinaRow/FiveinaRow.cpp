@@ -25,7 +25,7 @@ int main(void)
 			{
 				playerVSAI(); 
 			}
-			if ((msg.x >= 250) && (msg.x < 475) && (msg.y >= 265) && (msg.y <= 315)) //在机机对战区域按下
+			if ((msg.x >= 250) && (msg.x < 475) && (msg.y >= 265) && (msg.y <= 315))  
 			{
 				AIVSAI(); 
 			}

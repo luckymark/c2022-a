@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
-    <ClCompile Include="AI2.cpp" />
     <ClCompile Include="AIVSAI.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="FiveinaRow.cpp" />

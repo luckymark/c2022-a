@@ -33,9 +33,6 @@
     <ClCompile Include="AI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AI2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="AIVSAI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

@@ -10,28 +10,28 @@
 #define map_width 15      //棋格宽
 #define map_height 15     //棋格高
 #define piece_size 30	  //棋子直径
+#define white 1
+#define black 2
+#define tie 3
 using namespace std;
 
-extern int check;
 extern int map[20][20];
+extern int check;
 extern int AIx, AIy;
-extern int AI2x, AI2y;
 extern int Piece, changePiece;
 
 extern int order[20][20];
 extern int num;
 extern int jump;
 
-
-
 void drawPiece(int x, int y, int color);
 void drawBoard();
+void drawBoard2();
 void clear(int x, int y);
 bool pieceSet(int x, int y, int color);
-void judge(int x,int y);
+void judge(int x,int y,int color);
 void AI(int x,int y);
-void AI2(int x, int y);
-void regret(void);
+void regret();
 
 
 int playerVSplayer();

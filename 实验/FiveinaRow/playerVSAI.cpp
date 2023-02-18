@@ -1,34 +1,56 @@
 #include "title.h"
 
 MOUSEMSG m;
-int x, y, manPiece = 2, AIPiece = 1;
 
 int playerVSAI()
 {
-	initgraph((map_width - 1) * piece_size + offsetx * 2, (map_height - 1) * piece_size + offsety * 4);
-	setbkcolor(WHITE);
-	cleardevice();
-	setlinecolor(BLACK);
-	for (int i = 0; i < map_width; i++)//竖线
+	int x, y, manPiece =0, AIPiece = 0;
+
+	/*黑白棋选择*/
+	wchar_t choice[10];
+	InputBox(choice, 10, L"选择白棋请输入1，选择黑棋请输入2");
+	int chosenColor = _wtoi(choice);
+	manPiece = chosenColor;
+	while ((chosenColor!=white)&&(chosenColor!=black))
 	{
-		line(i * piece_size + offsetx, offsety, i * piece_size + offsetx, offsety + (map_height - 1) * piece_size);
+		MessageBox(GetHWnd(), L"请正确输入棋子颜色", L"错误：", MB_OKCANCEL);
+		InputBox(choice, 10, L"选择白棋请输入1，选择黑棋请输入2");
+		chosenColor = _wtoi(choice);
+		manPiece = chosenColor;
 	}
-	for (int i = 0; i < map_height; i++)//横线
+	if (manPiece == white)
 	{
-		line(offsetx, offsety + i * piece_size, (map_width - 1) * piece_size + offsetx, offsety + i * piece_size);
+		AIPiece = black;
 	}
+	else
+	{
+		AIPiece = white;
+	}
+	FlushMouseMsgBuffer();  //防误触
+
+	/*绘制窗口*/
+	drawBoard2();
 	settextstyle(30, 0, L"宋体");
 	settextcolor(RGB(70, 70, 70));
 	outtextxy(200, 455, L"悔棋");
 
-	num = 0, order[20][20] = { 0 }, jump = 0;
-
-
+	
+	/*执行*/
+	if (AIPiece == black)
+	{
+		drawPiece(7, 7, AIPiece);
+		map[7][7] = AIPiece; 
+		num += 1;
+		order[AIx][AIy] = num;
+	}
 	while (1)
 	{
 		m = GetMouseMsg();
+
+
 		if (m.mkLButton)
 		{
+			/*人类*/
 			if ((m.x >= 180) && (m.x < 375) && (m.y >= 450) && (m.y <= 500))    //悔棋
 			{
 				regret();
@@ -40,25 +62,26 @@ int playerVSAI()
 			if (pieceSet(x, y, manPiece))
 			{
 				drawPiece(x, y, manPiece);
-				judge(x, y);           
-				if (check == 2)
+				judge(x, y,manPiece);           
+				if (check == manPiece)
 				{
 					MessageBox(GetHWnd(), L"人类胜出！", L"游戏结束：", MB_OKCANCEL);
 					break;
 				}
 				num += 1;
 				order[x][y] = num;
-
+				
+				/*AI*/
 				AI(x,y);
 				drawPiece(AIx, AIy, AIPiece);
-				map[AIx][AIy] = AIPiece;         //标记map值
-				judge(AIx, AIy);
-				if (check == 1)
+				map[AIx][AIy] = AIPiece;         
+				judge(AIx, AIy,AIPiece);
+				if (check == AIPiece)
 				{
 					MessageBox(GetHWnd(), L"AI胜出！", L"游戏结束：", MB_OKCANCEL);
 					break;
 				}
-				if (check == 3)
+				if (check == tie)
 				{
 					MessageBox(GetHWnd(), L"平局", L"游戏结束：", MB_OKCANCEL);
 					break;
@@ -69,7 +92,8 @@ int playerVSAI()
 			
 		}
 	}
-	mciSendString(L"stop m", NULL, 0, NULL);
+	mciSendString(L"stop m", NULL, 0, NULL);    //停止播放音乐
+
 	return 0;
 }
 
