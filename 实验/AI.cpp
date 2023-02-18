@@ -187,7 +187,7 @@ void AI::AIdo() {
 
     if(GameRound>1)
     {
-        point bestpos = GiveBestPoint(R.com,4);
+        point bestpos = GiveBestPoint(R.com,6);
         solidcircle(X[bestpos.coor.first], Y[bestpos.coor.second], 28);
         board.put(bestpos.coor,R.com);
         clearrectangle(913, 0, 1500, 30);
