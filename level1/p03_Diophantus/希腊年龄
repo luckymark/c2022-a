@@ -1,0 +1,13 @@
+#define  _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int main() {
+	int fatherYear = 1, k=0;
+	for (; k == 0; fatherYear++) {
+		if ((1.0 / 6 + 1.0 / 12 + 1.0 / 7) * fatherYear + 5 + fatherYear / 2 + 4 == fatherYear) {
+			k = 1;
+			break;
+		}
+	}
+	int sonYear = fatherYear - 4;
+	printf("%d", sonYear);
+}
