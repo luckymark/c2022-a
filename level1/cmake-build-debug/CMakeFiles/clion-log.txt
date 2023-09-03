@@ -1,0 +1,13 @@
+"F:\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=F:/CLion 2022.2.3/bin/ninja/win/ninja.exe" -G Ninja -S C:\Users\Lenovo\c2022-a\level1 -B C:\Users\Lenovo\c2022-a\level1\cmake-build-debug
+-- Configuring done
+CMake Error at CMakeLists.txt:6 (add_executable):
+  Cannot find source file:
+
+    p01_runningLetter/main.c
+
+
+CMake Error at CMakeLists.txt:6 (add_executable):
+  No SOURCES given to target: level1
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.
