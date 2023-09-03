@@ -1,0 +1,22 @@
+4
+8 4
+5 7
+11 7
+8 10
+                
+                
+      XXX       
+      X X       
+      XBX       
+   XXXX XXXX    
+   X B @ B X    
+   XXXX XXXX    
+      XBX       
+      X X       
+      XXX       
+                
+                
+                
+                
+                
+你此次的步数是：46
